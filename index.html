@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>𝐌𝐀𝐈𝐋 𝐒𝐓𝐎𝐑𝐄</title>
+    <title>𝙀𝘼𝙍𝙉𝙄𝙉𝙂 🔥</title>
 
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
@@ -33,12 +33,12 @@
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .card-bg:hover {
-            border-color: rgba(0, 123, 255, 0.3);
-            box-shadow: 0 8px 24px rgba(0, 123, 255, 0.08);
+            border-color: rgba(245, 158, 11, 0.3);
+            box-shadow: 0 8px 24px rgba(245, 158, 11, 0.08);
             transform: translateY(-2px);
         }
         .text-accent-gradient {
-            background: linear-gradient(135deg, #007bff, #0056b3);
+            background: linear-gradient(135deg, #f59e0b, #ea580c);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
@@ -49,14 +49,14 @@
         }
         .btn:active, .btn-gradient:active, .btn-outline-accent:active { transform: scale(0.96); }
         .btn-gradient {
-            background-image: linear-gradient(135deg, #007bff, #0056b3);
+            background-image: linear-gradient(135deg, #f59e0b, #d97706);
             color: #ffffff;
             font-weight: 700;
-            box-shadow: 0 4px 15px rgba(0, 123, 255, 0.25);
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.25);
         }
         .btn-gradient:hover {
-            box-shadow: 0 6px 20px rgba(0, 123, 255, 0.35);
-            background-image: linear-gradient(135deg, #0056b3, #007bff);
+            box-shadow: 0 6px 20px rgba(245, 158, 11, 0.35);
+            background-image: linear-gradient(135deg, #d97706, #f59e0b);
         }
         .input-field {
             background-color: #f1f5f9;
@@ -65,8 +65,8 @@
             transition: all 0.2s ease;
         }
         .input-field:focus {
-            border-color: #007bff;
-            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
+            border-color: #f59e0b;
+            box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2);
             outline: none;
             background-color: #ffffff;
         }
@@ -114,8 +114,8 @@
             position: relative;
         }
         .nav-link-native.active { 
-            color: #007bff; 
-            background-color: rgba(0, 123, 255, 0.09);
+            color: #f59e0b; 
+            background-color: rgba(245, 158, 11, 0.1);
             transform: translateY(-2px);
         }
         .nav-link-native.active::after {
@@ -124,9 +124,9 @@
             bottom: 2px;
             width: 12px;
             height: 3px;
-            background-color: #007bff;
+            background-color: #f59e0b;
             border-radius: 99px;
-            box-shadow: 0 0 8px rgba(0, 123, 255, 0.6);
+            box-shadow: 0 0 8px rgba(245, 158, 11, 0.6);
         }
         .nav-link-native .icon { 
             width: 20px; 
@@ -138,7 +138,7 @@
         }
 
         .header-native {
-            background-color: #007bff;
+            background: linear-gradient(135deg, #0f172a, #1e293b);
             padding: 0.75rem;
             position: sticky;
             top: 0;
@@ -148,19 +148,19 @@
             justify-content: space-between;
             color: white;
             gap: 8px;
-            box-shadow: 0 2px 10px rgba(0,123,255,0.2);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
         }
         .header-btn {
-            background: rgba(255,255,255,0.18);
+            background: rgba(255,255,255,0.12);
             border-radius: 10px;
-            padding: 6px;
+            padding: 7px;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            transition: background 0.2s;
+            transition: all 0.2s;
         }
-        .header-btn:active { background: rgba(255,255,255,0.35); }
+        .header-btn:active { background: rgba(255,255,255,0.3); transform: scale(0.92); }
         
         .notif-badge {
             position: absolute;
@@ -170,7 +170,7 @@
             height: 10px;
             background-color: #ef4444;
             border-radius: 50%;
-            border: 2px solid #007bff;
+            border: 2px solid #0f172a;
             display: none;
         }
 
@@ -197,21 +197,16 @@
         .slide img { width: 100%; height: 100%; object-fit: cover; display: block; }
         .dots { position: absolute; bottom: 12px; width: 100%; text-align: center; z-index: 10; }
         .dot { display: inline-block; height: 8px; width: 8px; margin: 0 4px; background: rgba(255,255,255,0.5); border-radius: 50%; cursor: pointer; transition: background 0.3s; }
-        .dot.active { background: #007bff; width: 18px; border-radius: 4px; }
+        .dot.active { background: #f59e0b; width: 18px; border-radius: 4px; }
 
-        #loader { display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 1.5rem; transition: opacity 0.5s ease; }
-        #loader .logo-container { animation: popIn 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards, breath 2.5s ease-in-out infinite 1s; }
-        #loader .loader-text { animation: fadeInText 1s ease-in-out 0.5s forwards; opacity: 0; font-weight: bold; font-size: 1.5rem; }
-        #loader-reviews { position: absolute; bottom: 30px; font-size: 0.9rem; color: #64748b; opacity: 0; transition: opacity 0.5s ease-in-out; }
-        @keyframes popIn { 0% { transform: scale(0.5); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
-        @keyframes fadeInText { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes breath { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+        /* PREMIUM LOADER SCREEN STYLING */
+        #loader { transition: opacity 0.5s ease; }
 
         .premium-loader-spinner {
             width: 56px;
             height: 56px;
             border-radius: 50%;
-            background: conic-gradient(#0000 10%, #007bff);
+            background: conic-gradient(#0000 10%, #f59e0b);
             -webkit-mask: radial-gradient(farthest-side, #0000 calc(100% - 9px), #000 0);
             animation: spin 1s infinite linear;
         }
@@ -269,34 +264,48 @@
 </head>
 <body class="max-w-md mx-auto">
 
-    <div id="loader" class="fixed inset-0 bg-[#f8fafc] flex items-center justify-center z-[100]">
-        <div class="text-center">
-            <div class="logo-container">
-                <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[#007bff] mx-auto"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+    <!-- NEW PREMIUM SPLASH / LOADER SCREEN -->
+    <div id="loader" class="fixed inset-0 bg-slate-950 flex flex-col items-center justify-center z-[100] px-4 overflow-hidden">
+        <div class="absolute w-72 h-72 bg-amber-500/15 rounded-full blur-3xl -top-10 -left-10 pointer-events-none animate-pulse"></div>
+        <div class="absolute w-72 h-72 bg-orange-600/15 rounded-full blur-3xl -bottom-10 -right-10 pointer-events-none animate-pulse"></div>
+
+        <div class="relative z-10 text-center space-y-4 max-w-xs w-full bg-slate-900/60 p-8 rounded-3xl border border-slate-800/80 backdrop-blur-xl shadow-2xl">
+            <div class="logo-container relative inline-block">
+                <div class="w-20 h-20 rounded-2xl bg-gradient-to-tr from-amber-500 via-orange-500 to-yellow-400 p-0.5 mx-auto shadow-lg shadow-orange-500/30">
+                    <div class="w-full h-full bg-slate-950 rounded-[14px] flex items-center justify-center">
+                        <i data-lucide="flame" class="w-10 h-10 text-orange-400 animate-bounce"></i>
+                    </div>
+                </div>
             </div>
-            <h1 class="text-accent-gradient loader-text mt-4">𝐌𝐀𝐈𝐋 𝐒𝐓𝐎𝐑𝐄</h1>
+            <div>
+                <h1 class="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-orange-400 via-amber-300 to-yellow-400 tracking-wider">𝙀𝘼𝙍𝙉𝙄𝙉𝙂 🔥</h1>
+                <p class="text-xs text-slate-400 font-medium mt-1">Trusted Digital Earning Platform</p>
+            </div>
+            <div class="w-full bg-slate-800 rounded-full h-1.5 overflow-hidden mt-3">
+                <div class="bg-gradient-to-r from-amber-500 to-orange-500 h-full w-2/3 animate-pulse rounded-full"></div>
+            </div>
         </div>
-        <div id="loader-reviews">"খুবই বিশ্বস্ত একটি সাইট।" - মোঃ রায়হান</div>
+        <div id="loader-reviews" class="relative z-10 mt-8 text-xs text-slate-400 font-medium bg-slate-900/40 px-4 py-2 rounded-full border border-slate-800/50">"খুবই বিশ্বস্ত একটি সাইট।" - মোঃ রায়হান</div>
     </div>
     
     <div id="app-container" class="min-h-screen flex-col main-page">
         
         <header class="header-native">
             <div id="header-profile-area" class="relative cursor-pointer" onclick="navigateTo('profile-page')">
-                <img id="header-profile-pic" class="w-9 h-9 rounded-full border-2 border-white object-cover" src="" alt="Profile" loading="lazy">
-                <div id="header-initials-avatar" class="w-9 h-9 rounded-full bg-gray-200 flex items-center justify-center border-2 border-white hidden">
-                    <span id="header-initials" class="text-sm font-bold text-gray-600"></span>
+                <img id="header-profile-pic" class="w-9 h-9 rounded-full border-2 border-amber-500 object-cover" src="" alt="Profile" loading="lazy">
+                <div id="header-initials-avatar" class="w-9 h-9 rounded-full bg-slate-700 flex items-center justify-center border-2 border-amber-500 hidden">
+                    <span id="header-initials" class="text-sm font-bold text-amber-400"></span>
                 </div>
             </div>
 
             <!-- BALANCE CLICKABLE AREA WITH REFRESH BUTTON -->
             <div class="flex items-center gap-1.5 flex-grow justify-center">
-                <div id="header-balance-area" onclick="openBalancePopupModal()" class="bg-white/20 hover:bg-white/30 transition rounded-full px-3 py-1.5 flex items-center gap-1.5 cursor-pointer shadow-inner" title="Wallet Actions">
-                    <i data-lucide="wallet" class="w-4 h-4 text-yellow-300"></i>
+                <div id="header-balance-area" onclick="openBalancePopupModal()" class="bg-white/10 hover:bg-white/20 transition rounded-full px-3 py-1.5 flex items-center gap-1.5 cursor-pointer shadow-inner border border-white/10" title="Wallet Actions">
+                    <i data-lucide="wallet" class="w-4 h-4 text-yellow-400"></i>
                     <span id="header-coin-balance" class="font-extrabold text-sm text-white tracking-wide">৳0.00</span>
                     <i data-lucide="chevron-down" class="w-3.5 h-3.5 text-white/80"></i>
                 </div>
-                <button id="header-refresh-btn" onclick="refreshUserData(this)" class="header-btn" title="Refresh Balance">
+                <button id="header-refresh-btn" onclick="refreshUserData(this)" class="header-btn" title="Refresh All Data">
                     <i data-lucide="refresh-cw" class="w-4 h-4 text-white"></i>
                 </button>
             </div>
@@ -359,36 +368,36 @@
                     </div>
 
                     <!-- CNPJ HOME BANNER POST -->
-                    <div class="card-bg p-5 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-700 text-white shadow-lg relative overflow-hidden space-y-3">
+                    <div class="card-bg p-5 rounded-2xl bg-gradient-to-br from-amber-500 to-orange-600 text-white shadow-lg relative overflow-hidden space-y-3">
                         <div class="absolute -right-6 -bottom-6 opacity-15">
                             <i data-lucide="file-text" class="w-36 h-36"></i>
                         </div>
                         <div class="relative z-10 space-y-2">
                             <span class="bg-white/20 text-[10px] font-extrabold px-3 py-1 rounded-full uppercase tracking-wider backdrop-blur-md">CNPJ Generator</span>
                             <h3 class="text-2xl font-extrabold">CNPJ পান সহজে</h3>
-                            <p class="text-xs text-blue-100 leading-relaxed">
+                            <p class="text-xs text-amber-100 leading-relaxed">
                                 প্রথমবার একদম ফ্রী! ১ ঘণ্টার ভ্যালিডিটি সহ ইনস্ট্যান্ট CNPJ সংগ্রহ করুন।
                             </p>
-                            <button onclick="navigateTo('cnpj-page')" class="mt-2 px-5 py-2.5 bg-white text-blue-800 font-bold rounded-xl text-xs shadow-md hover:bg-blue-50 transition flex items-center gap-2">
-                                <i data-lucide="sparkles" class="w-4 h-4 text-blue-600"></i>
+                            <button onclick="navigateTo('cnpj-page')" class="mt-2 px-5 py-2.5 bg-white text-amber-800 font-bold rounded-xl text-xs shadow-md hover:bg-amber-50 transition flex items-center gap-2">
+                                <i data-lucide="sparkles" class="w-4 h-4 text-amber-600"></i>
                                 <span>CNPJ সংগ্রহ করুন (GET CNPJ)</span>
                             </button>
                         </div>
                     </div>
 
                     <!-- MAIL STORE HOME BANNER POST -->
-                    <div class="card-bg p-5 rounded-2xl bg-gradient-to-br from-amber-500 to-orange-600 text-white shadow-lg relative overflow-hidden space-y-3">
+                    <div class="card-bg p-5 rounded-2xl bg-gradient-to-br from-slate-800 to-slate-900 text-white shadow-lg relative overflow-hidden space-y-3">
                         <div class="absolute -right-6 -bottom-6 opacity-15">
                             <i data-lucide="shopping-cart" class="w-36 h-36"></i>
                         </div>
                         <div class="relative z-10 space-y-2">
-                            <span class="bg-white/20 text-[10px] font-extrabold px-3 py-1 rounded-full uppercase tracking-wider backdrop-blur-md">Mail Store</span>
+                            <span class="bg-amber-500/20 text-amber-400 border border-amber-500/30 text-[10px] font-extrabold px-3 py-1 rounded-full uppercase tracking-wider backdrop-blur-md">Store</span>
                             <h3 class="text-2xl font-extrabold">সকল ধরনের মেইল কিনুন</h3>
-                            <p class="text-xs text-amber-100 leading-relaxed">
+                            <p class="text-xs text-slate-300 leading-relaxed">
                                 ১০০% ভেরিফাইড নতুন স্টক থেকে আপনার প্রয়োজনীয় মেইল সংগ্রহ করুন।
                             </p>
-                            <button onclick="navigateTo('mail-page')" class="mt-2 px-5 py-2.5 bg-white text-amber-900 font-bold rounded-xl text-xs shadow-md hover:bg-amber-50 transition flex items-center gap-2">
-                                <i data-lucide="shopping-bag" class="w-4 h-4 text-amber-600"></i>
+                            <button onclick="navigateTo('mail-page')" class="mt-2 px-5 py-2.5 bg-amber-500 text-slate-950 font-bold rounded-xl text-xs shadow-md hover:bg-amber-400 transition flex items-center gap-2">
+                                <i data-lucide="shopping-bag" class="w-4 h-4 text-slate-950"></i>
                                 <span>মেইল কিনতে যান (BUY MAIL)</span>
                             </button>
                         </div>
@@ -400,32 +409,32 @@
             <div id="pay-page" class="p-4 space-y-6 sub-page">
                 <h2 class="text-2xl font-bold text-center text-accent-gradient">Deposit Center</h2>
 
-                <div class="card-bg p-5 rounded-2xl shadow-lg space-y-5 bg-gradient-to-br from-blue-50/50 to-white">
+                <div class="card-bg p-5 rounded-2xl shadow-lg space-y-5 bg-gradient-to-br from-amber-50/50 to-white">
                     <div class="text-center">
-                        <h3 class="font-semibold text-xl flex items-center justify-center gap-2 text-gray-800"><i data-lucide="credit-card" class="w-6 h-6 text-blue-500"></i><span>টাকা জমা দিন</span></h3>
+                        <h3 class="font-semibold text-xl flex items-center justify-center gap-2 text-gray-800"><i data-lucide="credit-card" class="w-6 h-6 text-amber-500"></i><span>টাকা জমা দিন</span></h3>
                         <p class="text-sm text-gray-500 mt-1">আপনার পছন্দমত মাধ্যমে টাকা পাঠান</p>
                     </div>
 
                     <div class="grid grid-cols-2 gap-4 pt-4">
-                        <div class="bg-white p-3 rounded-xl text-center border hover:border-blue-400 transition-all duration-300 shadow-sm">
+                        <div class="bg-white p-3 rounded-xl text-center border hover:border-amber-400 transition-all duration-300 shadow-sm">
                             <img src="https://i.postimg.cc/Jh9s6jWw/20250922-113350.png" alt="Nagad" class="w-10 h-10 rounded-full mx-auto mb-2" loading="lazy">
                             <p class="font-bold text-md">নগদ</p>
                             <p class="text-gray-600 font-mono tracking-wider text-sm my-1">01864260513</p>
                             <button onclick="copyToClipboard('01864260513', this)" class="w-full text-xs p-1.5 mt-1 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors flex items-center justify-center gap-1 font-semibold"><i data-lucide="copy" class="w-3 h-3"></i><span>Copy</span></button>
                         </div>
-                        <div class="bg-white p-3 rounded-xl text-center border hover:border-blue-400 transition-all duration-300 shadow-sm">
+                        <div class="bg-white p-3 rounded-xl text-center border hover:border-amber-400 transition-all duration-300 shadow-sm">
                             <img src="https://i.postimg.cc/tCwGVkdH/20250922-113514.png" alt="bKash" class="w-10 h-10 rounded-full mx-auto mb-2" loading="lazy">
                             <p class="font-bold text-md">বিকাশ</p>
                             <p class="text-gray-600 font-mono tracking-wider text-sm my-1">01827750260</p>
                             <button onclick="copyToClipboard('01827750260', this)" class="w-full text-xs p-1.5 mt-1 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors flex items-center justify-center gap-1 font-semibold"><i data-lucide="copy" class="w-3 h-3"></i><span>Copy</span></button>
                         </div>
-                        <div class="bg-white p-3 rounded-xl text-center border hover:border-blue-400 transition-all duration-300 shadow-sm">
+                        <div class="bg-white p-3 rounded-xl text-center border hover:border-amber-400 transition-all duration-300 shadow-sm">
                             <img src="https://i.postimg.cc/htsw10Tj/20250922-113924.png" alt="Rocket" class="w-10 h-10 rounded-full mx-auto mb-2" loading="lazy">
                             <p class="font-bold text-md">রকেট</p>
                             <p class="text-gray-600 font-mono tracking-wider text-sm my-1">018277502604</p>
                             <button onclick="copyToClipboard('018277502604', this)" class="w-full text-xs p-1.5 mt-1 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors flex items-center justify-center gap-1 font-semibold"><i data-lucide="copy" class="w-3 h-3"></i><span>Copy</span></button>
                         </div>
-                        <div class="bg-white p-3 rounded-xl text-center border hover:border-blue-400 transition-all duration-300 shadow-sm">
+                        <div class="bg-white p-3 rounded-xl text-center border hover:border-amber-400 transition-all duration-300 shadow-sm">
                             <img src="https://i.postimg.cc/L6LFLfxY/20250922-113752.png" alt="Binance Pay" class="w-10 h-10 rounded-full mx-auto mb-2" loading="lazy">
                             <p class="font-bold text-md">Binance Pay</p>
                             <p class="text-gray-600 font-mono tracking-wider text-sm my-1">1105989483</p>
@@ -455,7 +464,7 @@
 
                 <div class="card-bg p-5 rounded-2xl shadow-lg space-y-5">
                      <div class="text-center">
-                        <h3 class="font-semibold text-xl flex items-center justify-center gap-2 text-gray-800"><i data-lucide="wallet" class="w-6 h-6 text-blue-500"></i><span>টাকা উত্তোলন</span></h3>
+                        <h3 class="font-semibold text-xl flex items-center justify-center gap-2 text-gray-800"><i data-lucide="wallet" class="w-6 h-6 text-amber-500"></i><span>টাকা উত্তোলন</span></h3>
                         <p class="text-sm text-gray-500 mt-1">আপনার বিকাশ বা নগদ নম্বর দিন</p>
                     </div>
                     <div class="space-y-4">
@@ -487,29 +496,13 @@
 
             <!-- CNPJ PAGE -->
             <div id="cnpj-page" class="p-4 space-y-5 sub-page">
-                <div class="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl p-5 text-white shadow-lg space-y-2 relative overflow-hidden">
+                <div class="bg-gradient-to-r from-amber-500 to-orange-600 rounded-2xl p-5 text-white shadow-lg space-y-2 relative overflow-hidden">
                     <div class="absolute -right-4 -bottom-4 opacity-15">
                         <i data-lucide="building-2" class="w-32 h-32"></i>
                     </div>
                     <span class="bg-white/20 text-[10px] font-extrabold px-3 py-1 rounded-full uppercase tracking-wider backdrop-blur-md">CNPJ Center</span>
                     <h2 class="text-2xl font-extrabold">CNPJ সংগ্রহ করুন</h2>
-                    <p class="text-xs text-blue-100">প্রথমবার ফ্রী! পরবর্তীতে যখন ইচ্ছা ব্যালেন্স দিয়ে ৳১০ চার্জে CNPJ নিতে পারবেন (১ ঘণ্টা মেয়াদী)।</p>
-                </div>
-
-                <!-- PENDING BALANCE CARD ON CNPJ PAGE -->
-                <div class="card-bg p-4 rounded-xl flex items-center justify-between border-l-4 border-amber-500 bg-amber-50/30">
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center">
-                            <i data-lucide="clock" class="w-5 h-5"></i>
-                        </div>
-                        <div>
-                            <p class="text-xs text-gray-500 font-semibold">আপনার পেন্ডিং ব্যালেন্স (Work Submit):</p>
-                            <p id="cnpj-pending-balance" class="text-xl font-bold text-amber-600">৳0.00</p>
-                        </div>
-                    </div>
-                    <button onclick="navigateTo('work-submit-page')" class="bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold px-3 py-2 rounded-lg transition">
-                        Submit Work
-                    </button>
+                    <p class="text-xs text-amber-100">প্রথমবার ফ্রী! পরবর্তীতে যখন ইচ্ছা ব্যালেন্স দিয়ে ৳১০ চার্জে CNPJ নিতে পারবেন (১ ঘণ্টা মেয়াদী)।</p>
                 </div>
 
                 <div class="card-bg p-5 rounded-2xl text-center space-y-4 border border-gray-100 shadow-sm">
@@ -527,10 +520,10 @@
                 <div class="space-y-3 pt-2">
                     <h3 class="text-md font-bold text-gray-800 flex items-center justify-between">
                         <span class="flex items-center gap-2">
-                            <i data-lucide="list" class="w-4 h-4 text-blue-600"></i>
+                            <i data-lucide="list" class="w-4 h-4 text-amber-600"></i>
                             <span>আমার সক্রিয় CNPJ তালিকা (১ ঘণ্টা মেয়াদী)</span>
                         </span>
-                        <span id="cnpj-list-count-badge" class="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-bold">0</span>
+                        <span id="cnpj-list-count-badge" class="text-xs bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full font-bold">0</span>
                     </h3>
                     <div id="cnpj-active-list-container" class="space-y-3">
                         <p class="text-xs text-gray-400 text-center py-4">বর্তমানে কোনো সক্রিয় CNPJ নেই।</p>
@@ -538,7 +531,7 @@
                 </div>
             </div>
 
-            <!-- NEW & IMPROVED WORK SUBMIT PAGE -->
+            <!-- WORK SUBMIT PAGE -->
             <div id="work-submit-page" class="p-4 space-y-5 sub-page">
                 <div class="relative flex items-center justify-center mb-2">
                     <button onclick="navigateTo('home-page')" class="absolute left-0 p-2 rounded-full hover:bg-gray-100 transition-colors">
@@ -549,13 +542,13 @@
 
                 <!-- TOP STATS DISPLAY -->
                 <div class="grid grid-cols-3 gap-2">
-                    <div class="card-bg p-3 rounded-xl text-center border-b-4 border-blue-500">
-                        <p class="text-[10px] text-gray-500 font-bold uppercase">Total Submitted</p>
-                        <p id="work-stat-total-count" class="text-lg font-black text-blue-600">0</p>
-                    </div>
                     <div class="card-bg p-3 rounded-xl text-center border-b-4 border-amber-500">
+                        <p class="text-[10px] text-gray-500 font-bold uppercase">Total Submitted</p>
+                        <p id="work-stat-total-count" class="text-lg font-black text-amber-600">0</p>
+                    </div>
+                    <div class="card-bg p-3 rounded-xl text-center border-b-4 border-yellow-500">
                         <p class="text-[10px] text-gray-500 font-bold uppercase">Pending Balance</p>
-                        <p id="work-stat-pending-bal" class="text-lg font-black text-amber-600">৳0.00</p>
+                        <p id="work-stat-pending-bal" class="text-lg font-black text-yellow-600">৳0.00</p>
                     </div>
                     <div class="card-bg p-3 rounded-xl text-center border-b-4 border-emerald-500">
                         <p class="text-[10px] text-gray-500 font-bold uppercase">Approved Earnings</p>
@@ -611,24 +604,24 @@
             <div id="profile-page" class="p-4 space-y-5 sub-page">
                 <div class="card-bg p-6 rounded-2xl flex flex-col items-center text-center relative overflow-hidden">
                     <div class="relative mb-3">
-                        <img id="profile-pic" class="w-24 h-24 rounded-full border-4 border-[#007bff] object-cover shadow-md" src="" alt="Profile Picture" loading="lazy">
-                        <div id="profile-initials-avatar" class="w-24 h-24 rounded-full bg-gray-200 flex items-center justify-center border-4 border-[#007bff] shadow-md hidden"><span id="profile-initials" class="text-3xl font-bold text-gray-500"></span></div>
+                        <img id="profile-pic" class="w-24 h-24 rounded-full border-4 border-amber-500 object-cover shadow-md" src="" alt="Profile Picture" loading="lazy">
+                        <div id="profile-initials-avatar" class="w-24 h-24 rounded-full bg-gray-200 flex items-center justify-center border-4 border-amber-500 shadow-md hidden"><span id="profile-initials" class="text-3xl font-bold text-gray-500"></span></div>
                     </div>
                     <h3 id="profile-name" class="text-2xl font-extrabold text-gray-800">Loading...</h3>
                     <p id="profile-username" class="text-sm text-gray-500">@username</p>
-                    <p id="profile-id" class="text-xs text-blue-600 font-mono mt-1 font-semibold">ID: 123456</p>
+                    <p id="profile-id" class="text-xs text-amber-600 font-mono mt-1 font-semibold">ID: 123456</p>
                 </div>
 
                 <div class="card-bg p-5 rounded-2xl space-y-3">
                     <h4 class="font-extrabold text-sm text-gray-700 uppercase tracking-wider flex items-center gap-2">
-                        <i data-lucide="award" class="w-4 h-4 text-blue-600"></i>
+                        <i data-lucide="award" class="w-4 h-4 text-amber-600"></i>
                         <span>Work Performance & Skill Stats</span>
                     </h4>
 
                     <div class="grid grid-cols-3 gap-3 text-center pt-2">
-                        <div class="bg-blue-50 p-3 rounded-xl border border-blue-100">
+                        <div class="bg-amber-50 p-3 rounded-xl border border-amber-100">
                             <p class="text-[10px] text-gray-500 font-bold uppercase">Total Work</p>
-                            <p id="profile-stat-total" class="text-xl font-black text-blue-600">0</p>
+                            <p id="profile-stat-total" class="text-xl font-black text-amber-600">0</p>
                         </div>
                         <div class="bg-green-50 p-3 rounded-xl border border-green-100">
                             <p class="text-[10px] text-gray-500 font-bold uppercase">Approved</p>
@@ -695,7 +688,7 @@
                 </div>
 
                 <div class="text-center pt-4">
-                     <p class="text-center text-gray-500 text-xs">Developed by <a href="https://t.me/SAIDULEP" target="_blank" class="font-semibold text-[#007bff] hover:underline">SAIDUL VAI</a></p>
+                     <p class="text-center text-gray-500 text-xs">Developed by <a href="https://t.me/SAIDULEP" target="_blank" class="font-semibold text-amber-600 hover:underline">SAIDUL VAI</a></p>
                 </div>
             </div>
 
@@ -712,7 +705,7 @@
                 </div>
 
                 <div class="grid grid-cols-2 gap-4">
-                    <button id="features-receive-btn" class="p-3 rounded-xl font-bold text-white bg-gradient-to-r from-blue-500 to-sky-500 shadow-lg btn flex items-center justify-center gap-1">
+                    <button id="features-receive-btn" class="p-3 rounded-xl font-bold text-white bg-gradient-to-r from-amber-500 to-orange-500 shadow-lg btn flex items-center justify-center gap-1">
                         <i data-lucide="arrow-down-to-line" class="w-4 h-4"></i>
                         <span>Receive</span>
                     </button>
@@ -728,7 +721,7 @@
             <div id="admin-page" class="p-4 space-y-6 sub-page">
                 <h2 class="text-xl font-bold text-center text-gray-800">Admin Panel</h2>
 
-                <div class="card-bg p-5 rounded-xl space-y-3 border-l-4 border-blue-500">
+                <div class="card-bg p-5 rounded-xl space-y-3 border-l-4 border-amber-500">
                     <h3 class="font-semibold text-md text-gray-800">App Settings / Work Rate Configuration</h3>
                     <div>
                         <label for="admin-work-rate-input" class="block text-xs font-medium text-gray-600 mb-1">Default Work Submission Reward Rate (BDT)</label>
@@ -740,7 +733,7 @@
                 </div>
 
                 <!-- ADMIN CNPJ STOCK ADDITION -->
-                <div class="card-bg p-5 rounded-xl space-y-3 border-l-4 border-indigo-500">
+                <div class="card-bg p-5 rounded-xl space-y-3 border-l-4 border-orange-500">
                     <h3 class="font-semibold text-md text-gray-800">Add Real CNPJs to Firebase Stock</h3>
                     <p class="text-xs text-gray-500">প্রতি লাইনে একটি করে CNPJ লিখুন।</p>
                     <textarea id="admin-cnpj-textarea" rows="4" placeholder="00.000.000/0001-00&#10;11.111.111/0001-11" class="w-full p-3 rounded-xl input-field font-mono text-xs"></textarea>
@@ -788,7 +781,7 @@
                 </div>
                 <div class="card-bg p-5 rounded-xl space-y-5">
                     <div>
-                        <h3 class="font-semibold text-lg flex items-center gap-2 mb-4"><i data-lucide="users" class="w-6 h-6 text-[#007bff]"></i><span>Add Friend to Team</span></h3>
+                        <h3 class="font-semibold text-lg flex items-center gap-2 mb-4"><i data-lucide="users" class="w-6 h-6 text-amber-500"></i><span>Add Friend to Team</span></h3>
                         <p class="text-sm text-center text-gray-600 bg-gray-100 p-2 rounded-lg mb-4">আপনার বন্ধুর Telegram Chat ID দিয়ে তাকে আপনার টিমের সাথে যুক্ত করুন। যুক্ত হলে সে আপনার ব্যালেন্স ব্যবহার করে মেইল কিনতে পারবে।</p>
                         <div class="space-y-4">
                             <div>
@@ -815,7 +808,7 @@
                 </div>
                 <div class="card-bg p-5 rounded-xl space-y-5">
                     <div>
-                        <h3 class="font-semibold text-lg flex items-center gap-2 mb-4"><i data-lucide="send" class="w-6 h-6 text-[#007bff]"></i><span>ব্যালেন্স পাঠান</span></h3>
+                        <h3 class="font-semibold text-lg flex items-center gap-2 mb-4"><i data-lucide="send" class="w-6 h-6 text-amber-500"></i><span>ব্যালেন্স পাঠান</span></h3>
                         <p class="text-sm text-center text-red-600 bg-red-100 p-2 rounded-lg mb-4">প্রতিটি সেন্ডে 5% ফি প্রযোজ্য।</p>
                         <div class="space-y-4">
                             <div>
@@ -907,8 +900,8 @@
                 <i data-lucide="x" class="w-4 h-4"></i>
             </button>
 
-            <div class="w-12 h-12 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center mx-auto shadow-sm">
-                <i data-lucide="bell-ring" class="w-6 h-6 text-blue-600"></i>
+            <div class="w-12 h-12 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center mx-auto shadow-sm">
+                <i data-lucide="bell-ring" class="w-6 h-6 text-amber-600"></i>
             </div>
 
             <div>
@@ -939,7 +932,7 @@
             <p class="text-xs text-gray-600 text-center font-medium">আপনার দেওয়া তথ্যগুলি কি সঠিক?</p>
             
             <div class="bg-gray-50 p-3 rounded-xl space-y-1.5 text-xs font-mono border">
-                <p><strong>GMAIL:</strong> <span id="confirm-work-gmail" class="text-blue-600 font-bold"></span></p>
+                <p><strong>GMAIL:</strong> <span id="confirm-work-gmail" class="text-amber-600 font-bold"></span></p>
                 <p><strong>PASSWORD:</strong> <span id="confirm-work-pass" class="text-gray-800"></span></p>
                 <p><strong>WHATSAPP:</strong> <span id="confirm-work-wa" class="text-gray-800"></span></p>
             </div>
@@ -968,7 +961,7 @@
              <div id="support-links-container" class="w-full space-y-3 max-w-xs">
                  <p class="text-center text-gray-500">Loading support links...</p>
              </div>
-             <p class="text-xs text-gray-400 mt-8">Developed by <a href="https://t.me/SAIDULEP" target="_blank" class="text-blue-500 font-bold hover:underline">SAIDUL VAI</a></p>
+             <p class="text-xs text-gray-400 mt-8">Developed by <a href="https://t.me/SAIDULEP" target="_blank" class="text-amber-600 font-bold hover:underline">SAIDUL VAI</a></p>
         </div>
     </div>
 
@@ -993,7 +986,7 @@
             <h3 class="text-xl font-bold text-center text-accent-gradient">সহায়িকা</h3>
             <div class="text-gray-700 space-y-4 text-sm max-h-80 overflow-y-auto">
                 <div>
-                    <h4 class="font-semibold text-gray-800 mb-1 flex items-center gap-2"><i data-lucide="file-text" class="w-4 h-4 text-blue-500"></i>CNPJ কীভাবে নিবেন?</h4>
+                    <h4 class="font-semibold text-gray-800 mb-1 flex items-center gap-2"><i data-lucide="file-text" class="w-4 h-4 text-amber-500"></i>CNPJ কীভাবে নিবেন?</h4>
                     <p>CNPJ পেজে যান এবং "GET CNPJ" বাটনে ক্লিক করুন। প্রথমবার ফ্রী এবং পরবর্তীতে প্রতিবার ৳১০ চার্জ প্রযোজ্য।</p>
                 </div>
                 <div>
@@ -1133,6 +1126,7 @@
             const reviewEl = document.getElementById('loader-reviews');
 
             setInterval(() => {
+                if(!reviewEl) return;
                 reviewEl.style.opacity = '0';
                 setTimeout(() => {
                     reviewIndex = (reviewIndex + 1) % reviews.length;
@@ -1263,9 +1257,9 @@
             updateHeaderUI();
         }
 
-        /* HEADER REFRESH USER DATA FUNCTION */
+        /* HEADER REFRESH USER DATA & GLOBAL STORE REFRESH */
         window.refreshUserData = async function(btn) {
-            const icon = btn ? btn.querySelector('i') : null;
+            const icon = btn ? (btn.querySelector('i') || btn) : document.querySelector('#header-refresh-btn i');
             if (icon) icon.classList.add('animate-spin');
 
             try {
@@ -1280,20 +1274,29 @@
                 await fetchAppConfig();
 
                 const activeSubPage = document.querySelector('.sub-page.active');
-                if (activeSubPage) {
-                    const pageId = activeSubPage.id;
-                    if (pageId === 'work-submit-page') loadWorkSubmitPage();
-                    else if (pageId === 'mail-page') loadMailStore();
-                    else if (pageId === 'cnpj-page') loadCnpjPage();
-                    else if (pageId === 'pay-page') loadPaymentHistory();
-                    else if (pageId === 'withdraw-page') loadWithdrawHistory();
+                const pageId = activeSubPage ? activeSubPage.id : 'home-page';
+
+                if (pageId === 'mail-page' || document.getElementById('mail-page').classList.contains('active')) {
+                    await loadMailStore();
+                }
+                if (pageId === 'work-submit-page') {
+                    await loadWorkSubmitPage();
+                }
+                if (pageId === 'cnpj-page') {
+                    await loadCnpjPage();
+                }
+                if (pageId === 'pay-page') {
+                    await loadPaymentHistory();
+                }
+                if (pageId === 'withdraw-page') {
+                    await loadWithdrawHistory();
                 }
             } catch (e) {
                 console.error("Refresh error:", e);
             } finally {
                 setTimeout(() => {
                     if (icon) icon.classList.remove('animate-spin');
-                }, 500);
+                }, 600);
             }
         };
 
@@ -1406,8 +1409,8 @@
             const whatsappLink = appConfig.support?.whatsapp || "https://wa.me/";
             
             supportContainer.innerHTML = `
-                <button onclick="window.Telegram.WebApp.openTelegramLink('${telegramLink}')" class="w-full card-bg p-4 rounded-xl flex items-center gap-3 hover:bg-blue-50 transition">
-                    <i data-lucide="send" class="w-6 h-6 text-blue-500"></i>
+                <button onclick="window.Telegram.WebApp.openTelegramLink('${telegramLink}')" class="w-full card-bg p-4 rounded-xl flex items-center gap-3 hover:bg-amber-50 transition">
+                    <i data-lucide="send" class="w-6 h-6 text-amber-500"></i>
                     <span class="font-bold text-gray-700">Telegram Support</span>
                 </button>
                 <button onclick="window.Telegram.WebApp.openLink('${whatsappLink}')" class="w-full card-bg p-4 rounded-xl flex items-center gap-3 hover:bg-green-50 transition">
@@ -1419,38 +1422,51 @@
             document.getElementById('menu-page').classList.remove('hidden');
         }
 
+        /* FIXED NOTIFICATION FUNCTION (NO COMPOSITE INDEX ERROR) */
         async function openNotifications() {
             const listEl = document.getElementById('notification-list');
             listEl.innerHTML = getLoadingHTML();
             document.getElementById('notification-page').classList.remove('hidden');
             
             try {
-                const notifQuery = query(collection(db, "notifications"), 
-                    where("recipientId", "in", [userData.tgChatId, "all"]),
-                    orderBy("createdAt", "desc"),
-                    limit(20)
-                );
+                const qUser = query(collection(db, "notifications"), where("recipientId", "==", userData.tgChatId), limit(15));
+                const qAll = query(collection(db, "notifications"), where("recipientId", "==", "all"), limit(15));
 
-                const snapshot = await getDocs(notifQuery);
-                if (snapshot.empty) {
-                    listEl.innerHTML = '<p class="text-center text-gray-500 mt-4">কোনো নোটিফিকেশন নেই।</p>';
+                const [snapUser, snapAll] = await Promise.all([getDocs(qUser), getDocs(qAll)]);
+                
+                let allNotifs = [];
+                snapUser.forEach(doc => allNotifs.push({ id: doc.id, ...doc.data() }));
+                snapAll.forEach(doc => allNotifs.push({ id: doc.id, ...doc.data() }));
+
+                const uniqueNotifs = Array.from(new Map(allNotifs.map(item => [item.id, item])).values());
+
+                uniqueNotifs.sort((a, b) => {
+                    const timeA = a.createdAt?.toMillis ? a.createdAt.toMillis() : (a.createdAt ? new Date(a.createdAt).getTime() : 0);
+                    const timeB = b.createdAt?.toMillis ? b.createdAt.toMillis() : (b.createdAt ? new Date(b.createdAt).getTime() : 0);
+                    return timeB - timeA;
+                });
+
+                if (uniqueNotifs.length === 0) {
+                    listEl.innerHTML = '<p class="text-center text-gray-500 mt-6 text-sm">কোনো নোটিফিকেশন নেই।</p>';
                 } else {
-                    listEl.innerHTML = snapshot.docs.map(doc => {
-                        const n = doc.data();
-                        const time = n.createdAt ? n.createdAt.toDate().toLocaleString() : '';
+                    listEl.innerHTML = uniqueNotifs.map(n => {
+                        const time = n.createdAt?.toDate ? n.createdAt.toDate().toLocaleString('bn-BD') : (n.createdAt ? new Date(n.createdAt).toLocaleString('bn-BD') : '');
                         let icon = 'info';
-                        let color = 'blue';
+                        let color = 'text-amber-500';
                         
-                        if(n.title.includes("Approved") || n.title.includes("Success")) { icon = 'check-circle'; color = 'green'; }
-                        else if(n.title.includes("Rejected") || n.title.includes("Failed")) { icon = 'x-circle'; color = 'red'; }
+                        if(n.title && (n.title.includes("Approved") || n.title.includes("Success") || n.title.includes("✅"))) { 
+                            icon = 'check-circle-2'; color = 'text-emerald-500'; 
+                        } else if(n.title && (n.title.includes("Rejected") || n.title.includes("Failed") || n.title.includes("❌"))) { 
+                            icon = 'x-circle'; color = 'text-red-500'; 
+                        }
 
-                        return `<div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
+                        return `<div class="bg-white p-4 rounded-xl border border-gray-100 shadow-sm space-y-1">
                             <div class="flex items-start gap-3">
-                                <i data-lucide="${icon}" class="w-5 h-5 text-${color}-500 mt-1 flex-shrink-0"></i>
-                                <div>
-                                    <h4 class="font-bold text-gray-800 text-sm">${n.title}</h4>
-                                    <p class="text-xs text-gray-600 mt-1">${n.message}</p>
-                                    <p class="text-[10px] text-gray-400 mt-2">${time}</p>
+                                <i data-lucide="${icon}" class="w-5 h-5 ${color} mt-0.5 flex-shrink-0"></i>
+                                <div class="flex-grow">
+                                    <h4 class="font-bold text-gray-800 text-sm">${n.title || 'Notification'}</h4>
+                                    <p class="text-xs text-gray-600 mt-1 leading-relaxed">${n.message || ''}</p>
+                                    <p class="text-[10px] text-gray-400 mt-2 font-mono">${time}</p>
                                 </div>
                             </div>
                         </div>`;
@@ -1463,8 +1479,8 @@
                 document.getElementById('notif-dot').style.display = 'none';
 
             } catch(e) {
-                console.error(e);
-                listEl.innerHTML = '<p class="text-center text-red-500">Error loading notifications.</p>';
+                console.error("Notification Fetch Error:", e);
+                listEl.innerHTML = '<p class="text-center text-red-500 mt-4 text-sm font-semibold">নোটিফিকেশন লোড করতে সমস্যা হয়েছে।</p>';
             }
         }
 
@@ -1474,14 +1490,15 @@
 
         function listenForNotifications() {
             const q = query(collection(db, "notifications"), 
-                where("recipientId", "in", [userData.tgChatId, "all"]),
-                where("createdAt", ">", Timestamp.now())
+                where("recipientId", "in", [userData.tgChatId, "all"])
             );
             
             onSnapshot(q, (snapshot) => {
                 if (!snapshot.empty) {
                     document.getElementById('notif-dot').style.display = 'block';
                 }
+            }, (err) => {
+                console.warn("Notification listener ignored query error");
             });
         }
 
@@ -1598,11 +1615,9 @@
             }
         }
 
-        /* ----- REAL FIREBASE CNPJ FETCHING & CNPJ PAGE ----- */
+        /* ----- CNPJ PAGE LOGIC ----- */
         async function loadCnpjPage() {
             const badgeEl = document.getElementById('cnpj-fee-status-badge');
-            
-            loadPendingBalanceForCnpj();
 
             const deviceId = getDeviceId();
             const deviceRef = doc(db, "claimed_devices", deviceId);
@@ -1615,7 +1630,7 @@
                 document.getElementById('get-cnpj-btn-text').textContent = "GET FREE CNPJ";
             } else {
                 badgeEl.textContent = "💳 যেকোনো সময় CNPJ নিন (চার্জ: ৳১০ BDT)";
-                badgeEl.className = "text-xs font-bold text-blue-700 bg-blue-100 p-2.5 rounded-lg border border-blue-300";
+                badgeEl.className = "text-xs font-bold text-amber-700 bg-amber-100 p-2.5 rounded-lg border border-amber-300";
                 document.getElementById('get-cnpj-btn-text').textContent = "GET CNPJ (৳10)";
             }
 
@@ -1675,24 +1690,6 @@
 
                 if (!hasActive) clearInterval(cnpjListInterval);
             }, 1000);
-        }
-
-        async function loadPendingBalanceForCnpj() {
-            try {
-                const q = query(collection(db, "work_submissions"), 
-                    where("userId", "==", userData.tgChatId),
-                    where("status", "==", "pending")
-                );
-                const snapshot = await getDocs(q);
-                let totalPending = 0;
-                snapshot.docs.forEach(d => {
-                    const defaultRate = appConfig.workRate || 100;
-                    totalPending += (d.data().rewardAmount || defaultRate);
-                });
-                document.getElementById('cnpj-pending-balance').textContent = `৳${totalPending.toFixed(2)}`;
-            } catch(e) {
-                console.error("Error loading pending balance:", e);
-            }
         }
 
         // REAL FIREBASE CNPJ FETCHING HANDLER WITH 5-SECOND COOLDOWN DEBOUNCE
@@ -1840,7 +1837,7 @@
             }
         };
 
-        /* ----- WORK SUBMIT LOGIC & STATS (AUTOMATIC FORM CANCEL IF EMAIL EXISTS) ----- */
+        /* ----- WORK SUBMIT LOGIC ----- */
         window.handleWorkFormPreSubmit = async function(e) {
             e.preventDefault();
             const gmail = document.getElementById('work-gmail').value.trim().toLowerCase();
@@ -1857,7 +1854,6 @@
                 const q = query(collection(db, "work_submissions"), where("gmail", "==", gmail), limit(1));
                 const snap = await getDocs(q);
 
-                // IF GMAIL ALREADY SUBMITTED, AUTO CANCEL FORM & RESET IMMEDIATELY
                 if (!snap.empty) {
                     loader.style.display = 'none';
                     document.getElementById('work-submit-form').reset();
@@ -1911,7 +1907,6 @@
             }
         }
 
-        /* FIXED WORK SUBMIT PAGE STATS & HISTORY DISPLAY */
         async function loadWorkSubmitPage() {
             const listEl = document.getElementById('work-submission-history');
             listEl.innerHTML = getLoadingHTML();
@@ -2043,8 +2038,8 @@
                             <span class="text-[10px] bg-gray-100 text-gray-500 px-2 py-0.5 rounded font-mono">${date}</span>
                         </div>
 
-                        <div class="bg-blue-50/60 border border-blue-100 p-2.5 rounded-lg text-xs space-y-1">
-                            <p class="font-bold text-blue-700 text-[11px] uppercase tracking-wider">User Profile Info:</p>
+                        <div class="bg-amber-50/60 border border-amber-100 p-2.5 rounded-lg text-xs space-y-1">
+                            <p class="font-bold text-amber-700 text-[11px] uppercase tracking-wider">User Profile Info:</p>
                             <p><strong>Real Name:</strong> ${userProfile.realName || 'Not provided'}</p>
                             <p><strong>Phone:</strong> ${userProfile.phone || 'Not provided'}</p>
                             <p><strong>Skills:</strong> ${userProfile.skills || 'No skill description'}</p>
@@ -2273,7 +2268,7 @@
             }
         }
         
-        /* ----- REAL FIREBASE MAIL STORE FETCHING ----- */
+        /* ----- MAIL STORE FETCHING ----- */
         async function loadMailStore() {
             const mailListContainer = document.getElementById('mail-list-container');
             mailListContainer.innerHTML = getLoadingHTML();
@@ -2325,11 +2320,11 @@
                             <img src="${mail.logoUrl || 'https://i.postimg.cc/zBp8rCX9/Yellow-Orange-Modern-Marketing-Courses-You-Tube-Thumbnail-20250910-185659-0000.png'}" class="w-8 h-8 rounded-lg object-cover" alt="${mail.type} logo">
                             <h3 class="font-bold text-lg text-gray-800">${mail.type}</h3>
                         </div>
-                        <button onclick="showMailDetails('${mail.type}', '${encodedDetails}', '${encodedFeatures}')" class="text-blue-600 text-sm font-semibold">Details</button>
+                        <button onclick="showMailDetails('${mail.type}', '${encodedDetails}', '${encodedFeatures}')" class="text-amber-600 text-sm font-semibold">Details</button>
                     </div>
                     
                     <div class="grid grid-cols-2 text-center items-center pt-2 border-t border-gray-200">
-                        <div class="py-1"><p class="text-gray-500 text-xs">Price</p><p class="font-bold text-base text-blue-600">৳${parseFloat(mail.priceBdt).toFixed(2)}</p></div>
+                        <div class="py-1"><p class="text-gray-500 text-xs">Price</p><p class="font-bold text-base text-amber-600">৳${parseFloat(mail.priceBdt).toFixed(2)}</p></div>
                         <div class="py-1"><p class="text-gray-500 text-xs">Stock</p><p class="font-bold text-base text-green-600">${mail.stock}</p></div>
                     </div>
                     <button class="${buyButtonClasses} w-full py-2.5 rounded-xl text-md font-bold" ${buyButtonDisabled ? 'disabled' : ''} onclick="buyMail('${mail.type}', ${mail.priceBdt}, '${mail.stockKey}', '${pageType}')">Buy Now</button>
@@ -2338,7 +2333,6 @@
             lucide.createIcons();
         }
 
-        /* UPDATED BUY HISTORY WITH SEPARATE EMAIL/PASS COPY BUTTONS AND 24H REPLACEMENT TIMER */
         async function loadPurchaseHistory(historyListElId, countdownIntervalVarName, formatType = 'mail') {
             const historyListEl = document.getElementById(historyListElId);
             historyListEl.innerHTML = getLoadingHTML();
@@ -2376,13 +2370,13 @@
                                     <p class="text-[11px] text-gray-400">${date}</p>
                                     <p class="text-[11px] text-amber-600 font-semibold font-mono mt-0.5" id="mail-timer-${idx}" data-expires="${expireTime}">মেয়াদ বাকি: --:--:--</p>
                                 </div>
-                                <button onclick="copyToClipboard(\`${fullData}\`, this)" class="bg-blue-50 text-blue-600 text-xs px-2.5 py-1 rounded-md font-semibold flex items-center gap-1 border border-blue-200 hover:bg-blue-100 transition"><i data-lucide="copy" class="w-3 h-3"></i> FULL COPY</button>
+                                <button onclick="copyToClipboard(\`${fullData}\`, this)" class="bg-amber-50 text-amber-600 text-xs px-2.5 py-1 rounded-md font-semibold flex items-center gap-1 border border-amber-200 hover:bg-amber-100 transition"><i data-lucide="copy" class="w-3 h-3"></i> FULL COPY</button>
                             </div>
                             <div class="space-y-1.5 pt-2 border-t text-xs font-mono">
                                 <div class="flex items-center justify-between bg-gray-50 p-2 rounded-md">
                                     <span class="text-gray-500 font-sans font-medium">EMAIL:</span>
                                     <div class="flex items-center gap-2 max-w-[70%]">
-                                        <span class="text-blue-600 font-bold truncate">${purchase.mail}</span>
+                                        <span class="text-amber-600 font-bold truncate">${purchase.mail}</span>
                                         <button onclick="copyToClipboard(\`${purchase.mail}\`, this)" class="p-1 text-gray-600 hover:bg-gray-200 rounded transition" title="Copy Email"><i data-lucide="copy" class="w-3.5 h-3.5"></i></button>
                                     </div>
                                 </div>
