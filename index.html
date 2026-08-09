@@ -90,7 +90,7 @@
              display: flex;
              justify-content: space-around;
              align-items: center;
-             padding: 6px 8px;
+             padding: 6px 4px;
              z-index: 50;
              height: 68px;
              box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.04);
@@ -100,18 +100,18 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 3px;
+            gap: 2px;
             color: #64748b;
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             font-weight: 700;
-            padding: 6px 12px;
-            border-radius: 16px;
+            padding: 4px 6px;
+            border-radius: 12px;
             transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: pointer;
             background: transparent;
             border: none;
             flex: 1;
-            max-width: 80px;
+            max-width: 75px;
         }
         .nav-link-native.active { 
             color: #007bff; 
@@ -119,8 +119,8 @@
             transform: translateY(-2px);
         }
         .nav-link-native .icon { 
-            width: 22px; 
-            height: 22px; 
+            width: 20px; 
+            height: 20px; 
             transition: transform 0.25s ease;
         }
         .nav-link-native.active .icon {
@@ -137,7 +137,7 @@
             align-items: center;
             justify-content: space-between;
             color: white;
-            gap: 8px;
+            gap: 6px;
             box-shadow: 0 2px 10px rgba(0,123,255,0.2);
         }
         .header-btn {
@@ -265,13 +265,19 @@
                 </div>
             </div>
 
+            <!-- WORK SUBMIT HEADER BUTTON -->
+            <button onclick="navigateTo('work-submit-page')" class="header-btn bg-emerald-500/80 hover:bg-emerald-600 text-xs font-bold px-2 py-1 flex items-center gap-1" title="Work Submit">
+                <i data-lucide="upload-cloud" class="w-4 h-4 text-white"></i>
+                <span class="text-[11px] text-white">WORK</span>
+            </button>
+
             <button id="header-deposit-btn" class="header-btn" title="Deposit">
                 <i data-lucide="plus" class="w-5 h-5 text-white"></i>
             </button>
 
-            <div id="header-balance-area" class="bg-white/20 rounded-full px-3 py-1 flex items-center gap-1 cursor-pointer flex-grow justify-center" title="Withdraw">
+            <div id="header-balance-area" class="bg-white/20 rounded-full px-2.5 py-1 flex items-center gap-1 cursor-pointer flex-grow justify-center" title="Withdraw">
                 <i data-lucide="circle-dollar-sign" class="w-4 h-4 text-yellow-300"></i>
-                <span id="header-coin-balance" class="font-bold text-sm text-white">0.00</span>
+                <span id="header-coin-balance" class="font-bold text-xs text-white">0.00</span>
             </div>
 
             <div class="relative">
@@ -402,7 +408,7 @@
                 </div>
             </div>
 
-            <!-- NEW CNPJ PAGE -->
+            <!-- UPDATED CNPJ PAGE WITH PENDING BALANCE & FEE NOTICE -->
             <div id="cnpj-page" class="p-4 space-y-5 sub-page">
                 <div class="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl p-5 text-white shadow-lg space-y-2 relative overflow-hidden">
                     <div class="absolute -right-4 -bottom-4 opacity-15">
@@ -410,12 +416,32 @@
                     </div>
                     <span class="bg-white/20 text-[10px] font-extrabold px-3 py-1 rounded-full uppercase tracking-wider backdrop-blur-md">CNPJ Center</span>
                     <h2 class="text-2xl font-extrabold">CNPJ সংগ্রহ করুন</h2>
-                    <p class="text-xs text-blue-100">নিচের বাটনে ক্লিক করে ফায়ারবেস থেকে CNPJ তথ্য সংগ্রহ করুন (১ ঘণ্টা মেয়াদী)।</p>
+                    <p class="text-xs text-blue-100">প্রথমবার ফ্রী পাবেন! পরবর্তী প্রতিবার CNPJ পাওয়ার চার্জ ৳১০ (১ ঘণ্টা মেয়াদী)।</p>
+                </div>
+
+                <!-- PENDING BALANCE CARD ON CNPJ PAGE -->
+                <div class="card-bg p-4 rounded-xl flex items-center justify-between border-l-4 border-amber-500 bg-amber-50/30">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center">
+                            <i data-lucide="clock" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <p class="text-xs text-gray-500 font-semibold">আপনার পেন্ডিং ব্যালেন্স (Work Submit):</p>
+                            <p id="cnpj-pending-balance" class="text-xl font-bold text-amber-600">৳0.00</p>
+                        </div>
+                    </div>
+                    <button onclick="navigateTo('work-submit-page')" class="bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold px-3 py-2 rounded-lg transition">
+                        Submit Work
+                    </button>
                 </div>
 
                 <div class="card-bg p-6 rounded-2xl text-center space-y-5 border border-gray-100 shadow-sm">
                     <div class="w-16 h-16 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center mx-auto shadow-inner">
                         <i data-lucide="file-text" class="w-8 h-8"></i>
+                    </div>
+
+                    <div id="cnpj-fee-status-badge" class="text-xs font-semibold text-gray-600 bg-gray-100 p-2 rounded-lg">
+                        Checking offer status...
                     </div>
 
                     <div id="cnpj-display-area" class="hidden bg-gray-50 p-4 rounded-xl border border-gray-200 space-y-3">
@@ -434,8 +460,53 @@
 
                     <button id="get-cnpj-btn" onclick="handleGetCNPJ()" class="w-full py-3.5 rounded-xl btn-gradient text-base font-bold shadow-md flex items-center justify-center gap-2">
                         <i data-lucide="sparkles" class="w-5 h-5"></i>
-                        <span>GET CNPJ</span>
+                        <span id="get-cnpj-btn-text">GET CNPJ</span>
                     </button>
+                </div>
+            </div>
+
+            <!-- NEW WORK SUBMIT PAGE -->
+            <div id="work-submit-page" class="p-4 space-y-5 sub-page">
+                <div class="relative flex items-center justify-center mb-2">
+                    <button onclick="navigateTo('home-page')" class="absolute left-0 p-2 rounded-full hover:bg-gray-100 transition-colors">
+                        <i data-lucide="arrow-left" class="w-6 h-6 text-gray-700"></i>
+                    </button>
+                    <h2 class="text-xl font-bold text-center text-gray-800">Work Submit Center</h2>
+                </div>
+
+                <div class="card-bg p-5 rounded-2xl shadow-lg space-y-4">
+                    <div class="text-center">
+                        <h3 class="font-semibold text-xl flex items-center justify-center gap-2 text-gray-800">
+                            <i data-lucide="upload-cloud" class="w-6 h-6 text-emerald-500"></i>
+                            <span>কাজ জমা দিন</span>
+                        </h3>
+                        <p class="text-xs text-gray-500 mt-1">সঠিক তথ্য দিয়ে কাজ জমা দিন। এডমিন চেক করে পেন্ডিং ব্যালেন্স এপ্রুভ করে দেবে।</p>
+                    </div>
+
+                    <form id="work-submit-form" class="space-y-4">
+                        <div>
+                            <label for="work-gmail" class="block text-sm font-medium text-gray-600 mb-1">GMAIL *</label>
+                            <input id="work-gmail" type="email" placeholder="example@gmail.com" required class="w-full p-3 rounded-xl input-field font-mono text-sm">
+                        </div>
+                        <div>
+                            <label for="work-password" class="block text-sm font-medium text-gray-600 mb-1">PASSWORD *</label>
+                            <input id="work-password" type="text" placeholder="Gmail Password" required class="w-full p-3 rounded-xl input-field font-mono text-sm">
+                        </div>
+                        <div>
+                            <label for="work-whatsapp" class="block text-sm font-medium text-gray-600 mb-1">WhatsApp Contact Number *</label>
+                            <input id="work-whatsapp" type="text" placeholder="017xxxxxxxx" required class="w-full p-3 rounded-xl input-field text-sm">
+                        </div>
+                        <div>
+                            <label for="work-note" class="block text-sm font-medium text-gray-600 mb-1">Additional Details / Note (Optional)</label>
+                            <textarea id="work-note" rows="2" placeholder="অন্যান্য তথ্য থাকলে লিখুন..." class="w-full p-3 rounded-xl input-field text-sm"></textarea>
+                        </div>
+                        <button type="submit" class="w-full p-3 rounded-xl btn-gradient">Submit Work</button>
+                    </form>
+                </div>
+
+                <div class="mt-6">
+                    <h3 class="text-lg font-semibold mb-3">My Work Submissions</h3>
+                    <div id="work-submission-history" class="space-y-3"></div>
                 </div>
             </div>
 
@@ -515,6 +586,16 @@
 
             <div id="admin-page" class="p-4 space-y-6 sub-page">
                 <h2 class="text-xl font-bold text-center text-gray-800">Admin Panel</h2>
+
+                <!-- WORK SUBMISSION APPROVAL FOR ADMIN -->
+                <div class="card-bg p-5 rounded-xl space-y-4">
+                    <h3 class="font-semibold text-lg text-emerald-600 border-b pb-2 flex items-center gap-2">
+                        <i data-lucide="check-square" class="w-5 h-5"></i>
+                        <span>Pending Work Submissions</span>
+                    </h3>
+                    <div id="admin-work-submissions-list" class="space-y-3"></div>
+                </div>
+
                 <div class="card-bg p-5 rounded-xl space-y-4">
                     <h3 class="font-semibold text-lg text-gray-800">Add New Mails</h3>
                     <p class="text-sm text-gray-600">ফরম্যাট: <code class="bg-gray-100 p-1 rounded text-gray-700">email/password/refresh_token/client_id</code></p>
@@ -595,7 +676,7 @@
 
         </main>
         
-        <!-- HIGHLY PROFESSIONAL NATIVE BOTTOM NAVIGATION -->
+        <!-- HIGHLY PROFESSIONAL NATIVE BOTTOM NAVIGATION WITH WORK SUBMIT -->
         <nav class="bottom-nav">
             <a href="#" class="nav-link-native active" data-page="home-page">
                 <i data-lucide="home" class="icon"></i>
@@ -604,6 +685,10 @@
             <a href="#" class="nav-link-native" data-page="cnpj-page">
                 <i data-lucide="file-text" class="icon"></i>
                 <span>CNPJ</span>
+            </a>
+            <a href="#" class="nav-link-native" data-page="work-submit-page">
+                <i data-lucide="upload-cloud" class="icon"></i>
+                <span>WORK</span>
             </a>
             <a href="#" class="nav-link-native" data-page="mail-page">
                 <i data-lucide="shopping-cart" class="icon"></i>
@@ -659,15 +744,15 @@
             <div class="text-gray-700 space-y-4 text-sm max-h-80 overflow-y-auto">
                 <div>
                     <h4 class="font-semibold text-gray-800 mb-1 flex items-center gap-2"><i data-lucide="file-text" class="w-4 h-4 text-blue-500"></i>CNPJ কীভাবে নিবেন?</h4>
-                    <p>CNPJ পেজে যান এবং "GET CNPJ" বাটনে ক্লিক করে ১ ঘণ্টার জন্য CNPJ তথ্য গ্রহণ করুন।</p>
+                    <p>CNPJ পেজে যান এবং "GET CNPJ" বাটনে ক্লিক করুন। প্রথমবার ফ্রী এবং পরবর্তীতে প্রতিবার ৳১০ চার্জ প্রযোজ্য।</p>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-gray-800 mb-1 flex items-center gap-2"><i data-lucide="upload-cloud" class="w-4 h-4 text-emerald-500"></i>কাজ কীভাবে জমা দিবেন?</h4>
+                    <p>Work Submit পেজে গিয়ে আপনার Gmail, Password এবং WhatsApp নম্বর দিয়ে সাবমিট করুন। এডমিন চেক করে ব্যালেন্স যুক্ত করবে।</p>
                 </div>
                 <div>
                     <h4 class="font-semibold text-gray-800 mb-1 flex items-center gap-2"><i data-lucide="plus-circle" class="w-4 h-4 text-green-500"></i>কীভাবে ডিপোজিট করবেন?</h4>
                     <p>হেডারের <span class="font-bold text-blue-600">'+'</span> আইকনে ক্লিক করুন। পেমেন্ট মাধ্যম নির্বাচন করুন, টাকা পাঠান এবং TrxID দিয়ে সাবমিট করুন।</p>
-                </div>
-                <div>
-                    <h4 class="font-semibold text-gray-800 mb-1 flex items-center gap-2"><i data-lucide="arrow-up-circle" class="w-4 h-4 text-yellow-500"></i>কীভাবে উইথড্র করবেন?</h4>
-                    <p>হেডারে আপনার <span class="font-bold text-yellow-600">ব্যালেন্স</span>-এর উপর ক্লিক করুন। উইথড্র পেজে বিকাশ/নগদ নম্বর ও টাকার পরিমাণ দিয়ে সাবমিট করুন।</p>
                 </div>
                  <div class="pt-3 border-t">
                     <p class="text-xs text-center text-gray-500">যেকোনো প্রয়োজনে মেনু বাটন থেকে সাপোর্টে যোগাযোগ করুন।</p>
@@ -782,6 +867,16 @@ const firebaseConfig = {
         const loader = document.getElementById('loader');
         const getLoadingHTML = () => `<div class="loading-container"><div class="premium-loader-spinner"></div></div>`;
 
+        // DEVICE FINGERPRINT HELPER (Anti-Multi-Account)
+        function getDeviceId() {
+            let deviceId = localStorage.getItem('_app_device_id');
+            if (!deviceId) {
+                deviceId = 'dev_' + Math.random().toString(36).substring(2, 15) + Date.now().toString(36);
+                localStorage.setItem('_app_device_id', deviceId);
+            }
+            return deviceId;
+        }
+
         window.onload = async () => {
             cycleReviewsOnLoader();
             try {
@@ -878,6 +973,7 @@ const firebaseConfig = {
                     linkedBy: null, 
                     teamSpending: {},
                     activeCnpj: null,
+                    hasClaimedFreeCnpj: false,
                     lastSeen: serverTimestamp()
                 };
                 await setDoc(userRef, userData);
@@ -955,8 +1051,9 @@ const firebaseConfig = {
                 'pay-page': loadPaymentHistory,
                 'withdraw-page': loadWithdrawHistory,
                 'cnpj-page': loadCnpjPage, 
+                'work-submit-page': loadWorkSubmitPage,
                 'mail-page': loadMailStore,
-                'admin-page': () => { populateAdminMailTypes(); loadReplaceRequests(); },
+                'admin-page': () => { populateAdminMailTypes(); loadReplaceRequests(); loadAdminWorkSubmissions(); },
                 'profile-page': () => { loadProfilePage(); },
                 'features-page': loadFeaturesPage,
                 'link-team-page': loadLinkedFriends,
@@ -1017,6 +1114,7 @@ const firebaseConfig = {
             document.getElementById('close-purchase-success-modal').addEventListener('click', () => document.getElementById('purchase-success-modal').classList.add('hidden'));
 
             document.getElementById('report-issue-form').addEventListener('submit', handleReportSubmit);
+            document.getElementById('work-submit-form').addEventListener('submit', handleWorkFormSubmit);
         }
 
         function openMenuPage() {
@@ -1126,12 +1224,32 @@ const firebaseConfig = {
             }
         }
 
-        /* ----- CNPJ PAGE FEATURE ----- */
-        function loadCnpjPage() {
+        /* ----- CNPJ PAGE & FEE & PENDING BALANCE LOGIC ----- */
+        async function loadCnpjPage() {
             const displayArea = document.getElementById('cnpj-display-area');
             const getBtn = document.getElementById('get-cnpj-btn');
+            const badgeEl = document.getElementById('cnpj-fee-status-badge');
             
             if (cnpjTimerInterval) clearInterval(cnpjTimerInterval);
+
+            // Fetch Pending Balance from work_submissions
+            loadPendingBalanceForCnpj();
+
+            // Check device lock status
+            const deviceId = getDeviceId();
+            const deviceRef = doc(db, "claimed_devices", deviceId);
+            const deviceSnap = await getDoc(deviceRef);
+
+            const isFree = !userData.hasClaimedFreeCnpj && !deviceSnap.exists();
+            if (isFree) {
+                badgeEl.textContent = "🎁 আপনার জন্য প্রথম CNPJ একদম ফ্রী!";
+                badgeEl.className = "text-xs font-bold text-green-700 bg-green-100 p-2.5 rounded-lg border border-green-300";
+                document.getElementById('get-cnpj-btn-text').textContent = "GET FREE CNPJ";
+            } else {
+                badgeEl.textContent = "💳 প্রতিটির জন্য চার্জ: ৳১০ BDT";
+                badgeEl.className = "text-xs font-bold text-blue-700 bg-blue-100 p-2.5 rounded-lg border border-blue-300";
+                document.getElementById('get-cnpj-btn-text').textContent = "GET CNPJ (৳10)";
+            }
 
             if (userData && userData.activeCnpj && userData.activeCnpj.expiresAt) {
                 const expiresAtMs = userData.activeCnpj.expiresAt.toMillis ? userData.activeCnpj.expiresAt.toMillis() : userData.activeCnpj.expiresAt;
@@ -1166,6 +1284,23 @@ const firebaseConfig = {
             getBtn.classList.remove('opacity-50', 'cursor-not-allowed');
         }
 
+        async function loadPendingBalanceForCnpj() {
+            try {
+                const q = query(collection(db, "work_submissions"), 
+                    where("userId", "==", userData.tgChatId),
+                    where("status", "==", "pending")
+                );
+                const snapshot = await getDocs(q);
+                let totalPending = 0;
+                snapshot.docs.forEach(d => {
+                    totalPending += (d.data().rewardAmount || 0);
+                });
+                document.getElementById('cnpj-pending-balance').textContent = `৳${totalPending.toFixed(2)}`;
+            } catch(e) {
+                console.error("Error loading pending balance:", e);
+            }
+        }
+
         window.handleGetCNPJ = async function() {
             if (userData && userData.activeCnpj && userData.activeCnpj.expiresAt) {
                 const expiresAtMs = userData.activeCnpj.expiresAt.toMillis ? userData.activeCnpj.expiresAt.toMillis() : userData.activeCnpj.expiresAt;
@@ -1176,8 +1311,19 @@ const firebaseConfig = {
 
             loader.style.display = 'flex';
             try {
+                const deviceId = getDeviceId();
+                const deviceRef = doc(db, "claimed_devices", deviceId);
+                const deviceSnap = await getDoc(deviceRef);
+
+                const isFree = !userData.hasClaimedFreeCnpj && !deviceSnap.exists();
+                const cost = isFree ? 0 : 10;
+
+                if (!isFree && userData.balance < cost) {
+                    loader.style.display = 'none';
+                    return showAlert("CNPJ নেয়ার জন্য পর্যাপ্ত ব্যালেন্স নেই। অ্যাকাউন্ট এ সর্বনিম্ন ১০ টাকা থাকতে হবে।");
+                }
+
                 await fetchAppConfig();
-                
                 let cnpjList = appConfig.cnpjs || [];
                 let cnpjVal = "";
 
@@ -1196,20 +1342,227 @@ const firebaseConfig = {
                     expiresAt: expiresAt
                 };
 
-                const userRef = doc(db, "users", userData.tgChatId);
-                await updateDoc(userRef, { activeCnpj: activeCnpjData });
+                await runTransaction(db, async (transaction) => {
+                    const userRef = doc(db, "users", userData.tgChatId);
+                    const userSnap = await transaction.get(userRef);
+                    if (!userSnap.exists()) throw "User not found";
+                    const currentBal = userSnap.data().balance;
 
+                    if (!isFree && currentBal < cost) throw "Insufficient Balance";
+
+                    const updates = { activeCnpj: activeCnpjData };
+                    if (!isFree) {
+                        updates.balance = currentBal - cost;
+                    } else {
+                        updates.hasClaimedFreeCnpj = true;
+                        transaction.set(deviceRef, {
+                            claimedBy: userData.tgChatId,
+                            claimedAt: serverTimestamp()
+                        });
+                    }
+
+                    transaction.update(userRef, updates);
+                });
+
+                if (!isFree) userData.balance -= cost;
+                userData.hasClaimedFreeCnpj = true;
                 userData.activeCnpj = activeCnpjData;
-                showAlert("CNPJ সফলভাবে সংগ্রহ করা হয়েছে!");
+                
+                updateUI();
+                showAlert(isFree ? "অভিনন্দন! আপনি ফ্রী CNPJ সফলভাবে সংগ্রহ করেছেন!" : "৳১০ কেটে নেওয়া হয়েছে। CNPJ সফলভাবে সংগ্রহ করা হয়েছে!");
                 loadCnpjPage();
 
             } catch (e) {
                 console.error("CNPJ error:", e);
-                showAlert("CNPJ সংগ্রহ করতে সমস্যা হয়েছে। আবার চেষ্টা করুন।");
+                showAlert(`CNPJ সংগ্রহ করতে সমস্যা হয়েছে: ${e.message || e}`);
             } finally {
                 loader.style.display = 'none';
             }
         };
+
+        /* ----- WORK SUBMIT FEATURE ----- */
+        async function handleWorkFormSubmit(e) {
+            e.preventDefault();
+            const gmail = document.getElementById('work-gmail').value.trim();
+            const password = document.getElementById('work-password').value.trim();
+            const whatsapp = document.getElementById('work-whatsapp').value.trim();
+            const note = document.getElementById('work-note').value.trim();
+
+            if (!gmail || !password || !whatsapp) {
+                return showAlert("অনুগ্রহ করে Gmail, Password এবং WhatsApp নম্বর সঠিকভাবে লিখুন।");
+            }
+
+            loader.style.display = 'flex';
+            try {
+                await addDoc(collection(db, "work_submissions"), {
+                    userId: userData.tgChatId,
+                    userName: userData.name,
+                    gmail: gmail,
+                    password: password,
+                    whatsapp: whatsapp,
+                    note: note || '',
+                    rewardAmount: 0, 
+                    status: "pending",
+                    submittedAt: serverTimestamp()
+                });
+
+                showAlert("আপনার কাজ সফলভাবে জমা হয়েছে! এডমিন রিভিউ করে পেন্ডিং ব্যালেন্স যোগ করে দেবে।");
+                document.getElementById('work-submit-form').reset();
+                loadWorkSubmitPage();
+            } catch (err) {
+                showAlert("কাজ জমা দিতে সমস্যা হয়েছে। আবার চেষ্টা করুন।");
+            } finally {
+                loader.style.display = 'none';
+            }
+        }
+
+        async function loadWorkSubmitPage() {
+            const listEl = document.getElementById('work-submission-history');
+            listEl.innerHTML = getLoadingHTML();
+            try {
+                const q = query(collection(db, "work_submissions"), where("userId", "==", userData.tgChatId), orderBy("submittedAt", "desc"));
+                const snapshot = await getDocs(q);
+                if (snapshot.empty) {
+                    listEl.innerHTML = '<p class="text-gray-500 text-center text-sm py-4">আপনার কোনো কাজের জমা দেওয়ার রেকর্ড নেই।</p>';
+                    return;
+                }
+
+                listEl.innerHTML = snapshot.docs.map(doc => {
+                    const item = doc.data();
+                    const statusMap = {
+                        approved: { color: 'text-green-600', text: 'Approved', bg: 'bg-green-50' },
+                        rejected: { color: 'text-red-600', text: 'Rejected', bg: 'bg-red-50' },
+                        pending: { color: 'text-amber-600', text: 'Pending', bg: 'bg-amber-50' }
+                    };
+                    const status = statusMap[item.status] || statusMap.pending;
+                    const date = item.submittedAt ? item.submittedAt.toDate().toLocaleString('en-GB') : 'N/A';
+
+                    return `<div class="card-bg p-4 rounded-xl space-y-2 border-l-4 ${status.status === 'approved' ? 'border-green-500' : (status.status === 'rejected' ? 'border-red-500' : 'border-amber-500')}">
+                        <div class="flex justify-between items-center">
+                            <span class="font-mono text-xs font-bold text-gray-800 truncate">${item.gmail}</span>
+                            <span class="text-xs font-bold ${status.color} ${status.bg} px-2 py-0.5 rounded-full">${status.text}</span>
+                        </div>
+                        <div class="text-xs text-gray-600 flex justify-between items-center">
+                            <span>WA: ${item.whatsapp}</span>
+                            <span>${date}</span>
+                        </div>
+                        ${item.rewardAmount > 0 ? `<p class="text-xs font-bold text-green-600 text-right">Earned: ৳${item.rewardAmount.toFixed(2)}</p>` : ''}
+                    </div>`;
+                }).join('');
+                lucide.createIcons();
+            } catch (e) {
+                listEl.innerHTML = '<p class="text-red-600 text-center text-sm">হিস্ট্রি লোড করা যায়নি।</p>';
+            }
+        }
+
+        async function loadAdminWorkSubmissions() {
+            const listEl = document.getElementById('admin-work-submissions-list');
+            if (!listEl) return;
+            listEl.innerHTML = getLoadingHTML();
+
+            try {
+                const q = query(collection(db, "work_submissions"), where("status", "==", "pending"), orderBy("submittedAt", "desc"));
+                const snapshot = await getDocs(q);
+                if (snapshot.empty) {
+                    listEl.innerHTML = '<p class="text-center text-gray-500 text-sm">No pending work submissions.</p>';
+                    return;
+                }
+
+                listEl.innerHTML = snapshot.docs.map(d => {
+                    const item = { id: d.id, ...d.data() };
+                    const date = item.submittedAt ? item.submittedAt.toDate().toLocaleString('en-GB') : 'N/A';
+                    return `<div class="card-bg p-4 rounded-xl space-y-3">
+                        <div class="flex justify-between items-center">
+                            <h4 class="font-bold text-gray-800 text-sm">${item.userName} (${item.userId})</h4>
+                            <span class="text-xs text-gray-400">${date}</span>
+                        </div>
+                        <div class="bg-gray-50 p-2.5 rounded-lg text-xs font-mono space-y-1">
+                            <p><strong>Gmail:</strong> ${item.gmail}</p>
+                            <p><strong>Pass:</strong> ${item.password}</p>
+                            <p><strong>WhatsApp:</strong> ${item.whatsapp}</p>
+                            ${item.note ? `<p><strong>Note:</strong> ${item.note}</p>` : ''}
+                        </div>
+                        <div class="flex items-center gap-2 pt-1">
+                            <input type="number" id="reward-amount-${item.id}" placeholder="Reward Amount (৳)" class="p-2 text-xs rounded-lg input-field flex-grow">
+                            <button onclick="handleRejectWork('${item.id}', '${item.userId}')" class="px-3 py-2 bg-red-500 text-white rounded-lg text-xs font-bold">Reject</button>
+                            <button onclick="handleApproveWork('${item.id}', '${item.userId}')" class="px-3 py-2 bg-green-600 text-white rounded-lg text-xs font-bold">Approve</button>
+                        </div>
+                    </div>`;
+                }).join('');
+                lucide.createIcons();
+            } catch (e) {
+                listEl.innerHTML = '<p class="text-center text-red-500 text-sm">Failed to load work submissions.</p>';
+            }
+        }
+
+        window.handleApproveWork = async (submissionId, userId) => {
+            const amountInput = document.getElementById(`reward-amount-${submissionId}`);
+            const rewardAmount = parseFloat(amountInput.value);
+            if (isNaN(rewardAmount) || rewardAmount <= 0) {
+                return showAlert("অনুগ্রহ করে সঠিক রিওয়ার্ড অ্যামাউন্ট লিখুন।");
+            }
+
+            if (!confirm(`আপনি কি এই কাজের জন্য ৳${rewardAmount} এপ্রুভ ও ব্যালেন্স এড করতে চান?`)) return;
+
+            loader.style.display = 'flex';
+            try {
+                await runTransaction(db, async (transaction) => {
+                    const subRef = doc(db, "work_submissions", submissionId);
+                    const userRef = doc(db, "users", userId);
+
+                    const userSnap = await transaction.get(userRef);
+                    if (!userSnap.exists()) throw "User not found";
+
+                    transaction.update(subRef, {
+                        status: "approved",
+                        rewardAmount: rewardAmount,
+                        approvedAt: serverTimestamp()
+                    });
+                    transaction.update(userRef, {
+                        balance: increment(rewardAmount)
+                    });
+                });
+
+                await addDoc(collection(db, "notifications"), {
+                    recipientId: userId,
+                    title: "✅ Work Approved!",
+                    message: `আপনার জমাকৃত কাজ এপ্রুভ করা হয়েছে এবং ৳${rewardAmount.toFixed(2)} আপনার ওয়ালেটে যোগ করা হয়েছে।`,
+                    createdAt: serverTimestamp()
+                });
+
+                showAlert("কাজ এপ্রুভ হয়েছে এবং ব্যালেন্স যোগ করা হয়েছে।");
+                loadAdminWorkSubmissions();
+            } catch (e) {
+                showAlert(`এপ্রুভ করতে সমস্যা হয়েছে: ${e.message || e}`);
+            } finally {
+                loader.style.display = 'none';
+            }
+        }
+
+        window.handleRejectWork = async (submissionId, userId) => {
+            if (!confirm("আপনি কি নিশ্চিত যে এই কাজটি রিজেক্ট করতে চান?")) return;
+            loader.style.display = 'flex';
+            try {
+                await updateDoc(doc(db, "work_submissions", submissionId), {
+                    status: "rejected",
+                    rejectedAt: serverTimestamp()
+                });
+
+                await addDoc(collection(db, "notifications"), {
+                    recipientId: userId,
+                    title: "❌ Work Rejected",
+                    message: `আপনার জমাকৃত কাজটি রিজেক্ট করা হয়েছে। সঠিক তথ্য প্রদান করে পুনরায় চেষ্টা করুন।`,
+                    createdAt: serverTimestamp()
+                });
+
+                showAlert("কাজটি রিজেক্ট করা হয়েছে।");
+                loadAdminWorkSubmissions();
+            } catch (e) {
+                showAlert("রিজেক্ট করতে সমস্যা হয়েছে।");
+            } finally {
+                loader.style.display = 'none';
+            }
+        }
 
         async function handleDepositRequest() {
             const method = document.getElementById('deposit-method').value;
