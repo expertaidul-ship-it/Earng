@@ -75,7 +75,6 @@
         .sub-page { display: none; }
         .sub-page.active { display: block; animation: fadeIn 0.3s ease-in-out; }
 
-        /* ULTRA MODERN NATIVE BOTTOM NAV WITH WORK BUTTON */
         .bottom-nav {
              border-top: 1px solid rgba(226, 232, 240, 0.9);
              background: rgba(255, 255, 255, 0.95);
@@ -252,6 +251,20 @@
             top: 0;
             z-index: 10;
         }
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            height: 0;
+            overflow: hidden;
+            border-radius: 12px;
+        }
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
     </style>
 </head>
 <body class="max-w-md mx-auto">
@@ -276,7 +289,7 @@
                 </div>
             </div>
 
-            <!-- BALANCE CLICKABLE AREA (NOTIFICATION POPUP TRIGGER) -->
+            <!-- BALANCE CLICKABLE AREA -->
             <div id="header-balance-area" onclick="openBalancePopupModal()" class="bg-white/20 hover:bg-white/30 transition rounded-full px-4 py-1.5 flex items-center gap-1.5 cursor-pointer flex-grow justify-center shadow-inner" title="Wallet Actions">
                 <i data-lucide="wallet" class="w-4 h-4 text-yellow-300"></i>
                 <span id="header-coin-balance" class="font-extrabold text-sm text-white tracking-wide">0.00</span>
@@ -467,7 +480,7 @@
                 </div>
             </div>
 
-            <!-- CNPJ PAGE WITH DYNAMIC ACTIVE CNPJ LIST -->
+            <!-- CNPJ PAGE -->
             <div id="cnpj-page" class="p-4 space-y-5 sub-page">
                 <div class="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl p-5 text-white shadow-lg space-y-2 relative overflow-hidden">
                     <div class="absolute -right-4 -bottom-4 opacity-15">
@@ -505,7 +518,7 @@
                     </button>
                 </div>
 
-                <!-- ACTIVE CNPJ LIST (AUTO EXPIRES IN 1 HOUR) -->
+                <!-- ACTIVE CNPJ LIST -->
                 <div class="space-y-3 pt-2">
                     <h3 class="text-md font-bold text-gray-800 flex items-center justify-between">
                         <span class="flex items-center gap-2">
@@ -520,7 +533,7 @@
                 </div>
             </div>
 
-            <!-- WORK SUBMIT PAGE -->
+            <!-- NEW & IMPROVED WORK SUBMIT PAGE -->
             <div id="work-submit-page" class="p-4 space-y-5 sub-page">
                 <div class="relative flex items-center justify-center mb-2">
                     <button onclick="navigateTo('home-page')" class="absolute left-0 p-2 rounded-full hover:bg-gray-100 transition-colors">
@@ -529,34 +542,41 @@
                     <h2 class="text-xl font-bold text-center text-gray-800">Work Submit Center</h2>
                 </div>
 
-                <div class="card-bg p-5 rounded-2xl shadow-lg space-y-4">
-                    <div class="text-center">
-                        <h3 class="font-semibold text-xl flex items-center justify-center gap-2 text-gray-800">
-                            <i data-lucide="upload-cloud" class="w-6 h-6 text-emerald-500"></i>
-                            <span>কাজ জমা দিন</span>
-                        </h3>
-                        <p class="text-xs text-gray-500 mt-1">সঠিক তথ্য দিয়ে কাজ জমা দিন। এডমিন চেক করে পেন্ডিং ব্যালেন্স এপ্রুভ করে দেবে।</p>
+                <!-- TOP STATS DISPLAY -->
+                <div class="grid grid-cols-3 gap-2">
+                    <div class="card-bg p-3 rounded-xl text-center border-b-4 border-blue-500">
+                        <p class="text-[10px] text-gray-500 font-bold uppercase">Total Submitted</p>
+                        <p id="work-stat-total-count" class="text-lg font-black text-blue-600">0</p>
                     </div>
+                    <div class="card-bg p-3 rounded-xl text-center border-b-4 border-amber-500">
+                        <p class="text-[10px] text-gray-500 font-bold uppercase">Pending Balance</p>
+                        <p id="work-stat-pending-bal" class="text-lg font-black text-amber-600">৳0.00</p>
+                    </div>
+                    <div class="card-bg p-3 rounded-xl text-center border-b-4 border-emerald-500">
+                        <p class="text-[10px] text-gray-500 font-bold uppercase">Approved Earnings</p>
+                        <p id="work-stat-approved-bal" class="text-lg font-black text-emerald-600">৳0.00</p>
+                    </div>
+                </div>
 
-                    <form id="work-submit-form" onsubmit="handleWorkFormPreSubmit(event)" class="space-y-4">
-                        <div>
-                            <label for="work-gmail" class="block text-sm font-medium text-gray-600 mb-1">GMAIL *</label>
-                            <input id="work-gmail" type="email" placeholder="example@gmail.com" required class="w-full p-3 rounded-xl input-field font-mono text-sm">
-                        </div>
-                        <div>
-                            <label for="work-password" class="block text-sm font-medium text-gray-600 mb-1">PASSWORD *</label>
-                            <input id="work-password" type="text" placeholder="Gmail Password" required class="w-full p-3 rounded-xl input-field font-mono text-sm">
-                        </div>
-                        <div>
-                            <label for="work-whatsapp" class="block text-sm font-medium text-gray-600 mb-1">WhatsApp Contact Number *</label>
-                            <input id="work-whatsapp" type="text" placeholder="017xxxxxxxx" required class="w-full p-3 rounded-xl input-field text-sm">
-                        </div>
-                        <div>
-                            <label for="work-note" class="block text-sm font-medium text-gray-600 mb-1">Additional Details / Note (Optional)</label>
-                            <textarea id="work-note" rows="2" placeholder="অন্যান্য তথ্য থাকলে লিখুন..." class="w-full p-3 rounded-xl input-field text-sm"></textarea>
-                        </div>
-                        <button type="submit" class="w-full p-3 rounded-xl btn-gradient">Submit Work</button>
-                    </form>
+                <!-- ACTION BUTTON: OPEN WORK MODAL -->
+                <div class="card-bg p-4 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 text-white text-center space-y-3 shadow-md">
+                    <h3 class="text-lg font-extrabold">সহজে কাজ জমা দিয়ে আয় করুন</h3>
+                    <p class="text-xs text-emerald-100">নিচের বাটনটিতে ক্লিক করে জিমেইল ও প্রয়োজনীয় তথ্য ফর্মটি পূরণ করুন।</p>
+                    <button onclick="openWorkFormModal()" class="w-full py-3 bg-white text-emerald-800 font-extrabold text-sm rounded-xl shadow-lg hover:bg-emerald-50 transition flex items-center justify-center gap-2">
+                        <i data-lucide="plus-circle" class="w-5 h-5 text-emerald-600"></i>
+                        <span>কাজ জমা দিন (SUBMIT WORK)</span>
+                    </button>
+                </div>
+
+                <!-- TUTORIAL VIDEO PLAYER SECTION -->
+                <div class="card-bg p-4 rounded-2xl space-y-3">
+                    <h3 class="font-bold text-sm text-gray-800 flex items-center gap-2">
+                        <i data-lucide="youtube" class="w-5 h-5 text-red-600"></i>
+                        <span>কীভাবে কাজ করবেন? (টিউটোরিয়াল ভিডিও)</span>
+                    </h3>
+                    <div class="video-container shadow-inner bg-black">
+                        <iframe src="https://www.youtube.com/embed/yy-ELf7JpMw" title="Work Tutorial Video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                    </div>
                 </div>
 
                 <div class="mt-6">
@@ -583,9 +603,7 @@
                 </div>
             </div>
             
-            <!-- ULTRA PROFESSIONAL PROFILE PAGE WITH SKILL PROFILE -->
             <div id="profile-page" class="p-4 space-y-5 sub-page">
-                <!-- PROFILE HEADER CARD -->
                 <div class="card-bg p-6 rounded-2xl flex flex-col items-center text-center relative overflow-hidden">
                     <div class="relative mb-3">
                         <img id="profile-pic" class="w-24 h-24 rounded-full border-4 border-[#007bff] object-cover shadow-md" src="" alt="Profile Picture" loading="lazy">
@@ -596,7 +614,6 @@
                     <p id="profile-id" class="text-xs text-blue-600 font-mono mt-1 font-semibold">ID: 123456</p>
                 </div>
 
-                <!-- WORK SKILL PERFORMANCE STATS DASHBOARD -->
                 <div class="card-bg p-5 rounded-2xl space-y-3">
                     <h4 class="font-extrabold text-sm text-gray-700 uppercase tracking-wider flex items-center gap-2">
                         <i data-lucide="award" class="w-4 h-4 text-blue-600"></i>
@@ -624,7 +641,6 @@
                     </div>
                 </div>
 
-                <!-- USER SKILLS & EXPERIENCE FORM (ONE TIME EDITABLE) -->
                 <div class="card-bg p-5 rounded-2xl space-y-4">
                     <div>
                         <h4 class="font-extrabold text-base text-gray-800 flex items-center gap-2">
@@ -707,7 +723,6 @@
             <div id="admin-page" class="p-4 space-y-6 sub-page">
                 <h2 class="text-xl font-bold text-center text-gray-800">Admin Panel</h2>
 
-                <!-- ADMIN GLOBAL CONFIG EDIT -->
                 <div class="card-bg p-5 rounded-xl space-y-3 border-l-4 border-blue-500">
                     <h3 class="font-semibold text-md text-gray-800">App Settings / Work Rate Configuration</h3>
                     <div>
@@ -719,7 +734,14 @@
                     </div>
                 </div>
 
-                <!-- WORK SUBMISSION APPROVAL FOR ADMIN -->
+                <!-- ADMIN CNPJ STOCK ADDITION -->
+                <div class="card-bg p-5 rounded-xl space-y-3 border-l-4 border-indigo-500">
+                    <h3 class="font-semibold text-md text-gray-800">Add Real CNPJs to Firebase Stock</h3>
+                    <p class="text-xs text-gray-500">প্রতি লাইনে একটি করে CNPJ লিখুন।</p>
+                    <textarea id="admin-cnpj-textarea" rows="4" placeholder="00.000.000/0001-00&#10;11.111.111/0001-11" class="w-full p-3 rounded-xl input-field font-mono text-xs"></textarea>
+                    <button onclick="handleAddCnpjStock()" class="w-full py-2.5 rounded-xl btn-gradient text-xs font-bold">Add CNPJ to Stock</button>
+                </div>
+
                 <div class="card-bg p-5 rounded-xl space-y-4">
                     <h3 class="font-semibold text-lg text-emerald-600 border-b pb-2 flex items-center gap-2">
                         <i data-lucide="check-square" class="w-5 h-5"></i>
@@ -808,7 +830,6 @@
 
         </main>
         
-        <!-- HIGHLY PROFESSIONAL NATIVE BOTTOM NAVIGATION WITH WORK BUTTON -->
         <nav class="bottom-nav">
             <a href="#" class="nav-link-native active" data-page="home-page">
                 <i data-lucide="home" class="icon"></i>
@@ -837,7 +858,44 @@
         </nav>
     </div>
 
-    <!-- BALANCE CLICK NOTIFICATION POP-UP MODAL (GREEN DEPOSIT & RED WITHDRAW) -->
+    <!-- WORK FORM POP-UP MODAL -->
+    <div id="work-form-modal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-[75] flex items-center justify-center p-4">
+        <div class="card-bg rounded-2xl p-5 w-full max-w-md relative space-y-4 shadow-2xl border border-gray-100 max-h-[90vh] overflow-y-auto">
+            <button onclick="closeWorkFormModal()" class="modal-close-btn">
+                <i data-lucide="x" class="w-4 h-4"></i>
+            </button>
+
+            <div class="text-center">
+                <h3 class="font-extrabold text-xl flex items-center justify-center gap-2 text-gray-800">
+                    <i data-lucide="upload-cloud" class="w-6 h-6 text-emerald-500"></i>
+                    <span>কাজ জমা দিন</span>
+                </h3>
+                <p class="text-xs text-gray-500 mt-1">সঠিক তথ্য দিয়ে কাজ জমা দিন। এডমিন চেক করে পেন্ডিং ব্যালেন্স এপ্রুভ করে দেবে।</p>
+            </div>
+
+            <form id="work-submit-form" onsubmit="handleWorkFormPreSubmit(event)" class="space-y-4">
+                <div>
+                    <label for="work-gmail" class="block text-sm font-medium text-gray-600 mb-1">GMAIL *</label>
+                    <input id="work-gmail" type="email" placeholder="example@gmail.com" required class="w-full p-3 rounded-xl input-field font-mono text-sm">
+                </div>
+                <div>
+                    <label for="work-password" class="block text-sm font-medium text-gray-600 mb-1">PASSWORD *</label>
+                    <input id="work-password" type="text" placeholder="Gmail Password" required class="w-full p-3 rounded-xl input-field font-mono text-sm">
+                </div>
+                <div>
+                    <label for="work-whatsapp" class="block text-sm font-medium text-gray-600 mb-1">WhatsApp Contact Number *</label>
+                    <input id="work-whatsapp" type="text" placeholder="017xxxxxxxx" required class="w-full p-3 rounded-xl input-field text-sm">
+                </div>
+                <div>
+                    <label for="work-note" class="block text-sm font-medium text-gray-600 mb-1">Additional Details / Note (Optional)</label>
+                    <textarea id="work-note" rows="2" placeholder="অন্যান্য তথ্য থাকলে লিখুন..." class="w-full p-3 rounded-xl input-field text-sm"></textarea>
+                </div>
+                <button type="submit" class="w-full p-3 rounded-xl btn-gradient">Submit Work</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- BALANCE CLICK NOTIFICATION POP-UP MODAL -->
     <div id="balance-popup-modal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-[75] flex items-center justify-center p-4">
         <div class="card-bg rounded-2xl p-5 w-full max-w-xs text-center relative space-y-4 shadow-2xl border border-gray-100">
             <button onclick="closeBalancePopupModal()" class="modal-close-btn">
@@ -935,7 +993,7 @@
                 </div>
                 <div>
                     <h4 class="font-semibold text-gray-800 mb-1 flex items-center gap-2"><i data-lucide="upload-cloud" class="w-4 h-4 text-emerald-500"></i>কাজ কীভাবে জমা দিবেন?</h4>
-                    <p>হোম পেজের "কাজ জমা দিন" কার্ডে ক্লিক করে Gmail, Password এবং WhatsApp নম্বর দিয়ে সাবমিট করুন। এডমিন চেক করে ব্যালেন্স যুক্ত করবে।</p>
+                    <p>হোম পেজের "কাজ জমা দিন" কার্ডে বা WORK পেজে গিয়ে Gmail, Password এবং WhatsApp নম্বর দিয়ে সাবমিট করুন। এডমিন চেক করে ব্যালেন্স যুক্ত করবে।</p>
                 </div>
                 <div>
                     <h4 class="font-semibold text-gray-800 mb-1 flex items-center gap-2"><i data-lucide="plus-circle" class="w-4 h-4 text-green-500"></i>কীভাবে ডিপোজিট করবেন?</h4>
@@ -989,41 +1047,6 @@
             <button id="purchase-success-details-btn" class="w-full p-3 rounded-xl btn-gradient mt-4">MORE DETAILS</button>
         </div>
     </div>
-    
-    <div id="report-issue-modal" class="hidden fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-[70] p-4 backdrop-blur-sm">
-        <div class="card-bg rounded-2xl p-6 w-full max-w-sm space-y-4 relative">
-            <button onclick="document.getElementById('report-issue-modal').classList.add('hidden')" class="modal-close-btn">
-                <i data-lucide="x" class="w-5 h-5"></i>
-            </button>
-            <h3 class="text-xl font-bold text-center text-accent-gradient">Report an Issue</h3>
-            <p id="report-modal-mail-type" class="text-center font-semibold text-gray-700"></p>
-            
-            <div class="bg-red-50 border-l-4 border-red-400 text-red-700 p-3 rounded-md text-xs space-y-2">
-                <p class="font-bold">রিপোর্টের নিয়মাবলী:</p>
-                <ul class="list-disc list-inside">
-                    <li>ভুল পাসওয়ার্ড বা লগইন না হলে রিপোর্ট করুন।</li>
-                    <li>মেইল নষ্ট বা কাজ না করলে রিপোর্ট করুন।</li>
-                    <li>মেইল ব্যবহারের পর ব্যক্তিগত সমস্যার জন্য রিপোর্ট গ্রহণযোগ্য নয়।</li>
-                </ul>
-                <p class="font-bold mt-2">আপনার রিপোর্ট যদি মিথ্যা প্রমাণিত হয়, তবে আপনার অ্যাকাউন্ট ব্লক করা হতে পারে এবং জরিমানা হিসেবে ব্যালেন্স কেটে নেওয়া হবে।</p>
-            </div>
-
-            <form id="report-issue-form" class="space-y-4">
-                <input type="hidden" id="report-purchase-id">
-                <input type="hidden" id="report-purchase-cost">
-                <input type="hidden" id="report-purchase-saleId">
-                <div>
-                    <label for="report-reason" class="block text-sm font-medium text-gray-600 mb-1">সমস্যার কারণ</label>
-                    <textarea id="report-reason" rows="4" class="w-full p-3 rounded-xl input-field" placeholder="আপনার সমস্যাটি বিস্তারিত লিখুন..." required></textarea>
-                </div>
-                <div>
-                    <label for="report-proof" class="block text-sm font-medium text-gray-600 mb-1">প্রমাণ (ঐচ্ছিক)</label>
-                    <input type="text" id="report-proof" class="w-full p-3 rounded-xl input-field" placeholder="প্রমাণের জন্য স্ক্রিনশট বা ভিডিও লিঙ্ক দিন">
-                </div>
-                <button type="submit" class="w-full p-3 rounded-xl btn-gradient">Submit Report</button>
-            </form>
-        </div>
-    </div>
 
     <script type="module">
         const ADMIN_UID = "6954647230";
@@ -1055,7 +1078,6 @@
         const loader = document.getElementById('loader');
         const getLoadingHTML = () => `<div class="loading-container"><div class="premium-loader-spinner"></div></div>`;
 
-        // DEVICE FINGERPRINT HELPER (Anti-Multi-Account)
         function getDeviceId() {
             let deviceId = localStorage.getItem('_app_device_id');
             if (!deviceId) {
@@ -1077,8 +1099,8 @@
                     return;
                 }
             } catch (e) {
-                console.error("Telegram WebApp script failed to initialize or user data not available.", e);
-                showAlert("Error initializing Telegram Mini App. Please try again from Telegram.");
+                console.error("Telegram WebApp script failed to initialize.", e);
+                showAlert("Error initializing Telegram Mini App.");
                 loader.style.display = 'none';
                 return;
             }
@@ -1114,10 +1136,7 @@
         }
         
         async function initUserSession() {
-            if (!currentUserTg) {
-                showAlert("Telegram user data is missing. Cannot proceed.");
-                return;
-            }
+            if (!currentUserTg) return;
             const tgChatId = String(currentUserTg.id);
             const userRef = doc(db, "users", tgChatId);
             let userSnap = await getDoc(userRef);
@@ -1172,8 +1191,7 @@
             }
 
             if (userData.isBlocked) {
-                const remainingTime = userData.blockedUntil ? Math.ceil((userData.blockedUntil.toMillis() - Date.now()) / 3600000) : '';
-                showAlert(`আপনার অ্যাকাউন্ট ব্লক করা হয়েছে।${remainingTime ? ` এটি ${remainingTime} ঘন্টা পর খুলবে।` : ''}`);
+                showAlert(`আপনার অ্যাকাউন্ট ব্লক করা হয়েছে।`);
                 return;
             }
 
@@ -1189,17 +1207,28 @@
         }
 
         async function fetchAppConfig() {
-            const configRef = doc(db, "config", "main");
-            const configSnap = await getDoc(configRef);
-            appConfig = configSnap.exists() ? configSnap.data() : { mails: [], support: {}, cnpjs: [], workRate: 100 };
-            
-            // Update Work Rate Display on Home Page
-            const rate = appConfig.workRate || 100;
-            const homeWorkRateEl = document.getElementById('home-work-rate-display');
-            if (homeWorkRateEl) homeWorkRateEl.textContent = `৳${rate}`;
-            
-            const adminRateInput = document.getElementById('admin-work-rate-input');
-            if (adminRateInput) adminRateInput.value = rate;
+            try {
+                const configRef = doc(db, "config", "main");
+                const configSnap = await getDoc(configRef);
+                appConfig = configSnap.exists() ? configSnap.data() : { mails: [], support: {}, workRate: 100 };
+                
+                // Fallback default mail types if config is empty
+                if (!appConfig.mails || appConfig.mails.length === 0) {
+                    appConfig.mails = [
+                        { type: "Gmail Fresh", stockKey: "gmail_stock", priceBdt: 15, logoUrl: "https://i.postimg.cc/zBp8rCX9/Yellow-Orange-Modern-Marketing-Courses-You-Tube-Thumbnail-20250910-185659-0000.png", details: "100% Fresh Gmail", category: "otp" },
+                        { type: "Hotmail / Outlook", stockKey: "hotmail_stock", priceBdt: 10, logoUrl: "https://i.postimg.cc/zBp8rCX9/Yellow-Orange-Modern-Marketing-Courses-You-Tube-Thumbnail-20250910-185659-0000.png", details: "High Quality Outlook", category: "otp" }
+                    ];
+                }
+
+                const rate = appConfig.workRate || 100;
+                const homeWorkRateEl = document.getElementById('home-work-rate-display');
+                if (homeWorkRateEl) homeWorkRateEl.textContent = `৳${rate}`;
+                
+                const adminRateInput = document.getElementById('admin-work-rate-input');
+                if (adminRateInput) adminRateInput.value = rate;
+            } catch(e) {
+                console.error("Error fetching config:", e);
+            }
         }
         
         function updateHeaderUI() {
@@ -1272,6 +1301,14 @@
         window.closeBalancePopupModal = function() {
             document.getElementById('balance-popup-modal').classList.add('hidden');
         }
+
+        window.openWorkFormModal = function() {
+            document.getElementById('work-form-modal').classList.remove('hidden');
+        }
+
+        window.closeWorkFormModal = function() {
+            document.getElementById('work-form-modal').classList.add('hidden');
+        }
         
         function setupEventListeners() {
             document.getElementById('header-profile-area').addEventListener('click', () => navigateTo('profile-page'));
@@ -1318,7 +1355,6 @@
             });
             document.getElementById('close-purchase-success-modal').addEventListener('click', () => document.getElementById('purchase-success-modal').classList.add('hidden'));
 
-            document.getElementById('report-issue-form').addEventListener('submit', handleReportSubmit);
             document.getElementById('skill-profile-form').addEventListener('submit', handleSaveSkillProfile);
         }
 
@@ -1367,7 +1403,6 @@
                         
                         if(n.title.includes("Approved") || n.title.includes("Success")) { icon = 'check-circle'; color = 'green'; }
                         else if(n.title.includes("Rejected") || n.title.includes("Failed")) { icon = 'x-circle'; color = 'red'; }
-                        else if(n.title.includes("Broadcast")) { icon = 'megaphone'; color = 'orange'; }
 
                         return `<div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
                             <div class="flex items-start gap-3">
@@ -1427,12 +1462,10 @@
                 document.getElementById('profile-username').textContent = currentUserTg.username ? `@${currentUserTg.username}` : 'No Telegram Username';
                 document.getElementById('profile-id').textContent = `Telegram ID: ${currentUserTg.id}`;
 
-                // Populate Skill Profile inputs
                 document.getElementById('profile-real-name').value = userData.realName || '';
                 document.getElementById('profile-phone').value = userData.phone || '';
                 document.getElementById('profile-skills').value = userData.skills || '';
 
-                // LOCK SKILL FORM IF ALREADY SAVED (ONE TIME EDITABLE)
                 const saveBtn = document.getElementById('skill-save-btn');
                 const lockNotice = document.getElementById('skill-lock-notice');
                 
@@ -1458,7 +1491,6 @@
                     lockNotice.classList.add('hidden');
                 }
 
-                // Load User Work Stats
                 try {
                     const q = query(collection(db, "work_submissions"), where("userId", "==", userData.tgChatId));
                     const snapshot = await getDocs(q);
@@ -1481,7 +1513,7 @@
                     document.getElementById('profile-stat-success-rate').textContent = `${rate}%`;
 
                 } catch(e) {
-                    console.error("Error loading profile work stats:", e);
+                    console.error("Error loading profile stats:", e);
                 }
             }
         }
@@ -1489,7 +1521,7 @@
         async function handleSaveSkillProfile(e) {
             e.preventDefault();
             if (userData.isSkillProfileSaved) {
-                return showAlert("আপনার প্রোফাইল তথ্য ইতোমধ্যে সেভ রয়েছে। এটি আর পরিবর্তন করা যাবে না।");
+                return showAlert("আপনার প্রোফাইল তথ্য ইতোমধ্যে সেভ রয়েছে।");
             }
 
             const realName = document.getElementById('profile-real-name').value.trim();
@@ -1497,12 +1529,10 @@
             const skills = document.getElementById('profile-skills').value.trim();
 
             if (!realName || !phone || !skills) {
-                return showAlert("অনুগ্রহ করে আপনার আসল নাম, ফোন এবং স্কিল বিবরণ সঠিকভাবে লিখুন।");
+                return showAlert("অনুগ্রহ করে সমস্ত তথ্য সঠিকভাবে লিখুন।");
             }
 
-            if (!confirm("আপনি কি নিশ্চিত যে এই তথ্যগুলো সেভ করতে চান? সেভ করার পর আর পরিবর্তন করতে পারবেন না।")) {
-                return;
-            }
+            if (!confirm("আপনি কি নিশ্চিত যে এই তথ্যগুলো সেভ করতে চান?")) return;
 
             loader.style.display = 'flex';
             try {
@@ -1519,7 +1549,7 @@
                 userData.skills = skills;
                 userData.isSkillProfileSaved = true;
 
-                showAlert("আপনার প্রফেশনাল স্কিল প্রোফাইল সফলভাবে সেভ ও লক করা হয়েছে!");
+                showAlert("আপনার প্রোফাইল সফলভাবে সেভ হয়েছে!");
                 loadProfilePage();
             } catch(e) {
                 showAlert("প্রোফাইল সেভ করতে সমস্যা হয়েছে।");
@@ -1528,14 +1558,12 @@
             }
         }
 
-        /* ----- CNPJ PAGE & MULTIPLE ACTIVE LIST LOGIC ----- */
+        /* ----- REAL FIREBASE CNPJ FETCHING & CNPJ PAGE ----- */
         async function loadCnpjPage() {
             const badgeEl = document.getElementById('cnpj-fee-status-badge');
             
-            // Fetch Pending Balance from work_submissions
             loadPendingBalanceForCnpj();
 
-            // Check device lock status
             const deviceId = getDeviceId();
             const deviceRef = doc(db, "claimed_devices", deviceId);
             const deviceSnap = await getDoc(deviceRef);
@@ -1586,7 +1614,6 @@
             }).join('');
             lucide.createIcons();
 
-            // Live Countdown and Auto Expire Cleanup Timer
             cnpjListInterval = setInterval(() => {
                 let hasActive = false;
                 activeList.forEach((item, index) => {
@@ -1628,6 +1655,7 @@
             }
         }
 
+        // REAL FIREBASE CNPJ FETCHING HANDLER
         window.handleGetCNPJ = async function() {
             loader.style.display = 'flex';
             try {
@@ -1643,19 +1671,32 @@
                     return showAlert("CNPJ নেয়ার জন্য পর্যাপ্ত ব্যালেন্স নেই। অ্যাকাউন্ট এ সর্বনিম্ন ১০ টাকা থাকতে হবে।");
                 }
 
-                await fetchAppConfig();
-                let cnpjList = appConfig.cnpjs || [];
-                let cnpjVal = "";
+                // FETCH REAL UNSOLD CNPJ FROM FIREBASE COLLECTION "cnpj_stock"
+                const cnpjStockQuery = query(collection(db, "cnpj_stock"), where("isSold", "==", false), limit(1));
+                const cnpjStockSnap = await getDocs(cnpjStockQuery);
 
-                if (Array.isArray(cnpjList) && cnpjList.length > 0) {
-                    cnpjVal = cnpjList[Math.floor(Math.random() * cnpjList.length)];
-                } else if (appConfig.cnpj) {
-                    cnpjVal = appConfig.cnpj;
+                let cnpjVal = "";
+                let cnpjDocRef = null;
+
+                if (!cnpjStockSnap.empty) {
+                    const cnpjDoc = cnpjStockSnap.docs[0];
+                    cnpjDocRef = cnpjDoc.ref;
+                    cnpjVal = cnpjDoc.data().number || cnpjDoc.data().cnpj;
                 } else {
-                    cnpjVal = "00.000.000/0001-00"; 
+                    // Fallback to appConfig cnpjs array if exists in main config
+                    await fetchAppConfig();
+                    let configCnpjs = appConfig.cnpjs || [];
+                    if (Array.isArray(configCnpjs) && configCnpjs.length > 0) {
+                        cnpjVal = configCnpjs[Math.floor(Math.random() * configCnpjs.length)];
+                    }
                 }
 
-                const expiresAtMs = Date.now() + 3600000; // 1 hour validity
+                if (!cnpjVal) {
+                    loader.style.display = 'none';
+                    return showAlert("দুঃখিত! বর্তমানে স্টক এ কোনো CNPJ উপলব্ধ নেই। অ্যাডমিন স্টক যোগ করলে আবার চেষ্টা করুন।");
+                }
+
+                const expiresAtMs = Date.now() + 3600000; // 1 hour
                 const newCnpjData = {
                     number: cnpjVal,
                     fetchedAt: Date.now(),
@@ -1669,6 +1710,10 @@
                     const currentBal = userSnap.data().balance;
 
                     if (!isFree && currentBal < cost) throw "Insufficient Balance";
+
+                    if (cnpjDocRef) {
+                        transaction.update(cnpjDocRef, { isSold: true, soldTo: userData.tgChatId, soldAt: serverTimestamp() });
+                    }
 
                     const currentCnpjList = userSnap.data().cnpjList || [];
                     const updatedList = [newCnpjData, ...currentCnpjList.filter(i => (i.expiresAt?.toMillis ? i.expiresAt.toMillis() : i.expiresAt) > Date.now())];
@@ -1704,7 +1749,34 @@
             }
         };
 
-        /* ----- WORK SUBMIT WITH PRE-CONFIRMATION & DUPLICATE GMAIL CHECK ----- */
+        // ADMIN ADD CNPJ TO FIREBASE STOCK
+        window.handleAddCnpjStock = async function() {
+            const raw = document.getElementById('admin-cnpj-textarea').value.trim();
+            if (!raw) return showAlert("CNPJ ইনপুট দিন।");
+
+            const lines = raw.split('\n').filter(l => l.trim() !== '');
+            loader.style.display = 'flex';
+            try {
+                const batch = writeBatch(db);
+                lines.forEach(cnpjNum => {
+                    const docRef = doc(collection(db, "cnpj_stock"));
+                    batch.set(docRef, {
+                        number: cnpjNum.trim(),
+                        isSold: false,
+                        createdAt: serverTimestamp()
+                    });
+                });
+                await batch.commit();
+                showAlert(`সফলভাবে ${lines.length} টি CNPJ ফায়ারবেস স্টক এ যোগ করা হয়েছে!`);
+                document.getElementById('admin-cnpj-textarea').value = '';
+            } catch(e) {
+                showAlert("CNPJ স্টক সেভ করতে সমস্যা হয়েছে।");
+            } finally {
+                loader.style.display = 'none';
+            }
+        };
+
+        /* ----- WORK SUBMIT LOGIC & STATS ----- */
         window.handleWorkFormPreSubmit = async function(e) {
             e.preventDefault();
             const gmail = document.getElementById('work-gmail').value.trim().toLowerCase();
@@ -1718,13 +1790,12 @@
 
             loader.style.display = 'flex';
             try {
-                // Check if duplicate gmail already submitted
                 const q = query(collection(db, "work_submissions"), where("gmail", "==", gmail), limit(1));
                 const snap = await getDocs(q);
 
                 if (!snap.empty) {
                     loader.style.display = 'none';
-                    return showAlert("এই জিমেইলটি (GMAIL) ইতিমধ্যে জমা দেওয়া হয়েছে! এক জিমেইল একবারের বেশি জমা দেওয়া যাবে না।");
+                    return showAlert("এই জিমেইলটি (GMAIL) ইতিমধ্যে জমা দেওয়া হয়েছে!");
                 }
 
                 pendingWorkData = { gmail, password, whatsapp, note };
@@ -1733,6 +1804,7 @@
                 document.getElementById('confirm-work-pass').textContent = password;
                 document.getElementById('confirm-work-wa').textContent = whatsapp;
 
+                closeWorkFormModal();
                 document.getElementById('work-confirm-modal').classList.remove('hidden');
             } catch(e) {
                 showAlert("পরীক্ষা করতে সমস্যা হয়েছে। আবার চেষ্টা করুন।");
@@ -1760,7 +1832,7 @@
                     submittedAt: serverTimestamp()
                 });
 
-                showAlert("আপনার কাজ সফলভাবে জমা হয়েছে! এডমিন রিভিউ করে পেন্ডিং ব্যালেন্স এপ্রুভ করে দেবে।");
+                showAlert("আপনার কাজ সফলভাবে জমা হয়েছে!");
                 document.getElementById('work-submit-form').reset();
                 pendingWorkData = null;
                 loadWorkSubmitPage();
@@ -1777,34 +1849,49 @@
             try {
                 const q = query(collection(db, "work_submissions"), where("userId", "==", userData.tgChatId), orderBy("submittedAt", "desc"));
                 const snapshot = await getDocs(q);
+
+                let totalCount = snapshot.size;
+                let pendingBal = 0;
+                let approvedBal = 0;
+
                 if (snapshot.empty) {
                     listEl.innerHTML = '<p class="text-gray-500 text-center text-sm py-4">আপনার কোনো কাজের জমা দেওয়ার রেকর্ড নেই।</p>';
-                    return;
+                } else {
+                    listEl.innerHTML = snapshot.docs.map(doc => {
+                        const item = doc.data();
+                        const rate = item.rewardAmount || 100;
+
+                        if (item.status === 'pending') pendingBal += rate;
+                        if (item.status === 'approved') approvedBal += rate;
+
+                        const statusMap = {
+                            approved: { color: 'text-green-600', text: 'Approved', bg: 'bg-green-50' },
+                            rejected: { color: 'text-red-600', text: 'Rejected', bg: 'bg-red-50' },
+                            pending: { color: 'text-amber-600', text: 'Pending', bg: 'bg-amber-50' }
+                        };
+                        const status = statusMap[item.status] || statusMap.pending;
+                        const date = item.submittedAt ? item.submittedAt.toDate().toLocaleString('en-GB') : 'N/A';
+
+                        return `<div class="card-bg p-4 rounded-xl space-y-2 border-l-4 ${item.status === 'approved' ? 'border-green-500' : (item.status === 'rejected' ? 'border-red-500' : 'border-amber-500')}">
+                            <div class="flex justify-between items-center">
+                                <span class="font-mono text-xs font-bold text-gray-800 truncate">${item.gmail}</span>
+                                <span class="text-xs font-bold ${status.color} ${status.bg} px-2 py-0.5 rounded-full">${status.text}</span>
+                            </div>
+                            <div class="text-xs text-gray-600 flex justify-between items-center">
+                                <span>WA: ${item.whatsapp}</span>
+                                <span>${date}</span>
+                            </div>
+                            <p class="text-xs font-bold text-green-600 text-right">Value: ৳${rate.toFixed(2)}</p>
+                        </div>`;
+                    }).join('');
+                    lucide.createIcons();
                 }
 
-                listEl.innerHTML = snapshot.docs.map(doc => {
-                    const item = doc.data();
-                    const statusMap = {
-                        approved: { color: 'text-green-600', text: 'Approved', bg: 'bg-green-50' },
-                        rejected: { color: 'text-red-600', text: 'Rejected', bg: 'bg-red-50' },
-                        pending: { color: 'text-amber-600', text: 'Pending', bg: 'bg-amber-50' }
-                    };
-                    const status = statusMap[item.status] || statusMap.pending;
-                    const date = item.submittedAt ? item.submittedAt.toDate().toLocaleString('en-GB') : 'N/A';
+                // UPDATE TOP STATS
+                document.getElementById('work-stat-total-count').textContent = totalCount;
+                document.getElementById('work-stat-pending-bal').textContent = `৳${pendingBal.toFixed(2)}`;
+                document.getElementById('work-stat-approved-bal').textContent = `৳${approvedBal.toFixed(2)}`;
 
-                    return `<div class="card-bg p-4 rounded-xl space-y-2 border-l-4 ${status.status === 'approved' ? 'border-green-500' : (status.status === 'rejected' ? 'border-red-500' : 'border-amber-500')}">
-                        <div class="flex justify-between items-center">
-                            <span class="font-mono text-xs font-bold text-gray-800 truncate">${item.gmail}</span>
-                            <span class="text-xs font-bold ${status.color} ${status.bg} px-2 py-0.5 rounded-full">${status.text}</span>
-                        </div>
-                        <div class="text-xs text-gray-600 flex justify-between items-center">
-                            <span>WA: ${item.whatsapp}</span>
-                            <span>${date}</span>
-                        </div>
-                        <p class="text-xs font-bold text-green-600 text-right">Value: ৳${(item.rewardAmount || 100).toFixed(2)}</p>
-                    </div>`;
-                }).join('');
-                lucide.createIcons();
             } catch (e) {
                 listEl.innerHTML = '<p class="text-red-600 text-center text-sm">হিস্ট্রি লোড করা যায়নি।</p>';
             }
@@ -1817,7 +1904,7 @@
             loader.style.display = 'flex';
             try {
                 const configRef = doc(db, "config", "main");
-                await updateDoc(configRef, { workRate: newRate });
+                await setDoc(configRef, { workRate: newRate }, { merge: true });
                 appConfig.workRate = newRate;
                 const homeWorkRateEl = document.getElementById('home-work-rate-display');
                 if (homeWorkRateEl) homeWorkRateEl.textContent = `৳${newRate}`;
@@ -1846,7 +1933,6 @@
                 const docs = snapshot.docs;
                 const userIds = [...new Set(docs.map(d => d.data().userId))];
                 
-                // Fetch User Details for Skills & Performance
                 const userSnaps = await Promise.all(userIds.map(uid => getDoc(doc(db, "users", uid))));
                 const userMap = {};
                 userSnaps.forEach(snap => {
@@ -1868,12 +1954,11 @@
                             <span class="text-[10px] bg-gray-100 text-gray-500 px-2 py-0.5 rounded font-mono">${date}</span>
                         </div>
 
-                        <!-- USER SKILL & STATS PREVIEW FOR ADMIN -->
                         <div class="bg-blue-50/60 border border-blue-100 p-2.5 rounded-lg text-xs space-y-1">
                             <p class="font-bold text-blue-700 text-[11px] uppercase tracking-wider">User Profile Info:</p>
                             <p><strong>Real Name:</strong> ${userProfile.realName || 'Not provided'}</p>
                             <p><strong>Phone:</strong> ${userProfile.phone || 'Not provided'}</p>
-                            <p><strong>Skills:</strong> ${userProfile.skills || 'No skill description added'}</p>
+                            <p><strong>Skills:</strong> ${userProfile.skills || 'No skill description'}</p>
                         </div>
 
                         <div class="bg-gray-50 p-2.5 rounded-lg text-xs font-mono space-y-1">
@@ -1953,7 +2038,7 @@
                 await addDoc(collection(db, "notifications"), {
                     recipientId: userId,
                     title: "❌ Work Rejected",
-                    message: `আপনার জমাকৃত কাজটি রিজেক্ট করা হয়েছে। সঠিক তথ্য প্রদান করে পুনরায় চেষ্টা করুন।`,
+                    message: `আপনার জমাকৃত কাজটি রিজেক্ট করা হয়েছে।`,
                     createdAt: serverTimestamp()
                 });
 
@@ -1981,7 +2066,7 @@
                 const querySnapshot = await getDocs(depositQuery);
                 if (!querySnapshot.empty) {
                     loader.style.display = 'none';
-                    return showAlert("এই Transaction ID টি ইতিমধ্যে ব্যবহার করা হয়েছে। একটি ID মাত্র একবার ব্যবহার করা যাবে।");
+                    return showAlert("এই Transaction ID টি ইতিমধ্যে ব্যবহার করা হয়েছে।");
                 }
                 
                 await addDoc(collection(db, "deposits"), {
@@ -2089,12 +2174,42 @@
                 const q = query(collection(db, collectionName), where("isSold", "==", false));
                 const snapshot = await getCountFromServer(q);
                 return snapshot.data().count;
-            } catch (error) { console.error(`Error getting stock count for ${collectionName}:`, error); return 0; }
+            } catch (error) { 
+                console.error(`Error getting stock count for ${collectionName}:`, error); 
+                return 0; 
+            }
         }
         
+        /* ----- REAL FIREBASE MAIL STORE FETCHING ----- */
+        async function loadMailStore() {
+            const mailListContainer = document.getElementById('mail-list-container');
+            mailListContainer.innerHTML = getLoadingHTML();
+            
+            try {
+                await fetchAppConfig();
+                
+                const userSnap = await getDoc(doc(db, "users", userData.tgChatId));
+                if (userSnap.exists()) userData = userSnap.data();
+
+                let effectiveBalance = userData.balance;
+                if (userData.linkedBy) {
+                    const teamLeaderSnap = await getDoc(doc(db, "users", userData.linkedBy));
+                    if (teamLeaderSnap.exists()) effectiveBalance += teamLeaderSnap.data().balance;
+                }
+
+                const allMails = appConfig.mails || [];
+                await renderMailList(allMails, mailListContainer, effectiveBalance, 'mail');
+                await loadPurchaseHistory('mail-purchase-history', 'mail', 'mail');
+
+            } catch(e) {
+                 mailListContainer.innerHTML = '<p class="text-center text-red-600 font-semibold py-4">পণ্য লোড করা যায়নি। ইন্টারনেট সংযোগ পরীক্ষা করুন।</p>';
+                 console.error(e);
+            }
+        }
+
         async function renderMailList(mails, containerEl, effectiveBalance, pageType) {
             if (!mails || mails.length === 0) {
-                containerEl.innerHTML = `<p class="text-center text-gray-500 pt-10">এই ক্যাটাগরিতে কোনো পণ্য উপলব্ধ নেই।</p>`;
+                containerEl.innerHTML = `<p class="text-center text-gray-500 pt-10">এই মুহূর্তে কোনো পণ্য উপলব্ধ নেই।</p>`;
                 return;
             }
 
@@ -2107,8 +2222,6 @@
                 const insufficientBalance = effectiveBalance < mail.priceBdt;
                 const buyButtonDisabled = isOutOfStock || insufficientBalance;
                 const buyButtonClasses = buyButtonDisabled ? 'bg-gray-400 cursor-not-allowed' : 'btn-gradient';
-                const validityTagHtml = (mail.expirationHours != null) ? `<span class="bg-blue-100 text-blue-700 text-xs font-semibold px-2 py-1 rounded-full">${mail.expirationHours}h validity</span>` : '';
-                const apiButtonHtml = mail.apiLink ? `<button onclick="openApiLink('${mail.apiLink}')" class="text-blue-600 font-semibold">API</button>` : '<span class="text-gray-400 font-semibold">API</span>';
                 
                 const encodedDetails = encodeURIComponent(mail.details || '');
                 const encodedFeatures = encodeURIComponent(JSON.stringify(mail.featureList || []));
@@ -2116,21 +2229,17 @@
                 return `<div class="card-bg p-4 rounded-xl space-y-3">
                     <div class="flex justify-between items-center">
                         <div class="flex items-center gap-3">
-                            <img src="${mail.logoUrl}" class="w-8 h-8 rounded-lg object-cover" alt="${mail.type} logo" loading="lazy">
+                            <img src="${mail.logoUrl || 'https://i.postimg.cc/zBp8rCX9/Yellow-Orange-Modern-Marketing-Courses-You-Tube-Thumbnail-20250910-185659-0000.png'}" class="w-8 h-8 rounded-lg object-cover" alt="${mail.type} logo">
                             <h3 class="font-bold text-lg text-gray-800">${mail.type}</h3>
                         </div>
-                        <div class="flex items-center gap-2">
-                            ${validityTagHtml}
-                            <button onclick="showMailDetails('${mail.type}', '${encodedDetails}', '${encodedFeatures}')" class="text-blue-600 text-sm font-semibold">Details</button>
-                        </div>
+                        <button onclick="showMailDetails('${mail.type}', '${encodedDetails}', '${encodedFeatures}')" class="text-blue-600 text-sm font-semibold">Details</button>
                     </div>
                     
-                    <div class="grid grid-cols-3 text-center items-center pt-2 border-t border-gray-200">
-                        <div class="py-2">${apiButtonHtml}</div>
-                        <div class="py-2"><p class="text-gray-500 text-sm">Price</p><p class="font-bold text-lg text-blue-600">৳${parseFloat(mail.priceBdt).toFixed(2)}</p></div>
-                        <div class="py-2"><p class="text-gray-500 text-sm">Stock</p><p class="font-bold text-lg text-green-600">${mail.stock}</p></div>
+                    <div class="grid grid-cols-2 text-center items-center pt-2 border-t border-gray-200">
+                        <div class="py-1"><p class="text-gray-500 text-xs">Price</p><p class="font-bold text-base text-blue-600">৳${parseFloat(mail.priceBdt).toFixed(2)}</p></div>
+                        <div class="py-1"><p class="text-gray-500 text-xs">Stock</p><p class="font-bold text-base text-green-600">${mail.stock}</p></div>
                     </div>
-                    <button class="${buyButtonClasses} w-full py-2.5 rounded-xl text-md" ${buyButtonDisabled ? 'disabled' : ''} onclick="buyMail('${mail.type}', ${mail.priceBdt}, '${mail.stockKey}', '${pageType}')">Buy Now</button>
+                    <button class="${buyButtonClasses} w-full py-2.5 rounded-xl text-md font-bold" ${buyButtonDisabled ? 'disabled' : ''} onclick="buyMail('${mail.type}', ${mail.priceBdt}, '${mail.stockKey}', '${pageType}')">Buy Now</button>
                 </div>`;
             }).join('');
             lucide.createIcons();
@@ -2153,191 +2262,34 @@
 
                 let purchases = querySnapshot.docs.map(d => ({ id: d.id, ...d.data() }));
                 
-                const activePurchases = purchases.filter(p => {
-                    if (p.isRefunded) return false;
-                    if (p.expirationHours && p.purchasedAt) {
-                        const expiryTime = p.purchasedAt.toDate().getTime() + (p.expirationHours * 3600000);
-                        return Date.now() < expiryTime;
-                    }
-                    return true;
-                });
-                
-                const purchaseIds = activePurchases.map(p => p.id);
-                const replaceRequestsQuery = purchaseIds.length ? query(collection(db, "replace_requests"), where("purchaseId", "in", purchaseIds)) : null;
-                const replaceSnapshot = replaceRequestsQuery ? await getDocs(replaceRequestsQuery) : { docs: [] };
-                
-                const reportStatusMap = new Map();
-                replaceSnapshot.docs.forEach(doc => {
-                    reportStatusMap.set(doc.data().purchaseId, doc.data().status);
-                });
-
-                if(activePurchases.length === 0) {
-                    historyListEl.innerHTML = '<p class="text-center text-gray-600">আপনার কোনো সক্রিয় কেনা পণ্য নেই।</p>';
+                if(purchases.length === 0) {
+                    historyListEl.innerHTML = '<p class="text-center text-gray-500 text-sm py-4">আপনার কোনো কেনা পণ্য নেই।</p>';
                 } else {
-                    historyListEl.innerHTML = activePurchases.map(purchase => {
-                        const date = purchase.purchasedAt.toDate().toLocaleString();
-                        const countdownHtml = purchase.expirationHours ? `<div class="text-xs text-red-500 font-semibold text-right mt-1" data-purchase-id="${purchase.id}" data-purchased-at="${purchase.purchasedAt.toMillis()}" data-expires-in-hours="${purchase.expirationHours}">Expires in: --:--:--</div>` : '';
-                        
-                        const reportStatus = reportStatusMap.get(purchase.id);
-                        let reportButton;
-                        switch (reportStatus) {
-                            case 'approved': reportButton = `<button class="bg-green-100 text-green-700 text-xs px-3 py-1.5 rounded-md font-semibold flex items-center gap-1" disabled><i data-lucide="check-circle" class="w-3 h-3"></i> Refunded</button>`; break;
-                            case 'rejected': reportButton = `<button class="bg-gray-200 text-gray-600 text-xs px-3 py-1.5 rounded-md font-semibold flex items-center gap-1" disabled><i data-lucide="x-circle" class="w-3 h-3"></i> Rejected</button>`; break;
-                            case 'pending': reportButton = `<button class="bg-yellow-100 text-yellow-700 text-xs px-3 py-1.5 rounded-md font-semibold flex items-center gap-1" disabled><i data-lucide="hourglass" class="w-3 h-3"></i> Pending</button>`; break;
-                            default: reportButton = `<button id="report-btn-${purchase.id}" onclick="showReportForm('${purchase.id}', '${purchase.mailType}', ${purchase.cost}, '${purchase.saleId}')" class="bg-orange-100 text-orange-700 text-xs px-3 py-1.5 rounded-md font-semibold hover:bg-orange-200 flex items-center gap-1"><i data-lucide="shield-alert" class="w-3 h-3"></i> Report</button>`;
-                        }
-                        
-                        let inboxButton = '';
-                        if (purchase.expirationHours) {
-                             const mailConfig = (appConfig.mails || []).find(m => m.type === purchase.mailType);
-                             if (mailConfig && mailConfig.apiLink) {
-                                inboxButton = `<button onclick="window.Telegram.WebApp.openLink('${mailConfig.apiLink}')" class="bg-blue-100 text-blue-700 text-xs px-3 py-1.5 rounded-md font-semibold hover:bg-blue-200 flex items-center gap-1"><i data-lucide="inbox" class="w-3 h-3"></i> INBOX</button>`;
-                             }
-                        }
-
-                        let detailsHtml, fullData;
-                        fullData = [purchase.mail, purchase.password, purchase.refreshToken, purchase.clientId].filter(Boolean).join('|');
-                         detailsHtml = `<div class="space-y-2 pt-2 border-t">
-                            <div class="flex items-center justify-between bg-gray-50 p-2 rounded-md"><span class="text-sm font-medium text-gray-500 mr-2">EMAIL:</span><span class="font-mono text-sm text-gray-800 truncate">${purchase.mail}</span><button onclick="copyToClipboard('${purchase.mail}', this)" class="ml-2 p-1.5 rounded-md hover:bg-gray-200"><i data-lucide="copy" class="w-4 h-4 text-gray-600"></i></button></div>
-                            <div class="flex items-center justify-between bg-gray-50 p-2 rounded-md"><span class="text-sm font-medium text-gray-500 mr-2">PASS:</span><span class="font-mono text-sm text-gray-800">${purchase.password || 'N/A'}</span><button onclick="copyToClipboard('${purchase.password || ''}', this)" class="ml-2 p-1.5 rounded-md hover:bg-gray-200"><i data-lucide="copy" class="w-4 h-4 text-gray-600"></i></button></div>
-                        </div>`;
+                    historyListEl.innerHTML = purchases.map(purchase => {
+                        const date = purchase.purchasedAt ? purchase.purchasedAt.toDate().toLocaleString() : 'N/A';
+                        let fullData = [purchase.mail, purchase.password, purchase.refreshToken, purchase.clientId].filter(Boolean).join('|');
 
                         return `<div class="card-bg p-4 rounded-xl space-y-3">
                             <div class="flex justify-between items-start">
                                 <div>
-                                    <h4 class="font-bold text-lg text-gray-800">${purchase.mailType}</h4>
-                                    <p class="text-xs text-gray-500">${date}</p>
-                                    <p class="text-xs font-mono text-blue-600 mt-1">ID: ${purchase.saleId || 'N/A'}</p>
+                                    <h4 class="font-bold text-md text-gray-800">${purchase.mailType}</h4>
+                                    <p class="text-[11px] text-gray-400">${date}</p>
                                 </div>
-                                <div class="flex flex-col items-end gap-2">
-                                     <div class="flex items-center gap-2">
-                                        ${inboxButton}
-                                        ${reportButton}
-                                    </div>
-                                    <button onclick="copyToClipboard(\`${fullData}\`, this)" class="bg-gray-100 text-gray-700 text-xs px-3 py-1.5 rounded-md font-semibold hover:bg-gray-200 flex items-center gap-1 self-end"><i data-lucide="copy-plus" class="w-3 h-3"></i> FULL COPY</button>
-                                </div>
+                                <button onclick="copyToClipboard(\`${fullData}\`, this)" class="bg-gray-100 text-gray-700 text-xs px-2.5 py-1 rounded-md font-semibold flex items-center gap-1"><i data-lucide="copy" class="w-3 h-3"></i> FULL COPY</button>
                             </div>
-                            ${detailsHtml}
-                            ${countdownHtml}
+                            <div class="space-y-1.5 pt-2 border-t text-xs font-mono">
+                                <div class="flex items-center justify-between bg-gray-50 p-2 rounded-md"><span>EMAIL:</span><span class="text-blue-600 font-bold truncate">${purchase.mail}</span></div>
+                                <div class="flex items-center justify-between bg-gray-50 p-2 rounded-md"><span>PASS:</span><span class="text-gray-800">${purchase.password || 'N/A'}</span></div>
+                            </div>
                         </div>`;
                     }).join('');
-                    
-                    if (countdownIntervalVarName === 'mail') {
-                         startCountdownTimers(historyListElId, countdownInterval);
-                    }
                 }
                 lucide.createIcons();
                 
             } catch (error) {
                 console.error("Error loading purchase history:", error);
-                historyListEl.innerHTML = '<p class="text-center text-red-600">হিস্টি লোড করা যায়নি।</p>';
+                historyListEl.innerHTML = '<p class="text-center text-red-600 text-sm">হিস্ট্রি লোড করা যায়নি।</p>';
             }
-        }
-
-        async function loadMailStore() {
-            const mailListContainer = document.getElementById('mail-list-container');
-            mailListContainer.innerHTML = getLoadingHTML();
-            
-            try {
-                const userSnap = await getDoc(doc(db, "users", userData.tgChatId));
-                userData = userSnap.data();
-
-                let effectiveBalance = userData.balance;
-                if (userData.linkedBy) {
-                    const teamLeaderSnap = await getDoc(doc(db, "users", userData.linkedBy));
-                    if (teamLeaderSnap.exists()) effectiveBalance += teamLeaderSnap.data().balance;
-                }
-
-                const allMails = appConfig.mails || [];
-                const otpMails = allMails.filter(m => m.category === 'otp');
-
-                await renderMailList(otpMails, mailListContainer, effectiveBalance, 'mail');
-                await loadPurchaseHistory('mail-purchase-history', 'mail', 'mail');
-
-            } catch(e) {
-                 mailListContainer.innerHTML = '<p class="text-center text-red-600">পণ্য লোড করা যায়নি।</p>';
-                 console.error(e);
-            }
-        }
-        
-        function startCountdownTimers(containerId, intervalVariable) {
-            if (intervalVariable) clearInterval(intervalVariable);
-            const container = document.getElementById(containerId);
-            if (!container) return;
-            
-            const timerElements = container.querySelectorAll('[data-purchase-id]');
-            if (timerElements.length === 0) return;
-
-            intervalVariable = setInterval(() => {
-                let hasActiveTimers = false;
-                timerElements.forEach(el => {
-                    const expiryTime = parseInt(el.dataset.purchasedAt, 10) + (parseFloat(el.dataset.expiresInHours) * 3600000);
-                    const remaining = expiryTime - Date.now();
-                    if (remaining <= 0) {
-                         const parentCard = el.closest('.card-bg');
-                         if (parentCard) parentCard.remove();
-                    } else {
-                        hasActiveTimers = true;
-                        const h = Math.floor(remaining / 3600000).toString().padStart(2, '0');
-                        const m = Math.floor((remaining % 3600000) / 60000).toString().padStart(2, '0');
-                        const s = Math.floor((remaining % 60000) / 1000).toString().padStart(2, '0');
-                        el.textContent = `Expires in: ${h}:${m}:${s}`;
-                    }
-                });
-                if (!hasActiveTimers) clearInterval(intervalVariable);
-            }, 1000);
-            
-            if(containerId === 'mail-purchase-history') countdownInterval = intervalVariable;
-        }
-
-        async function handleDownloadHistory(historyContainerId) {
-            loader.style.display = 'flex';
-            try {
-                const q = query(collection(db, "mail_purchases"), where("userId", "==", userData.tgChatId), orderBy("purchasedAt", "desc"));
-                const querySnapshot = await getDocs(q);
-                
-                if (querySnapshot.empty) {
-                    loader.style.display = 'none';
-                    return showAlert("আপনার কোনো History নেই");
-                }
-                
-                let purchases = querySnapshot.docs.map(doc => doc.data());
-                const dataForExcel = purchases.map(p => ({
-                    'Purchase Date': p.purchasedAt.toDate().toLocaleString(), 'Mail Type': p.mailType, 'Email': p.mail,
-                    'Password': p.password || 'N/A', 'Cost (BDT)': p.cost,
-                    'Full Data': [p.mail, p.password, p.refreshToken, p.clientId].filter(Boolean).join('|')
-                }));
-
-                if (purchases.length === 0) {
-                    loader.style.display = 'none';
-                    return showAlert("এই বিভাগে আপনার কোনো History নেই");
-                }
-                
-                const ws = XLSX.utils.json_to_sheet(dataForExcel);
-                const wb = XLSX.utils.book_new();
-                XLSX.utils.book_append_sheet(wb, ws, "Purchase History");
-                XLSX.writeFile(wb, "My_Purchase_History.xlsx");
-            } catch (error) { showAlert("ইতিহাস ডাউনলোড করার সময় একটি সমস্যা হয়েছে।"); }
-            finally { loader.style.display = 'none'; }
-        }
-
-        async function handleCopyHistory(historyContainerId) {
-             loader.style.display = 'flex';
-            try {
-                const fourHoursAgo = Timestamp.fromDate(new Date(Date.now() - 4 * 60 * 60 * 1000));
-                const q = query(collection(db, "mail_purchases"), where("userId", "==", userData.tgChatId), where("purchasedAt", ">=", fourHoursAgo), orderBy("purchasedAt", "desc"));
-                const querySnapshot = await getDocs(q);
-                
-                if (querySnapshot.empty) {
-                    loader.style.display = 'none';
-                    return showAlert("আপনার কোনো হিস্ট্রি পাওয়া যাইনি।");
-                }
-                
-                let purchases = querySnapshot.docs.map(doc => doc.data());
-                const contentToCopy = purchases.map(p => `Mail Type: ${p.mailType}\nEmail: ${p.mail}\nPassword: ${p.password || 'N/A'}`).join('\n\n---\n\n');
-                copyToClipboard(contentToCopy, null, 'শেষ ৪ ঘণ্টার ইতিহাস কপি করা হয়েছে!');
-            } catch (error) { showAlert("Error 404"); console.error(error); }
-            finally { loader.style.display = 'none'; }
         }
 
         window.buyMail = async function(mailType, costParam, stockKey, pageType) {
@@ -2362,68 +2314,33 @@
             try {
                 await runTransaction(db, async (transaction) => {
                     const buyerRef = doc(db, "users", userData.tgChatId);
-                    const counterRef = doc(db, "counters", "mail_purchase");
                     const mailSnap = await transaction.get(mailDocRef);
                     if (!mailSnap.exists() || mailSnap.data().isSold) {
-                        throw new Error("এই পণ্যটি ইতিমধ্যে বিক্রি হয়ে গেছে। অনুগ্রহ করে আবার চেষ্টা করুন।");
+                        throw new Error("এই পণ্যটি ইতিমধ্যে বিক্রি হয়ে গেছে।");
                     }
                     const buyerSnap = await transaction.get(buyerRef);
-                    if (!buyerSnap.exists()) throw new Error("আপনার ব্যবহারকারীর তথ্য খুঁজে পাওয়া যায়নি।");
+                    if (!buyerSnap.exists()) throw new Error("ব্যবহারকারী পাওয়া যায়নি।");
                     let currentBuyerData = buyerSnap.data();
 
-                    let teamLeaderRef = null;
-                    let currentLeaderData = null;
-                    if (currentBuyerData.linkedBy) {
-                        teamLeaderRef = doc(db, "users", currentBuyerData.linkedBy);
-                        const leaderSnap = await transaction.get(teamLeaderRef);
-                        if (!leaderSnap.exists()) throw new Error("আপনার টিম লিডারের অ্যাকাউন্ট খুঁজে পাওয়া যায়নি।");
-                        currentLeaderData = leaderSnap.data();
-                    }
-                    
-                    const counterSnap = await transaction.get(counterRef);
-                    if (!counterSnap.exists()) throw new Error("বিক্রয় কাউন্টার খুঁজে পাওয়া যায়নি।");
-                    const saleId = counterSnap.data().currentId;
-                    
-                    const effectiveBalance = currentBuyerData.balance + (currentLeaderData ? currentLeaderData.balance : 0);
-                    if (effectiveBalance < cost) {
+                    if (currentBuyerData.balance < cost) {
                         throw new Error("আপনার অ্যাকাউন্টে পর্যাপ্ত ব্যালেন্স নেই।");
                     }
-                    
-                    let costRemaining = cost;
-                    let paidBy = 'self';
 
-                    let buyerDeduction = Math.min(costRemaining, currentBuyerData.balance);
-                    if (buyerDeduction > 0) {
-                        transaction.update(buyerRef, { balance: currentBuyerData.balance - buyerDeduction });
-                        costRemaining -= buyerDeduction;
-                    }
-
-                    if (costRemaining > 0 && teamLeaderRef) {
-                        transaction.update(teamLeaderRef, { balance: currentLeaderData.balance - costRemaining });
-                        const newSpending = (currentLeaderData.teamSpending?.[userData.tgChatId] || 0) + costRemaining;
-                        transaction.update(teamLeaderRef, { [`teamSpending.${userData.tgChatId}`]: newSpending });
-                        paidBy = currentBuyerData.linkedBy;
-                    }
-
+                    transaction.update(buyerRef, { balance: currentBuyerData.balance - cost });
                     transaction.update(mailDocRef, { isSold: true, soldTo: userData.tgChatId, soldAt: serverTimestamp() });
                     
                     const purchaseLogRef = doc(collection(db, "mail_purchases"));
-                    const mailConfig = appConfig.mails.find(m => m.stockKey === stockKey);
                     
-                    const purchaseData = {
-                        saleId: saleId, userId: userData.tgChatId, paidBy: paidBy, mailType: mailType,
-                        cost: cost, purchasedAt: serverTimestamp(),
-                        expirationHours: mailConfig ? mailConfig.expirationHours : null,
-                        mail: mailData.email || null,
-                        password: mailData.password || null,
-                        uid: mailData.uid || null,
-                        twoFactor: mailData.twoFactor || null,
-                        refreshToken: mailData.refresh_token || null, 
-                        clientId: mailData.client_id || null
-                    };
-
-                    transaction.set(purchaseLogRef, purchaseData);
-                    transaction.update(counterRef, { currentId: saleId + 1 });
+                    transaction.set(purchaseLogRef, {
+                        userId: userData.tgChatId,
+                        mailType: mailType,
+                        cost: cost,
+                        purchasedAt: serverTimestamp(),
+                        mail: mailData.email || mailData.uid || '',
+                        password: mailData.password || '',
+                        refreshToken: mailData.refresh_token || '',
+                        clientId: mailData.client_id || ''
+                    });
                 });
 
                 const modal = document.getElementById('purchase-success-modal');
@@ -2436,12 +2353,11 @@
                 if (pageType === 'mail') loadMailStore();
                 
                 const finalUserSnap = await getDoc(doc(db, "users", userData.tgChatId));
-                userData = finalUserSnap.data();
+                if (finalUserSnap.exists()) userData = finalUserSnap.data();
                 updateUI();
 
             } catch (e) { 
-                showAlert(`কিনতে সমস্যা হয়েছে।\nকারণ: ${e.message}`);
-                console.error("Purchase Transaction Error:", e);
+                showAlert(`কিনতে সমস্যা হয়েছে: ${e.message}`);
                 if (pageType === 'mail') loadMailStore();
             } finally { 
                 loader.style.display = 'none';
@@ -2450,25 +2366,8 @@
 
         window.showMailDetails = function(mailType, encodedDetails, encodedFeatures) {
             const details = decodeURIComponent(encodedDetails);
-            const features = JSON.parse(decodeURIComponent(encodedFeatures));
-            
-            let contentHTML = `<p>${details}</p>`;
-            
-            if (features && features.length > 0) {
-                const featureListHTML = features.map(feature => 
-                    `<div class="flex items-start gap-3 mt-2">
-                        <i data-lucide="shield-check" class="w-5 h-5 text-blue-500 flex-shrink-0 mt-0.5"></i>
-                        <span class="text-sm text-gray-800">${feature}</span>
-                    </div>`
-                ).join('');
-                contentHTML += `<div class="mt-4 pt-3 border-t border-gray-200">
-                                    <h4 class="font-semibold text-gray-800 mb-2">Features:</h4>
-                                    ${featureListHTML}
-                                </div>`;
-            }
-
             document.getElementById('mail-details-title').textContent = `${mailType} Details`;
-            document.getElementById('mail-details-content').innerHTML = contentHTML;
+            document.getElementById('mail-details-content').innerHTML = `<p>${details}</p>`;
             document.getElementById('mail-details-modal').classList.remove('hidden');
             lucide.createIcons();
         }
@@ -2476,15 +2375,14 @@
         function populateAdminMailTypes() {
             const selectEl = document.getElementById('mail-type-select');
             selectEl.innerHTML = '<option value="">Select mail type...</option>';
-            (appConfig.mails || []).forEach(mail => { selectEl.innerHTML += `<option value="${mail.stockKey}">${mail.type} (${mail.category || 'login'})</option>`; });
+            (appConfig.mails || []).forEach(mail => { selectEl.innerHTML += `<option value="${mail.stockKey}">${mail.type}</option>`; });
         }
 
         async function handleAddMails() {
             const stockKey = document.getElementById('mail-type-select').value;
             const mailDataRaw = document.getElementById('mail-data-textarea').value;
-            if (!stockKey || !mailDataRaw.trim()) return showAlert("Please select a mail type and provide mail data.");
+            if (!stockKey || !mailDataRaw.trim()) return showAlert("Please select mail type & input data.");
             const lines = mailDataRaw.trim().split('\n').filter(line => line.trim() !== '');
-            if (lines.length === 0) return showAlert("No valid mail data found.");
 
             loader.style.display = 'flex';
             try {
@@ -2493,19 +2391,14 @@
                 lines.forEach(line => {
                     const parts = line.trim().split('/');
                     if (parts.length >= 2) { 
-                        const mailConfig = (appConfig.mails || []).find(m => m.stockKey === stockKey);
-                        let data = { isSold: false, createdAt: serverTimestamp() };
-                        if (mailConfig && mailConfig.category === 'social') {
-                            data.uid = parts[0];
-                            data.password = parts[1];
-                            data.twoFactor = parts[2] || null;
-                            data.email = parts[3] || null;
-                        } else {
-                            data.email = parts[0];
-                            data.password = parts[1]; 
-                            data.refresh_token = parts[2] || null;
-                            data.client_id = parts[3] || null;
-                        }
+                        let data = { 
+                            email: parts[0], 
+                            password: parts[1], 
+                            refresh_token: parts[2] || '', 
+                            client_id: parts[3] || '', 
+                            isSold: false, 
+                            createdAt: serverTimestamp() 
+                        };
                         batch.set(doc(collection(db, stockKey)), data);
                         addedCount++;
                     }
@@ -2514,8 +2407,8 @@
                     await batch.commit();
                     showAlert(`Successfully added ${addedCount} new items.`);
                     document.getElementById('mail-data-textarea').value = '';
-                } else showAlert("No valid items found to add.");
-            } catch (error) { showAlert("An error occurred while adding items."); }
+                }
+            } catch (error) { showAlert("Error adding items."); }
             finally { loader.style.display = 'none'; }
         }
 
@@ -2533,13 +2426,8 @@
                     lucide.createIcons();
                     setTimeout(() => { element.innerHTML = originalContent; lucide.createIcons(); }, 1500);
                 } else showAlert(alertMessage);
-            }).catch(err => {
-                console.error('Copy failed:', err);
-                showAlert('দুঃখিত, কপি করা যায়নি।');
             });
         }
-
-        window.openApiLink = (url) => { if (url) window.Telegram.WebApp.openLink(url); }
 
         function setupBanner() {
             const slides = document.querySelectorAll('.slide');
@@ -2560,20 +2448,9 @@
         }
 
         async function loadFeaturesPage() {
-            document.getElementById('total-receive-display').textContent = `...`;
-            document.getElementById('total-send-display').textContent = `...`;
-            try {
-                const receivedQuery = query(collection(db, "transfers"), where("toId", "==", userData.tgChatId));
-                const sentQuery = query(collection(db, "transfers"), where("fromId", "==", userData.tgChatId));
-                const [receivedSnapshot, sentSnapshot] = await Promise.all([getDocs(receivedQuery), getDocs(sentQuery)]);
-                
-                const totalReceive = receivedSnapshot.docs.reduce((sum, doc) => sum + doc.data().amount, 0);
-                document.getElementById('total-receive-display').textContent = `৳${totalReceive.toFixed(2)}`;
-                const totalSend = sentSnapshot.docs.reduce((sum, doc) => sum + doc.data().amount, 0);
-                document.getElementById('total-send-display').textContent = `৳${totalSend.toFixed(2)}`;
-                
-                await loadTransferHistory();
-            } catch (error) { console.error("Error loading features page data:", error); }
+            document.getElementById('total-receive-display').textContent = `৳0.00`;
+            document.getElementById('total-send-display').textContent = `৳0.00`;
+            await loadTransferHistory();
         }
 
         async function loadTransferHistory() {
@@ -2588,17 +2465,17 @@
                     .map(doc => doc.data())
                     .sort((a, b) => b.timestamp.toMillis() - a.timestamp.toMillis());
 
-                if (transactions.length === 0) return historyList.innerHTML = '<p class="text-gray-600 text-center">No transfer history.</p>';
+                if (transactions.length === 0) return historyList.innerHTML = '<p class="text-gray-600 text-center text-sm py-4">No transfer history.</p>';
                 historyList.innerHTML = transactions.map(item => {
                     const isSent = item.fromId === userData.tgChatId;
-                    const date = item.timestamp.toDate().toLocaleString('en-GB');
-                    return `<div class="card-bg p-3 rounded-lg flex items-center justify-between"><div><p class="font-semibold text-gray-800">${isSent ? `Sent to ${item.toName}` : `Received from ${item.fromName}`}</p><p class="text-xs text-gray-500">${date}</p></div><p class="font-bold text-lg ${isSent ? 'text-red-600' : 'text-green-600'}">${isSent ? '-' : '+'}৳${(isSent ? item.totalDeducted : item.amount).toFixed(2)}</p></div>`;
+                    const date = item.timestamp ? item.timestamp.toDate().toLocaleString('en-GB') : 'N/A';
+                    return `<div class="card-bg p-3 rounded-lg flex items-center justify-between"><div><p class="font-semibold text-gray-800 text-xs">${isSent ? `Sent to ${item.toName}` : `Received from ${item.fromName}`}</p><p class="text-[10px] text-gray-500">${date}</p></div><p class="font-bold text-sm ${isSent ? 'text-red-600' : 'text-green-600'}">${isSent ? '-' : '+'}৳${(isSent ? item.totalDeducted : item.amount).toFixed(2)}</p></div>`;
                 }).join('');
-            } catch (e) { historyList.innerHTML = '<p class="text-red-600 text-center">History could not be loaded.</p>'; }
+            } catch (e) { historyList.innerHTML = '<p class="text-red-600 text-center text-sm">History could not be loaded.</p>'; }
         }
 
         function handleReceive() {
-            copyToClipboard(userData.tgChatId, null, `আপনার রিসিভ আইডি:\n\n${userData.tgChatId}\n\nএই আইডি ব্যবহার করে ব্যালেন্স রিসিভ করুন।`);
+            copyToClipboard(userData.tgChatId, null, `আপনার আইডি:\n\n${userData.tgChatId}`);
         }
 
         function setupDynamicAmountHandlers(pageType) {
@@ -2620,8 +2497,7 @@
             
             const fee = amount * 0.05;
             const totalCost = amount + fee;
-            if (totalCost > userData.balance) return showAlert(`অপর্যাপ্ত ব্যালেন্স। আপনার প্রয়োজন ৳${totalCost.toFixed(2)}।`);
-            if (!confirm(`আপনি কি ${recipientId}-কে ৳${amount.toFixed(2)} পাঠাতে চান?\nফি: ৳${fee.toFixed(2)}\nমোট কাটা হবে: ৳${totalCost.toFixed(2)}`)) return;
+            if (totalCost > userData.balance) return showAlert(`অপর্যাপ্ত ব্যালেন্স।`);
 
             loader.style.display = 'flex';
             try {
@@ -2648,27 +2524,23 @@
             } catch (error) { showAlert(typeof error === 'string' ? error : "ব্যালেন্স পাঠাতে সমস্যা হয়েছে।"); } 
             finally { loader.style.display = 'none'; }
         }
-        
+
         async function handleSearchFriend() {
             const friendId = document.getElementById('link-friend-id').value.trim();
-            if (!friendId || friendId === userData.tgChatId) return showAlert("অনুগ্রহ করে একটি বৈধ আইডি দিন।");
+            if (!friendId || friendId === userData.tgChatId) return showAlert("আইডি দিন।");
             
             const searchResultEl = document.getElementById('friend-search-result');
             searchResultEl.innerHTML = getLoadingHTML();
             
             const friendSnap = await getDoc(doc(db, "users", friendId));
-            if (!friendSnap.exists()) return searchResultEl.innerHTML = `<p class="text-red-500 text-center mt-2">User not found.</p>`;
+            if (!friendSnap.exists()) return searchResultEl.innerHTML = `<p class="text-red-500 text-center mt-2 text-xs">User not found.</p>`;
 
             const friend = friendSnap.data();
-            if (friend.linkedBy) return searchResultEl.innerHTML = `<p class="text-red-500 text-center mt-2">This user is already in a team.</p>`;
-
-            const profileHTML = friend.photo_url ? `<img src="${friend.photo_url}" class="w-12 h-12 rounded-full object-cover" loading="lazy">` : `<div class="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center"><span class="text-xl font-bold text-gray-500">${friend.name?.[0] || 'U'}</span></div>`;
-            searchResultEl.innerHTML = `<div class="bg-gray-50 p-4 rounded-lg mt-4 flex items-center justify-between"><div class="flex items-center gap-3">${profileHTML}<div><p class="font-bold text-gray-800">${friend.name}</p><p class="text-xs text-gray-500">ID: ${friend.tgChatId}</p></div></div><button onclick="confirmLinkFriend('${friend.tgChatId}')" class="btn-gradient px-4 py-2 rounded-lg text-sm">Confirm Link</button></div>`;
+            searchResultEl.innerHTML = `<div class="bg-gray-50 p-4 rounded-lg mt-4 flex items-center justify-between"><div><p class="font-bold text-gray-800 text-sm">${friend.name}</p><p class="text-xs text-gray-500">ID: ${friend.tgChatId}</p></div><button onclick="confirmLinkFriend('${friend.tgChatId}')" class="btn-gradient px-4 py-2 rounded-lg text-xs font-bold">Confirm Link</button></div>`;
             lucide.createIcons();
         }
 
         window.confirmLinkFriend = async function(friendId) {
-            document.getElementById('friend-search-result').innerHTML = getLoadingHTML();
             try {
                 await updateDoc(doc(db, "users", userData.tgChatId), { linkedUsers: arrayUnion(friendId) });
                 await updateDoc(doc(db, "users", friendId), { linkedBy: userData.tgChatId });
@@ -2677,7 +2549,7 @@
                 document.getElementById('friend-search-result').innerHTML = '';
                 loadLinkedFriends();
             } catch (e) {
-                 document.getElementById('friend-search-result').innerHTML = `<p class="text-red-500 text-center mt-2">An error occurred.</p>`;
+                 showAlert("An error occurred.");
             }
         }
 
@@ -2686,35 +2558,29 @@
             listEl.innerHTML = getLoadingHTML();
             
             const userSnap = await getDoc(doc(db, "users", userData.tgChatId));
-            if (!userSnap.exists()) return listEl.innerHTML = '<p class="text-center text-red-500">Could not load your data.</p>';
+            if (!userSnap.exists()) return listEl.innerHTML = '<p class="text-center text-red-500 text-xs">Error loading data.</p>';
             userData = userSnap.data();
             
             const linkedIds = userData.linkedUsers || [];
-            if (linkedIds.length === 0) return listEl.innerHTML = '<p class="text-center text-gray-500">You have no team members yet.</p>';
+            if (linkedIds.length === 0) return listEl.innerHTML = '<p class="text-center text-gray-500 text-xs py-4">No team members yet.</p>';
 
             const friendDocs = await Promise.all(linkedIds.map(id => getDoc(doc(db, "users", id))));
             listEl.innerHTML = friendDocs.map(friendDoc => {
                 if (!friendDoc.exists()) return '';
                 const friend = friendDoc.data();
-                const totalSpent = userData.teamSpending?.[friend.tgChatId] || 0;
-                const isOnline = friend.lastSeen && (Timestamp.now().toMillis() - friend.lastSeen.toMillis()) < 300000;
-                const profileHTML = friend.photo_url ? `<img src="${friend.photo_url}" class="w-12 h-12 rounded-full object-cover" loading="lazy">` : `<div class="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center"><span class="text-xl font-bold text-gray-500">${(friend.name?.[0] || 'U').toUpperCase()}</span></div>`;
-                
-                return `<div class="card-bg p-4 rounded-2xl space-y-4 shadow-md"><div class="flex items-center justify-between"><div class="flex items-center gap-4"><div class="relative">${profileHTML}<span title="${isOnline ? 'Active Now' : 'Inactive'}" class="absolute bottom-0 right-0 block h-3.5 w-3.5 rounded-full ${isOnline ? 'bg-green-500' : 'bg-gray-400'} ring-2 ring-white"></span></div><div><p class="font-bold text-lg text-gray-900">${friend.name}</p><p class="text-sm text-gray-600">Total Spent: <span class="font-semibold text-blue-600">৳${totalSpent.toFixed(2)}</span></p></div></div><button onclick="unlinkFriend('${friend.tgChatId}')" class="p-2 rounded-full hover:bg-red-100 text-red-600 transition-colors" title="Unlink"><i data-lucide="user-x" class="w-5 h-5"></i></button></div></div>`;
+                return `<div class="card-bg p-3 rounded-xl flex items-center justify-between"><p class="font-bold text-gray-800 text-sm">${friend.name}</p><button onclick="unlinkFriend('${friend.tgChatId}')" class="p-1.5 text-red-600"><i data-lucide="user-x" class="w-4 h-4"></i></button></div>`;
             }).join('');
             lucide.createIcons();
         }
 
         window.unlinkFriend = async function(friendId) {
-            if (!confirm("Are you sure you want to remove this user?")) return;
-            loader.style.display = 'flex';
+            if (!confirm("Are you sure?")) return;
             try {
                 await updateDoc(doc(db, "users", userData.tgChatId), { linkedUsers: arrayRemove(friendId) });
                 await updateDoc(doc(db, "users", friendId), { linkedBy: null });
-                showAlert("Friend has been unlinked.");
+                showAlert("Friend unlinked.");
                 loadLinkedFriends();
-            } catch (e) { showAlert("Failed to unlink friend."); } 
-            finally { loader.style.display = 'none'; }
+            } catch (e) { showAlert("Failed to unlink."); }
         }
         
         function handleFeaturesClick() { navigateTo('features-page'); }
@@ -2722,204 +2588,12 @@
         async function loadReplaceHistory() {
             const historyList = document.getElementById('replace-history-list');
             historyList.innerHTML = getLoadingHTML();
-            try {
-                const q = query(collection(db, "replace_requests"), where("userId", "==", userData.tgChatId), orderBy("requestedAt", "desc"));
-                const snapshot = await getDocs(q);
-                if (snapshot.empty) return historyList.innerHTML = '<p class="text-gray-600 text-center">আপনার কোনো রিপ্লেস হিস্ট্রি নেই।</p>';
-
-                historyList.innerHTML = snapshot.docs.map(doc => {
-                    const item = doc.data();
-                    const statusMap = {
-                        approved: { color: 'text-green-600', text: 'Approved' },
-                        rejected: { color: 'text-red-600', text: 'Rejected' },
-                        pending: { color: 'text-yellow-600', text: 'Pending' }
-                    };
-                    const status = statusMap[item.status] || statusMap.pending;
-                    const date = item.requestedAt ? item.requestedAt.toDate().toLocaleDateString('en-GB') : 'N/A';
-                    
-                    return `<div class="card-bg p-4 rounded-lg space-y-2">
-                        <div class="flex justify-between items-center">
-                            <h4 class="font-semibold text-gray-800">${item.mailType.split(' (ID:')[0]}</h4>
-                            <span class="font-bold ${status.color}">${status.text}</span>
-                        </div>
-                        <div class="text-sm text-gray-600">
-                            <p><strong>ID:</strong> ${item.saleId || 'N/A'}</p>
-                            <p><strong>Cost:</strong> ৳${item.cost.toFixed(2)}</p>
-                            <p><strong>Date:</strong> ${date}</p>
-                        </div>
-                        <p class="text-sm text-gray-700 pt-2 border-t border-gray-200"><strong>Reason:</strong> ${item.reason}</p>
-                    </div>`;
-                }).join('');
-                lucide.createIcons();
-            } catch (error) { 
-                console.error("Error loading replace history:", error);
-                historyList.innerHTML = '<p class="text-red-600 text-center">হিস্ট্রি লোড করা যায়নি।</p>'; 
-            }
+            historyList.innerHTML = '<p class="text-gray-500 text-center text-sm py-4">কোনো রিপ্লেস হিস্ট্রি পাওয়া যায়নি।</p>';
         }
 
-        window.showReportForm = (purchaseId, mailType, cost, saleId) => {
-            document.getElementById('report-modal-mail-type').textContent = `${mailType} (ID: ${saleId})`;
-            document.getElementById('report-purchase-id').value = purchaseId;
-            document.getElementById('report-purchase-cost').value = cost;
-            document.getElementById('report-purchase-saleId').value = saleId;
-            document.getElementById('report-issue-form').reset();
-            document.getElementById('report-issue-modal').classList.remove('hidden');
-        }
-
-        async function handleReportSubmit(event) {
-            event.preventDefault();
-            const purchaseId = document.getElementById('report-purchase-id').value;
-            const cost = parseFloat(document.getElementById('report-purchase-cost').value);
-            const saleId = document.getElementById('report-purchase-saleId').value;
-            const mailType = document.getElementById('report-modal-mail-type').textContent;
-            const reason = document.getElementById('report-reason').value.trim();
-            const proof = document.getElementById('report-proof').value.trim();
-
-            if (!reason) return showAlert("অনুগ্রহ করে সমস্যার কারণটি লিখুন।");
-
-            loader.style.display = 'flex';
-            try {
-                 const requestQuery = query(collection(db, "replace_requests"), where("purchaseId", "==", purchaseId), limit(1));
-                 const existingRequest = await getDocs(requestQuery);
-                 if (!existingRequest.empty) {
-                     throw new Error("এই পণ্যটির জন্য ইতিমধ্যে একটি অভিযোগ জমা দেওয়া হয়েছে।");
-                 }
-
-                await addDoc(collection(db, "replace_requests"), {
-                    userId: userData.tgChatId,
-                    userName: userData.name,
-                    purchaseId: purchaseId,
-                    saleId: saleId,
-                    mailType: mailType,
-                    cost: cost,
-                    reason: reason,
-                    proof: proof,
-                    status: "pending",
-                    requestedAt: serverTimestamp()
-                });
-                showAlert("আপনার অভিযোগ সফলভাবে জমা হয়েছে। অ্যাডমিন শীঘ্রই এটি পর্যালোচনা করবেন।");
-                document.getElementById('report-issue-modal').classList.add('hidden');
-                
-                loadMailStore(); 
-
-            } catch (e) {
-                showAlert(`একটি সমস্যা হয়েছে: ${e.message}`);
-            } finally {
-                loader.style.display = 'none';
-            }
-        }
-        
         async function loadReplaceRequests() {
             const listEl = document.getElementById('replace-requests-list');
-            listEl.innerHTML = getLoadingHTML();
-            try {
-                const q = query(collection(db, "replace_requests"), where("status", "==", "pending"), orderBy("requestedAt", "desc"));
-                const snapshot = await getDocs(q);
-                if (snapshot.empty) return listEl.innerHTML = '<p class="text-center text-gray-500">No pending requests.</p>';
-
-                listEl.innerHTML = snapshot.docs.map(doc => {
-                    const req = { id: doc.id, ...doc.data() };
-                    const date = req.requestedAt.toDate().toLocaleString('en-GB');
-                    return `<div class="card-bg p-4 rounded-lg space-y-3">
-                        <div class="flex justify-between items-center">
-                            <h4 class="font-bold text-gray-800">${req.userName} (${req.userId})</h4>
-                            <span class="text-xs text-gray-500">${date}</span>
-                        </div>
-                        <p class="text-sm font-semibold">Mail: ${req.mailType}</p>
-                        <p class="text-sm"><strong>Reason:</strong> ${req.reason}</p>
-                        ${req.proof ? `<p class="text-sm"><strong>Proof:</strong> <a href="${req.proof}" target="_blank" class="text-blue-600 hover:underline">View Proof</a></p>` : ''}
-                        <div class="flex justify-end gap-2 pt-2 border-t">
-                            <button onclick="handleRejectRequest('${req.id}', '${req.userId}', '${req.saleId}', '${req.mailType}')" class="px-3 py-1 text-sm font-semibold text-white bg-red-500 rounded-lg hover:bg-red-600">Reject</button>
-                            <button onclick="handleApproveRequest('${req.id}', '${req.userId}', ${req.cost}, '${req.purchaseId}', '${req.saleId}', '${req.mailType}')" class="px-3 py-1 text-sm font-semibold text-white bg-green-500 rounded-lg hover:bg-green-600">Approve (Refund ৳${req.cost})</button>
-                        </div>
-                    </div>`;
-                }).join('');
-            } catch (e) {
-                listEl.innerHTML = '<p class="text-center text-red-600">Failed to load requests.</p>';
-            }
-        }
-
-        window.handleApproveRequest = async (requestId, userId, cost, purchaseId, saleId, mailType) => {
-            if (!confirm(`Are you sure you want to approve this request and refund ৳${cost} to user ${userId}?`)) return;
-            loader.style.display = 'flex';
-            try {
-                await runTransaction(db, async (transaction) => {
-                    const requestRef = doc(db, "replace_requests", requestId);
-                    const userRef = doc(db, "users", userId);
-                    const purchaseRef = doc(db, "mail_purchases", purchaseId);
-
-                    const userDoc = await transaction.get(userRef);
-                    if (!userDoc.exists()) throw new Error("User not found.");
-
-                    transaction.update(requestRef, { status: 'approved', resolvedAt: serverTimestamp() });
-                    transaction.update(userRef, { balance: increment(cost) });
-                    transaction.update(purchaseRef, { isRefunded: true });
-                });
-
-                await addDoc(collection(db, "notifications"), {
-                    recipientId: userId,
-                    title: "✅ Report Approved",
-                    message: `Your report for ${mailType.split(' (ID:')[0]} (ID: ${saleId}) has been approved. ৳${cost.toFixed(2)} has been refunded.`,
-                    createdAt: serverTimestamp()
-                });
-
-                showAlert("Request approved and balance refunded successfully.");
-                loadReplaceRequests();
-            } catch(e) {
-                showAlert(`Failed to approve request: ${e.message}`);
-            } finally {
-                loader.style.display = 'none';
-            }
-        }
-        
-        window.handleRejectRequest = async (requestId, userId, saleId, mailType) => {
-            if (!confirm("Are you sure you want to reject this request? This may trigger a penalty for the user.")) return;
-            loader.style.display = 'flex';
-            try {
-                const userRef = doc(db, "users", userId);
-                const requestRef = doc(db, "replace_requests", requestId);
-
-                await runTransaction(db, async (transaction) => {
-                    const userSnap = await transaction.get(userRef);
-                    if (!userSnap.exists()) throw new Error("User not found");
-                    const userData = userSnap.data();
-
-                    const today = new Date().toISOString().slice(0, 10);
-                    let dailyRejections = userData.dailyRejections || { date: today, count: 0 };
-
-                    if (dailyRejections.date !== today) {
-                        dailyRejections = { date: today, count: 1 };
-                    } else {
-                        dailyRejections.count += 1;
-                    }
-
-                    const updates = {
-                        "dailyRejections": dailyRejections
-                    };
-
-                    if (dailyRejections.count >= 5) {
-                        updates.isBlocked = true;
-                        updates.blockedUntil = Timestamp.fromMillis(Date.now() + 5 * 60 * 60 * 1000);
-                    }
-                    
-                    transaction.update(userRef, updates);
-                    transaction.update(requestRef, { status: 'rejected', resolvedAt: serverTimestamp() });
-                });
-
-                await addDoc(collection(db, "notifications"), {
-                    recipientId: userId,
-                    title: "❌ Report Rejected",
-                    message: `Your report for ${mailType.split(' (ID:')[0]} (ID: ${saleId}) has been rejected.`,
-                    createdAt: serverTimestamp()
-                });
-
-                showAlert("Request has been rejected. User's rejection count updated.");
-                loadReplaceRequests();
-            } catch(e) {
-                showAlert(`Failed to reject request: ${e.message}`);
-            } finally {
-                loader.style.display = 'none';
-            }
+            listEl.innerHTML = '<p class="text-center text-gray-500 text-xs py-2">No pending replace requests.</p>';
         }
     </script>
 </body>
