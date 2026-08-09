@@ -75,10 +75,10 @@
         .sub-page { display: none; }
         .sub-page.active { display: block; animation: fadeIn 0.3s ease-in-out; }
 
-        /* ULTRA PROFESSIONAL NATIVE BOTTOM NAV REDESIGN */
+        /* ULTRA MODERN NATIVE BOTTOM NAV */
         .bottom-nav {
              border-top: 1px solid rgba(226, 232, 240, 0.9);
-             background: rgba(255, 255, 255, 0.96);
+             background: rgba(255, 255, 255, 0.94);
              backdrop-filter: blur(20px);
              -webkit-backdrop-filter: blur(20px);
              position: fixed;
@@ -90,44 +90,52 @@
              display: flex;
              justify-content: space-around;
              align-items: center;
-             padding: 8px 12px;
+             padding: 6px 10px;
              z-index: 50;
-             height: 66px;
-             box-shadow: 0 -6px 25px rgba(0, 0, 0, 0.05);
-             border-top-left-radius: 20px;
-             border-top-right-radius: 20px;
+             height: 68px;
+             box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.05);
         }
         .nav-link-native {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 3px;
-            color: #94a3b8;
-            font-size: 0.65rem;
+            gap: 4px;
+            color: #64748b;
+            font-size: 0.68rem;
             font-weight: 800;
-            padding: 6px 14px;
-            border-radius: 14px;
+            padding: 6px 12px;
+            border-radius: 18px;
             transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: pointer;
             background: transparent;
             border: none;
             flex: 1;
-            max-width: 85px;
+            max-width: 82px;
+            position: relative;
         }
         .nav-link-native.active { 
             color: #007bff; 
-            background: rgba(0, 123, 255, 0.09);
-            box-shadow: inset 0 0 0 1px rgba(0, 123, 255, 0.15);
+            background-color: rgba(0, 123, 255, 0.09);
             transform: translateY(-2px);
         }
+        .nav-link-native.active::after {
+            content: '';
+            position: absolute;
+            bottom: 3px;
+            width: 14px;
+            height: 3px;
+            background-color: #007bff;
+            border-radius: 99px;
+            box-shadow: 0 0 8px rgba(0, 123, 255, 0.6);
+        }
         .nav-link-native .icon { 
-            width: 21px; 
-            height: 21px; 
+            width: 22px; 
+            height: 22px; 
             transition: transform 0.25s ease;
         }
         .nav-link-native.active .icon {
-            transform: scale(1.15);
+            transform: scale(1.18);
         }
 
         .header-native {
@@ -140,7 +148,7 @@
             align-items: center;
             justify-content: space-between;
             color: white;
-            gap: 8px;
+            gap: 10px;
             box-shadow: 0 2px 10px rgba(0,123,255,0.2);
         }
         .header-btn {
@@ -268,10 +276,11 @@
                 </div>
             </div>
 
-            <!-- HEADER BALANCE DISPLAY (CLICK OPENS DEPOSIT/WITHDRAW ACTION MODAL) -->
-            <div onclick="openBalanceActionModal()" class="bg-white/20 hover:bg-white/30 transition rounded-full px-3.5 py-1 flex items-center gap-1.5 cursor-pointer flex-grow justify-center" title="Balance Options">
-                <i data-lucide="circle-dollar-sign" class="w-4 h-4 text-yellow-300"></i>
-                <span id="header-coin-balance" class="font-extrabold text-sm text-white">0.00</span>
+            <!-- BALANCE CLICKABLE AREA -->
+            <div id="header-balance-area" onclick="openBalanceActionModal()" class="bg-white/20 hover:bg-white/30 transition rounded-full px-4 py-1.5 flex items-center gap-1.5 cursor-pointer flex-grow justify-center shadow-inner" title="Wallet Options">
+                <i data-lucide="wallet" class="w-4 h-4 text-yellow-300"></i>
+                <span id="header-coin-balance" class="font-extrabold text-sm text-white tracking-wide">0.00</span>
+                <i data-lucide="chevron-down" class="w-3.5 h-3.5 text-white/80"></i>
             </div>
 
             <div class="relative">
@@ -296,7 +305,7 @@
                     <div class="banner-wrapper">
                         <div class="banner-inner" id="slides">
                             <div class="slide active"><a href="https://t.me/EXPERTearn_team" target="_blank"><img src="https://i.postimg.cc/zBp8rCX9/Yellow-Orange-Modern-Marketing-Courses-You-Tube-Thumbnail-20250910-185659-0000.png" alt="Slide 1" loading="lazy"></a></div>
-                            <div class="slide"><a href="https.t.me/EXPERTearn_team" target="_blank"><img src="https://i.postimg.cc/W1syFD8p/Grey-Blue-Illustration-Refer-a-Friend-Instagram-Post-1080-x-720-px-20250917-223749-0000.png" alt="Slide 2" loading="lazy"></a></div>
+                            <div class="slide"><a href="https://t.me/EXPERTearn_team" target="_blank"><img src="https://i.postimg.cc/W1syFD8p/Grey-Blue-Illustration-Refer-a-Friend-Instagram-Post-1080-x-720-px-20250917-223749-0000.png" alt="Slide 2" loading="lazy"></a></div>
                             <div class="slide"><a href="https://t.me/EXPERTearn_team" target="_blank"><img src="https://i.postimg.cc/52HsFwvV/Black-and-Orange-Money-You-Tube-Thumbnail-20250917-224706-0000.png" alt="Slide 3" loading="lazy"></a></div>
                         </div>
                         <div class="dots" id="dots"></div>
@@ -309,14 +318,11 @@
                         <p class="text-gray-500 text-sm mb-1 font-medium">Your Balance</p>
                         <div class="flex items-center justify-between">
                             <p id="balance-display" class="text-4xl font-extrabold text-gray-800">৳0.00</p>
-                            <button onclick="openBalanceActionModal()" class="btn-gradient px-5 py-2.5 rounded-xl text-xs flex items-center gap-1.5 font-bold">
-                                <i data-lucide="wallet" class="w-4 h-4"></i>
-                                <span>Manage Balance</span>
-                            </button>
+                            <button id="home-deposit-btn" onclick="openBalanceActionModal()" class="btn-gradient px-6 py-2.5 rounded-xl text-sm">Add Funds</button>
                         </div>
                     </div>
 
-                    <!-- 1. WORK SUBMIT HOME BANNER POST -->
+                    <!-- WORK SUBMIT HOME BANNER POST -->
                     <div class="card-bg p-5 rounded-2xl bg-gradient-to-br from-emerald-600 to-teal-700 text-white shadow-lg relative overflow-hidden space-y-3">
                         <div class="absolute -right-6 -bottom-6 opacity-15">
                             <i data-lucide="briefcase" class="w-36 h-36"></i>
@@ -334,38 +340,38 @@
                         </div>
                     </div>
 
-                    <!-- 2. CNPJ POST CARD ON HOME PAGE -->
+                    <!-- CNPJ HOME BANNER POST -->
                     <div class="card-bg p-5 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-700 text-white shadow-lg relative overflow-hidden space-y-3">
                         <div class="absolute -right-6 -bottom-6 opacity-15">
-                            <i data-lucide="building-2" class="w-36 h-36"></i>
+                            <i data-lucide="file-text" class="w-36 h-36"></i>
                         </div>
                         <div class="relative z-10 space-y-2">
-                            <span class="bg-white/20 text-[10px] font-extrabold px-3 py-1 rounded-full uppercase tracking-wider backdrop-blur-md">Instant CNPJ</span>
-                            <h3 class="text-2xl font-extrabold">CNPJ সংগ্রহ করুন</h3>
+                            <span class="bg-white/20 text-[10px] font-extrabold px-3 py-1 rounded-full uppercase tracking-wider backdrop-blur-md">CNPJ Generator</span>
+                            <h3 class="text-2xl font-extrabold">CNPJ পান সহজে</h3>
                             <p class="text-xs text-blue-100 leading-relaxed">
-                                ১ম বার একদম ফ্রী! পরবর্তী প্রতিবার মাত্র ৳১০ টাকায় ১ ঘণ্টা মেয়াদী CNPJ পান।
+                                প্রথমবার একদম ফ্রী! ১ ঘণ্টার ভ্যালিডিটি সহ ইনস্ট্যান্ট CNPJ সংগ্রহ করুন।
                             </p>
                             <button onclick="navigateTo('cnpj-page')" class="mt-2 px-5 py-2.5 bg-white text-blue-800 font-bold rounded-xl text-xs shadow-md hover:bg-blue-50 transition flex items-center gap-2">
-                                <i data-lucide="file-text" class="w-4 h-4 text-blue-600"></i>
-                                <span>CNPJ সংগ্রহ করুন</span>
+                                <i data-lucide="sparkles" class="w-4 h-4 text-blue-600"></i>
+                                <span>CNPJ সংগ্রহ করুন (GET CNPJ)</span>
                             </button>
                         </div>
                     </div>
 
-                    <!-- 3. MAIL STORE BUY POST CARD ON HOME PAGE -->
-                    <div class="card-bg p-5 rounded-2xl bg-gradient-to-br from-purple-600 to-indigo-800 text-white shadow-lg relative overflow-hidden space-y-3">
+                    <!-- MAIL STORE HOME BANNER POST -->
+                    <div class="card-bg p-5 rounded-2xl bg-gradient-to-br from-amber-500 to-orange-600 text-white shadow-lg relative overflow-hidden space-y-3">
                         <div class="absolute -right-6 -bottom-6 opacity-15">
-                            <i data-lucide="shopping-bag" class="w-36 h-36"></i>
+                            <i data-lucide="shopping-cart" class="w-36 h-36"></i>
                         </div>
                         <div class="relative z-10 space-y-2">
-                            <span class="bg-white/20 text-[10px] font-extrabold px-3 py-1 rounded-full uppercase tracking-wider backdrop-blur-md">Account Store</span>
-                            <h3 class="text-2xl font-extrabold">মেইল / অ্যাকাউন্ট কিনুন</h3>
-                            <p class="text-xs text-purple-100 leading-relaxed">
-                                স্টকে বিভিন্ন ধরনের প্রিমিয়াম মেইল ও সামাজিক অ্যাকাউন্ট অ্যাভেলেবল। ইনস্ট্যান্ট ডেলিভারি!
+                            <span class="bg-white/20 text-[10px] font-extrabold px-3 py-1 rounded-full uppercase tracking-wider backdrop-blur-md">Mail Store</span>
+                            <h3 class="text-2xl font-extrabold">সকল ধরনের মেইল কিনুন</h3>
+                            <p class="text-xs text-amber-100 leading-relaxed">
+                                ১০০% ভেরিফাইড নতুন স্টক থেকে আপনার প্রয়োজনীয় মেইল সংগ্রহ করুন।
                             </p>
-                            <button onclick="navigateTo('mail-page')" class="mt-2 px-5 py-2.5 bg-white text-purple-800 font-bold rounded-xl text-xs shadow-md hover:bg-purple-50 transition flex items-center gap-2">
-                                <i data-lucide="shopping-cart" class="w-4 h-4 text-purple-600"></i>
-                                <span>স্টক থেকে কিনুন (BUY NOW)</span>
+                            <button onclick="navigateTo('mail-page')" class="mt-2 px-5 py-2.5 bg-white text-amber-900 font-bold rounded-xl text-xs shadow-md hover:bg-amber-50 transition flex items-center gap-2">
+                                <i data-lucide="shopping-bag" class="w-4 h-4 text-amber-600"></i>
+                                <span>মেইল কিনতে যান (BUY MAIL)</span>
                             </button>
                         </div>
                     </div>
@@ -581,8 +587,9 @@
                 </div>
             </div>
             
-            <!-- PROFILE PAGE WITH ONE-TIME EDIT SKILL PROFILE -->
+            <!-- ULTRA PROFESSIONAL PROFILE PAGE WITH SKILL PROFILE -->
             <div id="profile-page" class="p-4 space-y-5 sub-page">
+                <!-- PROFILE HEADER CARD -->
                 <div class="card-bg p-6 rounded-2xl flex flex-col items-center text-center relative overflow-hidden">
                     <div class="relative mb-3">
                         <img id="profile-pic" class="w-24 h-24 rounded-full border-4 border-[#007bff] object-cover shadow-md" src="" alt="Profile Picture" loading="lazy">
@@ -621,36 +628,36 @@
                     </div>
                 </div>
 
-                <!-- ONE-TIME EDITABLE USER SKILLS & REAL INFO FORM -->
+                <!-- USER SKILLS & EXPERIENCE FORM (ONE TIME EDITABLE) -->
                 <div class="card-bg p-5 rounded-2xl space-y-4">
-                    <div class="flex items-center justify-between border-b pb-2">
-                        <div>
-                            <h4 class="font-extrabold text-base text-gray-800 flex items-center gap-2">
-                                <i data-lucide="user-check" class="w-5 h-5 text-emerald-500"></i>
-                                <span>Complete Skill Profile</span>
-                            </h4>
-                            <p class="text-[11px] text-gray-500 mt-0.5">আপনার আসল তথ্য ও দক্ষতা দিন (শুধুমাত্র একবার পরিবর্তনযোগ্য)।</p>
-                        </div>
-                        <div id="skill-lock-badge" class="hidden bg-red-100 text-red-600 text-[10px] font-bold px-2.5 py-1 rounded-full flex items-center gap-1">
-                            <i data-lucide="lock" class="w-3 h-3"></i>
-                            <span>LOCKED</span>
-                        </div>
+                    <div>
+                        <h4 class="font-extrabold text-base text-gray-800 flex items-center gap-2">
+                            <i data-lucide="user-check" class="w-5 h-5 text-emerald-500"></i>
+                            <span>Complete Skill Profile</span>
+                        </h4>
+                        <p class="text-xs text-gray-500 mt-1">আপনার আসল তথ্য সেভ করুন। <span class="text-red-500 font-bold">(সতর্কতা: একবার সেভ করলে আর পরিবর্তন করতে পারবেন না)</span></p>
                     </div>
 
                     <form id="skill-profile-form" class="space-y-3">
                         <div>
-                            <label for="profile-real-name" class="block text-xs font-bold text-gray-600 mb-1">আসল নাম (Real Full Name) *</label>
-                            <input id="profile-real-name" type="text" placeholder="আপনার পুরো আসল নাম লিখুন" required class="w-full p-2.5 rounded-xl input-field text-xs">
+                            <label for="profile-real-name" class="block text-xs font-bold text-gray-600 mb-1">আসল নাম (Real Name) *</label>
+                            <input id="profile-real-name" type="text" placeholder="আপনার সঠিক নাম লিখুন" required class="w-full p-2.5 rounded-xl input-field text-xs">
                         </div>
                         <div>
-                            <label for="profile-phone" class="block text-xs font-bold text-gray-600 mb-1">আসল ফোন নম্বর (Contact Phone / WA) *</label>
+                            <label for="profile-phone" class="block text-xs font-bold text-gray-600 mb-1">Contact Phone / WhatsApp *</label>
                             <input id="profile-phone" type="text" placeholder="017xxxxxxxx" required class="w-full p-2.5 rounded-xl input-field text-xs">
                         </div>
                         <div>
                             <label for="profile-skills" class="block text-xs font-bold text-gray-600 mb-1">Skills & Experience (দক্ষতা ও অভিজ্ঞতা) *</label>
-                            <textarea id="profile-skills" rows="3" placeholder="যেমন: 2 years Gmail creating, CNPJ work experience, Fast delivery..." required class="w-full p-2.5 rounded-xl input-field text-xs"></textarea>
+                            <textarea id="profile-skills" rows="3" placeholder="যেমন: Gmail creation, CNPJ work, 2 years experience..." required class="w-full p-2.5 rounded-xl input-field text-xs"></textarea>
                         </div>
-                        <button id="save-skill-profile-btn" type="submit" class="w-full py-2.5 rounded-xl btn-gradient text-xs font-bold shadow-md">
+
+                        <div id="skill-lock-notice" class="hidden bg-amber-50 border border-amber-200 text-amber-800 p-2.5 rounded-xl text-xs font-semibold flex items-center gap-2">
+                            <i data-lucide="lock" class="w-4 h-4 text-amber-600"></i>
+                            <span>আপনার প্রোফাইল তথ্য সেভ রয়েছে (আর পরিবর্তন সম্ভব নয়)।</span>
+                        </div>
+
+                        <button id="skill-save-btn" type="submit" class="w-full py-2.5 rounded-xl btn-gradient text-xs font-bold shadow-md">
                             Save Skill Profile
                         </button>
                     </form>
@@ -671,7 +678,7 @@
                 </div>
 
                 <div class="text-center pt-4">
-                     <p class="text-center text-gray-500 text-xs">Developed by <a href="https://t.me/SAIDULEP" target="_blank" class="font-bold text-[#007bff] hover:underline">SAIDUL VAI</a></p>
+                     <p class="text-center text-gray-500 text-xs">Developed by <a href="https://t.me/SAIDULEP" target="_blank" class="font-semibold text-[#007bff] hover:underline">SAIDUL VAI</a></p>
                 </div>
             </div>
 
@@ -805,7 +812,7 @@
 
         </main>
         
-        <!-- ULTRA PROFESSIONAL NATIVE BOTTOM NAVIGATION -->
+        <!-- HIGHLY PROFESSIONAL NATIVE BOTTOM NAVIGATION -->
         <nav class="bottom-nav">
             <a href="#" class="nav-link-native active" data-page="home-page">
                 <i data-lucide="home" class="icon"></i>
@@ -830,30 +837,30 @@
         </nav>
     </div>
 
-    <!-- BALANCE ACTION MODAL ("আপনি কি করতে চান?") -->
-    <div id="balance-action-modal" class="hidden fixed inset-0 bg-black/60 flex items-center justify-center z-[70] p-4 backdrop-blur-sm">
-        <div class="card-bg rounded-2xl p-6 w-full max-w-xs space-y-5 relative text-center">
-            <button onclick="document.getElementById('balance-action-modal').classList.add('hidden')" class="modal-close-btn">
+    <!-- BALANCE ACTION CHOICE MODAL (DEPOSIT/WITHDRAW) -->
+    <div id="balance-action-modal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-[70] flex items-center justify-center p-4">
+        <div class="card-bg rounded-2xl p-6 w-full max-w-sm text-center relative space-y-5 shadow-2xl border border-gray-100">
+            <button onclick="closeBalanceActionModal()" class="modal-close-btn">
                 <i data-lucide="x" class="w-5 h-5"></i>
             </button>
-            
+
             <div class="w-14 h-14 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center mx-auto shadow-inner">
                 <i data-lucide="wallet" class="w-7 h-7"></i>
             </div>
 
             <div>
-                <h3 class="text-xl font-extrabold text-gray-800">আপনি কি করতে চান?</h3>
-                <p class="text-xs text-gray-500 mt-1">আপনার ব্যালেন্স জমা বা উত্তোলন করতে বেছে নিন</p>
+                <h3 class="text-xl font-bold text-gray-800">আপনি কি করতে চান?</h3>
+                <p class="text-xs text-gray-500 mt-1">আপনার ওয়ালেট লেনদেন পরিচালনা করুন</p>
             </div>
 
-            <div class="space-y-3 pt-2">
-                <button onclick="document.getElementById('balance-action-modal').classList.add('hidden'); navigateTo('pay-page')" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-bold text-xs shadow-md flex items-center justify-center gap-2 hover:opacity-95 transition">
-                    <i data-lucide="arrow-down-circle" class="w-5 h-5"></i>
-                    <span>DEPOSIT (টাকা জমা দিন)</span>
+            <div class="grid grid-cols-2 gap-3 pt-2">
+                <button onclick="closeBalanceActionModal(); navigateTo('pay-page');" class="p-3.5 bg-gradient-to-r from-emerald-500 to-teal-600 text-white rounded-xl font-bold text-xs shadow-md hover:shadow-lg transition flex flex-col items-center justify-center gap-1.5 active:scale-95">
+                    <i data-lucide="arrow-down-left" class="w-5 h-5"></i>
+                    <span>Deposit (টাকা জমা)</span>
                 </button>
-                <button onclick="document.getElementById('balance-action-modal').classList.add('hidden'); navigateTo('withdraw-page')" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold text-xs shadow-md flex items-center justify-center gap-2 hover:opacity-95 transition">
-                    <i data-lucide="arrow-up-circle" class="w-5 h-5"></i>
-                    <span>WITHDRAW (টাকা উত্তোলন)</span>
+                <button onclick="closeBalanceActionModal(); navigateTo('withdraw-page');" class="p-3.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl font-bold text-xs shadow-md hover:shadow-lg transition flex flex-col items-center justify-center gap-1.5 active:scale-95">
+                    <i data-lucide="arrow-up-right" class="w-5 h-5"></i>
+                    <span>Withdraw (উত্তোলন)</span>
                 </button>
             </div>
         </div>
@@ -872,7 +879,7 @@
              <div id="support-links-container" class="w-full space-y-3 max-w-xs">
                  <p class="text-center text-gray-500">Loading support links...</p>
              </div>
-             <p class="text-xs text-gray-400 mt-8">Developed by SAIDUL VAI</p>
+             <p class="text-xs text-gray-400 mt-8">Developed by <a href="https://t.me/SAIDULEP" target="_blank" class="text-blue-500 font-bold hover:underline">SAIDUL VAI</a></p>
         </div>
     </div>
 
@@ -906,7 +913,7 @@
                 </div>
                 <div>
                     <h4 class="font-semibold text-gray-800 mb-1 flex items-center gap-2"><i data-lucide="plus-circle" class="w-4 h-4 text-green-500"></i>কীভাবে ডিপোজিট করবেন?</h4>
-                    <p>হেডারের ব্যালেন্সের ওপর ক্লিক করুন এবং <span class="font-bold text-emerald-600">DEPOSIT</span> বাটন চাপুন। ট্রানজেকশন তথ্য সাবমিট করুন।</p>
+                    <p>হেডারের ওয়ালেট ব্যালেন্সে ক্লিক করে Deposit অপশন নির্বাচন করুন। পেমেন্ট মাধ্যমে টাকা পাঠিয়ে TrxID দিয়ে সাবমিট করুন।</p>
                 </div>
                  <div class="pt-3 border-t">
                     <p class="text-xs text-center text-gray-500">যেকোনো প্রয়োজনে মেনু বাটন থেকে সাপোর্টে যোগাযোগ করুন।</p>
@@ -1031,11 +1038,6 @@ const firebaseConfig = {
             return deviceId;
         }
 
-        window.openBalanceActionModal = function() {
-            document.getElementById('balance-action-modal').classList.remove('hidden');
-            lucide.createIcons();
-        }
-
         window.onload = async () => {
             cycleReviewsOnLoader();
             try {
@@ -1136,7 +1138,7 @@ const firebaseConfig = {
                     realName: '',
                     phone: '',
                     skills: '',
-                    skillProfileLocked: false,
+                    isSkillProfileSaved: false,
                     lastSeen: serverTimestamp()
                 };
                 await setDoc(userRef, userData);
@@ -1235,10 +1237,17 @@ const firebaseConfig = {
             lucide.createIcons();
         }
         window.navigateTo = navigateTo;
+
+        window.openBalanceActionModal = function() {
+            document.getElementById('balance-action-modal').classList.remove('hidden');
+        }
+
+        window.closeBalanceActionModal = function() {
+            document.getElementById('balance-action-modal').classList.add('hidden');
+        }
         
         function setupEventListeners() {
             document.getElementById('header-profile-area').addEventListener('click', () => navigateTo('profile-page'));
-            document.getElementById('header-[#header-balance-area]')?.addEventListener('click', openBalanceActionModal);
             document.getElementById('header-notif-btn').addEventListener('click', openNotifications);
             
             document.getElementById('header-menu-btn').addEventListener('click', openMenuPage);
@@ -1256,7 +1265,6 @@ const firebaseConfig = {
             document.getElementById('deposit-btn').addEventListener('click', handleDepositRequest);
             document.getElementById('submit-withdraw-btn').addEventListener('click', handleWithdrawRequest);
 
-            document.getElementById('home-deposit-btn').addEventListener('click', openBalanceActionModal);
             document.getElementById('add-mails-btn').addEventListener('click', handleAddMails);
             
             document.getElementById('download-history-btn').addEventListener('click', () => handleDownloadHistory('mail-purchase-history'));
@@ -1389,42 +1397,39 @@ const firebaseConfig = {
                     document.getElementById('profile-initials-avatar').classList.remove('hidden');
                 }
                 
-                document.getElementById('profile-name').textContent = userData.realName || `${currentUserTg.first_name} ${currentUserTg.last_name || ''}`.trim();
+                document.getElementById('profile-name').textContent = `${currentUserTg.first_name} ${currentUserTg.last_name || ''}`.trim();
                 document.getElementById('profile-username').textContent = currentUserTg.username ? `@${currentUserTg.username}` : 'No Telegram Username';
                 document.getElementById('profile-id').textContent = `Telegram ID: ${currentUserTg.id}`;
 
                 // Populate Skill Profile inputs
-                const realNameInput = document.getElementById('profile-real-name');
-                const phoneInput = document.getElementById('profile-phone');
-                const skillsInput = document.getElementById('profile-skills');
-                const saveBtn = document.getElementById('save-skill-profile-btn');
-                const lockBadge = document.getElementById('skill-lock-badge');
+                document.getElementById('profile-real-name').value = userData.realName || '';
+                document.getElementById('profile-phone').value = userData.phone || '';
+                document.getElementById('profile-skills').value = userData.skills || '';
 
-                realNameInput.value = userData.realName || '';
-                phoneInput.value = userData.phone || '';
-                skillsInput.value = userData.skills || '';
-
-                // ONE-TIME EDIT LOCK LOGIC
-                if (userData.skillProfileLocked) {
-                    realNameInput.disabled = true;
-                    phoneInput.disabled = true;
-                    skillsInput.disabled = true;
-
+                // LOCK SKILL FORM IF ALREADY SAVED (ONE TIME EDITABLE)
+                const saveBtn = document.getElementById('skill-save-btn');
+                const lockNotice = document.getElementById('skill-lock-notice');
+                
+                if (userData.isSkillProfileSaved) {
+                    document.getElementById('profile-real-name').disabled = true;
+                    document.getElementById('profile-phone').disabled = true;
+                    document.getElementById('profile-skills').disabled = true;
+                    
                     saveBtn.disabled = true;
-                    saveBtn.textContent = "Profile Info Locked (একবারই পূরণযোগ্য)";
-                    saveBtn.className = "w-full py-2.5 rounded-xl bg-gray-300 text-gray-500 text-xs font-bold cursor-not-allowed shadow-none";
-
-                    lockBadge.classList.remove('hidden');
+                    saveBtn.textContent = "🔒 তথ্য সেভ রয়েছে (লকড)";
+                    saveBtn.classList.remove('btn-gradient');
+                    saveBtn.classList.add('bg-gray-400', 'cursor-not-allowed');
+                    lockNotice.classList.remove('hidden');
                 } else {
-                    realNameInput.disabled = false;
-                    phoneInput.disabled = false;
-                    skillsInput.disabled = false;
-
+                    document.getElementById('profile-real-name').disabled = false;
+                    document.getElementById('profile-phone').disabled = false;
+                    document.getElementById('profile-skills').disabled = false;
+                    
                     saveBtn.disabled = false;
                     saveBtn.textContent = "Save Skill Profile";
-                    saveBtn.className = "w-full py-2.5 rounded-xl btn-gradient text-xs font-bold shadow-md";
-
-                    lockBadge.classList.add('hidden');
+                    saveBtn.classList.add('btn-gradient');
+                    saveBtn.classList.remove('bg-gray-400', 'cursor-not-allowed');
+                    lockNotice.classList.add('hidden');
                 }
 
                 // Load User Work Stats
@@ -1457,9 +1462,8 @@ const firebaseConfig = {
 
         async function handleSaveSkillProfile(e) {
             e.preventDefault();
-
-            if (userData.skillProfileLocked) {
-                return showAlert("আপনার স্কিল প্রোফাইল একবার সেভ করা হয়ে গেছে। এটি আর এডিট করা যাবে না।");
+            if (userData.isSkillProfileSaved) {
+                return showAlert("আপনার প্রোফাইল তথ্য ইতোমধ্যে সেভ রয়েছে। এটি আর পরিবর্তন করা যাবে না।");
             }
 
             const realName = document.getElementById('profile-real-name').value.trim();
@@ -1467,29 +1471,27 @@ const firebaseConfig = {
             const skills = document.getElementById('profile-skills').value.trim();
 
             if (!realName || !phone || !skills) {
-                return showAlert("অনুগ্রহ করে আপনার আসল নাম, ফোন নম্বর এবং দক্ষতার তথ্য সবগুলো পূরণ করুন।");
+                return showAlert("অনুগ্রহ করে আপনার আসল নাম, ফোন এবং স্কিল বিবরণ সঠিকভাবে লিখুন।");
             }
 
-            if (!confirm("আপনি কি নিশ্চিত? তথ্য একবার সেভ করার পর এটি আর পরিবর্তন/এডিট করতে পারবেন না।")) {
+            if (!confirm("আপনি কি নিশ্চিত যে এই তথ্যগুলো সেভ করতে চান? সেভ করার পর আর পরিবর্তন করতে পারবেন না।")) {
                 return;
             }
 
             loader.style.display = 'flex';
             try {
                 const userRef = doc(db, "users", userData.tgChatId);
-                const updates = {
+                await updateDoc(userRef, {
                     realName: realName,
                     phone: phone,
                     skills: skills,
-                    skillProfileLocked: true
-                };
-
-                await updateDoc(userRef, updates);
+                    isSkillProfileSaved: true
+                });
                 
                 userData.realName = realName;
                 userData.phone = phone;
                 userData.skills = skills;
-                userData.skillProfileLocked = true;
+                userData.isSkillProfileSaved = true;
 
                 showAlert("আপনার প্রফেশনাল স্কিল প্রোফাইল সফলভাবে সেভ ও লক করা হয়েছে!");
                 loadProfilePage();
@@ -1785,16 +1787,16 @@ const firebaseConfig = {
                     return `<div class="card-bg p-4 rounded-xl space-y-3 border-l-4 border-emerald-500">
                         <div class="flex justify-between items-start">
                             <div>
-                                <h4 class="font-bold text-gray-800 text-sm">${userProfile.realName || item.userName}</h4>
-                                <p class="text-[11px] text-gray-500 font-mono">TG ID: ${item.userId}</p>
+                                <h4 class="font-bold text-gray-800 text-sm">${item.userName}</h4>
+                                <p class="text-[11px] text-gray-500 font-mono">ID: ${item.userId}</p>
                             </div>
                             <span class="text-[10px] bg-gray-100 text-gray-500 px-2 py-0.5 rounded font-mono">${date}</span>
                         </div>
 
                         <!-- USER SKILL & STATS PREVIEW FOR ADMIN -->
                         <div class="bg-blue-50/60 border border-blue-100 p-2.5 rounded-lg text-xs space-y-1">
-                            <p class="font-bold text-blue-700 text-[11px] uppercase tracking-wider">User Real Skill Profile:</p>
-                            <p><strong>Real Name:</strong> ${userProfile.realName || 'Not completed'}</p>
+                            <p class="font-bold text-blue-700 text-[11px] uppercase tracking-wider">User Profile Info:</p>
+                            <p><strong>Real Name:</strong> ${userProfile.realName || 'Not provided'}</p>
                             <p><strong>Phone:</strong> ${userProfile.phone || 'Not provided'}</p>
                             <p><strong>Skills:</strong> ${userProfile.skills || 'No skill description added'}</p>
                         </div>
