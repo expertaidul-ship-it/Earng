@@ -502,22 +502,6 @@
                     <p>• যদি একই CNPJ একবারের বেশি বা একাধিক একাউন্টে ব্যবহার করেন, তবে কাজ হবে না।</p>
                 </div>
 
-                <!-- PENDING BALANCE CARD ON CNPJ PAGE -->
-                <div class="card-bg p-4 rounded-xl flex items-center justify-between border-l-4 border-amber-500 bg-amber-50/30">
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center">
-                            <i data-lucide="clock" class="w-5 h-5"></i>
-                        </div>
-                        <div>
-                            <p class="text-xs text-gray-500 font-semibold">আপনার পেন্ডিং ব্যালেন্স (Work Submit):</p>
-                            <p id="cnpj-pending-balance" class="text-xl font-bold text-amber-600">৳0.00</p>
-                        </div>
-                    </div>
-                    <button onclick="navigateTo('work-submit-page')" class="bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold px-3 py-2 rounded-lg transition">
-                        Submit Work
-                    </button>
-                </div>
-
                 <div class="card-bg p-5 rounded-2xl text-center space-y-4 border border-gray-100 shadow-sm">
                     <div id="cnpj-fee-status-badge" class="text-xs font-semibold text-gray-600 bg-gray-100 p-2.5 rounded-lg">
                         Checking offer status...
@@ -544,7 +528,7 @@
                 </div>
             </div>
 
-            <!-- NEW & IMPROVED WORK SUBMIT PAGE -->
+            <!-- WORK SUBMIT PAGE -->
             <div id="work-submit-page" class="p-4 space-y-5 sub-page">
                 <div class="relative flex items-center justify-center mb-2">
                     <button onclick="navigateTo('home-page')" class="absolute left-0 p-2 rounded-full hover:bg-gray-100 transition-colors">
@@ -1261,7 +1245,6 @@
                     tutorialVideoUrl: "https://www.youtube.com/embed/yy-ELf7JpMw"
                 };
                 
-                // Fallback default mail types if config is empty
                 if (!appConfig.mails || appConfig.mails.length === 0) {
                     appConfig.mails = [
                         { type: "Gmail Fresh", stockKey: "gmail_stock", priceBdt: 15, logoUrl: "https://i.postimg.cc/zBp8rCX9/Yellow-Orange-Modern-Marketing-Courses-You-Tube-Thumbnail-20250910-185659-0000.png", details: "100% Fresh Gmail", category: "otp" },
@@ -1276,7 +1259,6 @@
                 const feeWith = appConfig.withdrawFee || 0;
                 const tutUrl = appConfig.tutorialVideoUrl || "https://www.youtube.com/embed/yy-ELf7JpMw";
 
-                // Update UI Dynamic Displays
                 const homeWorkRateEl = document.getElementById('home-work-rate-display');
                 if (homeWorkRateEl) homeWorkRateEl.textContent = `৳${rate}`;
 
@@ -1295,7 +1277,6 @@
                 const tutIframe = document.getElementById('tutorial-iframe');
                 if (tutIframe && tutIframe.src !== tutUrl) tutIframe.src = tutUrl;
 
-                // Admin Inputs Population
                 if (document.getElementById('admin-work-rate-input')) {
                     document.getElementById('admin-work-rate-input').value = rate;
                     document.getElementById('admin-cnpj-price-input').value = cnpjPrice;
@@ -1464,31 +1445,36 @@
             document.getElementById('notification-page').classList.remove('hidden');
             
             try {
+                const recipientIds = [String(userData.tgChatId), "all"];
                 const notifQuery = query(collection(db, "notifications"), 
-                    where("recipientId", "in", [userData.tgChatId, "all"]),
-                    orderBy("createdAt", "desc"),
-                    limit(20)
+                    where("recipientId", "in", recipientIds)
                 );
 
                 const snapshot = await getDocs(notifQuery);
                 if (snapshot.empty) {
                     listEl.innerHTML = '<p class="text-center text-gray-500 mt-4">কোনো নোটিফিকেশন নেই।</p>';
                 } else {
-                    listEl.innerHTML = snapshot.docs.map(doc => {
-                        const n = doc.data();
-                        const time = n.createdAt ? n.createdAt.toDate().toLocaleString() : '';
+                    const docs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                    docs.sort((a, b) => {
+                        const timeA = a.createdAt?.toMillis ? a.createdAt.toMillis() : 0;
+                        const timeB = b.createdAt?.toMillis ? b.createdAt.toMillis() : 0;
+                        return timeB - timeA;
+                    });
+
+                    listEl.innerHTML = docs.slice(0, 20).map(n => {
+                        const time = n.createdAt?.toDate ? n.createdAt.toDate().toLocaleString() : '';
                         let icon = 'info';
                         let color = 'blue';
                         
-                        if(n.title.includes("Approved") || n.title.includes("Success")) { icon = 'check-circle'; color = 'green'; }
-                        else if(n.title.includes("Rejected") || n.title.includes("Failed")) { icon = 'x-circle'; color = 'red'; }
+                        if(n.title && (n.title.includes("Approved") || n.title.includes("Success"))) { icon = 'check-circle'; color = 'green'; }
+                        else if(n.title && (n.title.includes("Rejected") || n.title.includes("Failed"))) { icon = 'x-circle'; color = 'red'; }
 
                         return `<div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
                             <div class="flex items-start gap-3">
                                 <i data-lucide="${icon}" class="w-5 h-5 text-${color}-500 mt-1 flex-shrink-0"></i>
                                 <div>
-                                    <h4 class="font-bold text-gray-800 text-sm">${n.title}</h4>
-                                    <p class="text-xs text-gray-600 mt-1">${n.message}</p>
+                                    <h4 class="font-bold text-gray-800 text-sm">${n.title || ''}</h4>
+                                    <p class="text-xs text-gray-600 mt-1">${n.message || ''}</p>
                                     <p class="text-[10px] text-gray-400 mt-2">${time}</p>
                                 </div>
                             </div>
@@ -1497,12 +1483,12 @@
                     lucide.createIcons();
                 }
                 
-                const userRef = doc(db, "users", userData.tgChatId);
+                const userRef = doc(db, "users", String(userData.tgChatId));
                 await updateDoc(userRef, { lastSeenNotification: serverTimestamp() });
                 document.getElementById('notif-dot').style.display = 'none';
 
             } catch(e) {
-                console.error(e);
+                console.error("Notif Error:", e);
                 listEl.innerHTML = '<p class="text-center text-red-500">Error loading notifications.</p>';
             }
         }
@@ -1513,8 +1499,7 @@
 
         function listenForNotifications() {
             const q = query(collection(db, "notifications"), 
-                where("recipientId", "in", [userData.tgChatId, "all"]),
-                where("createdAt", ">", Timestamp.now())
+                where("recipientId", "in", [String(userData.tgChatId), "all"])
             );
             
             onSnapshot(q, (snapshot) => {
@@ -1571,7 +1556,7 @@
                 }
 
                 try {
-                    const q = query(collection(db, "work_submissions"), where("userId", "==", userData.tgChatId));
+                    const q = query(collection(db, "work_submissions"), where("userId", "==", String(userData.tgChatId)));
                     const snapshot = await getDocs(q);
                     
                     let total = snapshot.size;
@@ -1615,7 +1600,7 @@
 
             loader.style.display = 'flex';
             try {
-                const userRef = doc(db, "users", userData.tgChatId);
+                const userRef = doc(db, "users", String(userData.tgChatId));
                 await updateDoc(userRef, {
                     realName: realName,
                     phone: phone,
@@ -1637,11 +1622,9 @@
             }
         }
 
-        /* ----- REAL FIREBASE CNPJ FETCHING & CNPJ PAGE ----- */
+        /* ----- CNPJ PAGE ----- */
         async function loadCnpjPage() {
             const badgeEl = document.getElementById('cnpj-fee-status-badge');
-            
-            loadPendingBalanceForCnpj();
 
             const deviceId = getDeviceId();
             const deviceRef = doc(db, "claimed_devices", deviceId);
@@ -1717,25 +1700,6 @@
             }, 1000);
         }
 
-        async function loadPendingBalanceForCnpj() {
-            try {
-                const q = query(collection(db, "work_submissions"), 
-                    where("userId", "==", userData.tgChatId),
-                    where("status", "==", "pending")
-                );
-                const snapshot = await getDocs(q);
-                let totalPending = 0;
-                snapshot.docs.forEach(d => {
-                    const defaultRate = appConfig.workRate || 100;
-                    totalPending += (d.data().rewardAmount || defaultRate);
-                });
-                document.getElementById('cnpj-pending-balance').textContent = `৳${totalPending.toFixed(2)}`;
-            } catch(e) {
-                console.error("Error loading pending balance:", e);
-            }
-        }
-
-        // REAL FIREBASE CNPJ FETCHING HANDLER
         window.handleGetCNPJ = async function() {
             loader.style.display = 'flex';
             try {
@@ -1752,7 +1716,6 @@
                     return showAlert(`CNPJ নেয়ার জন্য পর্যাপ্ত ব্যালেন্স নেই। অ্যাকাউন্ট এ সর্বনিম্ন ৳${cost} টাকা থাকতে হবে।`);
                 }
 
-                // FETCH REAL UNSOLD CNPJ FROM FIREBASE COLLECTION "cnpj_stock"
                 const cnpjStockQuery = query(collection(db, "cnpj_stock"), where("isSold", "==", false), limit(1));
                 const cnpjStockSnap = await getDocs(cnpjStockQuery);
 
@@ -1776,7 +1739,7 @@
                     return showAlert("দুঃখিত! বর্তমানে স্টক এ কোনো CNPJ উপলব্ধ নেই। অ্যাডমিন স্টক যোগ করলে আবার চেষ্টা করুন।");
                 }
 
-                const expiresAtMs = Date.now() + 3600000; // 1 hour
+                const expiresAtMs = Date.now() + 3600000;
                 const newCnpjData = {
                     number: cnpjVal,
                     fetchedAt: Date.now(),
@@ -1784,7 +1747,7 @@
                 };
 
                 await runTransaction(db, async (transaction) => {
-                    const userRef = doc(db, "users", userData.tgChatId);
+                    const userRef = doc(db, "users", String(userData.tgChatId));
                     const userSnap = await transaction.get(userRef);
                     if (!userSnap.exists()) throw "User not found";
                     const currentBal = userSnap.data().balance;
@@ -1792,7 +1755,7 @@
                     if (!isFree && currentBal < cost) throw "Insufficient Balance";
 
                     if (cnpjDocRef) {
-                        transaction.update(cnpjDocRef, { isSold: true, soldTo: userData.tgChatId, soldAt: serverTimestamp() });
+                        transaction.update(cnpjDocRef, { isSold: true, soldTo: String(userData.tgChatId), soldAt: serverTimestamp() });
                     }
 
                     const currentCnpjList = userSnap.data().cnpjList || [];
@@ -1804,7 +1767,7 @@
                     } else {
                         updates.hasClaimedFreeCnpj = true;
                         transaction.set(deviceRef, {
-                            claimedBy: userData.tgChatId,
+                            claimedBy: String(userData.tgChatId),
                             claimedAt: serverTimestamp()
                         });
                     }
@@ -1829,7 +1792,6 @@
             }
         };
 
-        // ADMIN ADD CNPJ TO FIREBASE STOCK
         window.handleAddCnpjStock = async function() {
             const raw = document.getElementById('admin-cnpj-textarea').value.trim();
             if (!raw) return showAlert("CNPJ ইনপুট দিন।");
@@ -1875,6 +1837,9 @@
 
                 if (!snap.empty) {
                     loader.style.display = 'none';
+                    document.getElementById('work-submit-form').reset();
+                    pendingWorkData = null;
+                    closeWorkFormModal(); // Automatic cancel form
                     return showAlert("এই জিমেইলটি (GMAIL) ইতিমধ্যে জমা দেওয়া হয়েছে!");
                 }
 
@@ -1901,7 +1866,7 @@
             try {
                 const defaultRate = appConfig.workRate || 100;
                 await addDoc(collection(db, "work_submissions"), {
-                    userId: userData.tgChatId,
+                    userId: String(userData.tgChatId),
                     userName: userData.name,
                     gmail: pendingWorkData.gmail,
                     password: pendingWorkData.password,
@@ -1927,7 +1892,7 @@
             const listEl = document.getElementById('work-submission-history');
             listEl.innerHTML = getLoadingHTML();
             try {
-                const q = query(collection(db, "work_submissions"), where("userId", "==", userData.tgChatId), orderBy("submittedAt", "desc"));
+                const q = query(collection(db, "work_submissions"), where("userId", "==", String(userData.tgChatId)));
                 const snapshot = await getDocs(q);
 
                 let totalCount = snapshot.size;
@@ -1937,8 +1902,14 @@
                 if (snapshot.empty) {
                     listEl.innerHTML = '<p class="text-gray-500 text-center text-sm py-4">আপনার কোনো কাজের জমা দেওয়ার রেকর্ড নেই।</p>';
                 } else {
-                    listEl.innerHTML = snapshot.docs.map(doc => {
-                        const item = doc.data();
+                    const docs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                    docs.sort((a, b) => {
+                        const timeA = a.submittedAt?.toMillis ? a.submittedAt.toMillis() : 0;
+                        const timeB = b.submittedAt?.toMillis ? b.submittedAt.toMillis() : 0;
+                        return timeB - timeA;
+                    });
+
+                    listEl.innerHTML = docs.map(item => {
                         const rate = item.rewardAmount || 100;
 
                         if (item.status === 'pending') pendingBal += rate;
@@ -1950,7 +1921,7 @@
                             pending: { color: 'text-amber-600', text: 'Pending', bg: 'bg-amber-50' }
                         };
                         const status = statusMap[item.status] || statusMap.pending;
-                        const date = item.submittedAt ? item.submittedAt.toDate().toLocaleString('en-GB') : 'N/A';
+                        const date = item.submittedAt?.toDate ? item.submittedAt.toDate().toLocaleString('en-GB') : 'N/A';
 
                         return `<div class="card-bg p-4 rounded-xl space-y-2 border-l-4 ${item.status === 'approved' ? 'border-green-500' : (item.status === 'rejected' ? 'border-red-500' : 'border-amber-500')}">
                             <div class="flex justify-between items-center">
@@ -1967,17 +1938,16 @@
                     lucide.createIcons();
                 }
 
-                // UPDATE TOP STATS
                 document.getElementById('work-stat-total-count').textContent = totalCount;
                 document.getElementById('work-stat-pending-bal').textContent = `৳${pendingBal.toFixed(2)}`;
                 document.getElementById('work-stat-approved-bal').textContent = `৳${approvedBal.toFixed(2)}`;
 
             } catch (e) {
+                console.error("Error loading work submissions:", e);
                 listEl.innerHTML = '<p class="text-red-600 text-center text-sm">হিস্ট্রি লোড করা যায়নি।</p>';
             }
         }
 
-        // ADMIN ALL GLOBAL APP CONFIG SAVER
         async function saveAdminAppConfig() {
             const workRate = parseFloat(document.getElementById('admin-work-rate-input').value) || 100;
             const cnpjPrice = parseFloat(document.getElementById('admin-cnpj-price-input').value) || 10;
@@ -2017,7 +1987,7 @@
             listEl.innerHTML = getLoadingHTML();
 
             try {
-                const q = query(collection(db, "work_submissions"), where("status", "==", "pending"), orderBy("submittedAt", "desc"));
+                const q = query(collection(db, "work_submissions"), where("status", "==", "pending"));
                 const snapshot = await getDocs(q);
                 if (snapshot.empty) {
                     listEl.innerHTML = '<p class="text-center text-gray-500 text-sm">No pending work submissions.</p>';
@@ -2027,7 +1997,7 @@
                 const docs = snapshot.docs;
                 const userIds = [...new Set(docs.map(d => d.data().userId))];
                 
-                const userSnaps = await Promise.all(userIds.map(uid => getDoc(doc(db, "users", uid))));
+                const userSnaps = await Promise.all(userIds.map(uid => getDoc(doc(db, "users", String(uid)))));
                 const userMap = {};
                 userSnaps.forEach(snap => {
                     if (snap.exists()) userMap[snap.id] = snap.data();
@@ -2035,7 +2005,7 @@
 
                 listEl.innerHTML = docs.map(d => {
                     const item = { id: d.id, ...d.data() };
-                    const date = item.submittedAt ? item.submittedAt.toDate().toLocaleString('en-GB') : 'N/A';
+                    const date = item.submittedAt?.toDate ? item.submittedAt.toDate().toLocaleString('en-GB') : 'N/A';
                     const userProfile = userMap[item.userId] || {};
                     const defaultRate = appConfig.workRate || 100;
 
@@ -2089,7 +2059,7 @@
             try {
                 await runTransaction(db, async (transaction) => {
                     const subRef = doc(db, "work_submissions", submissionId);
-                    const userRef = doc(db, "users", userId);
+                    const userRef = doc(db, "users", String(userId));
 
                     const userSnap = await transaction.get(userRef);
                     if (!userSnap.exists()) throw "User not found";
@@ -2105,7 +2075,7 @@
                 });
 
                 await addDoc(collection(db, "notifications"), {
-                    recipientId: userId,
+                    recipientId: String(userId),
                     title: "✅ Work Approved!",
                     message: `আপনার জমাকৃত কাজ এপ্রুভ করা হয়েছে এবং ৳${rewardAmount.toFixed(2)} আপনার ওয়ালেটে যোগ করা হয়েছে।`,
                     createdAt: serverTimestamp()
@@ -2130,7 +2100,7 @@
                 });
 
                 await addDoc(collection(db, "notifications"), {
-                    recipientId: userId,
+                    recipientId: String(userId),
                     title: "❌ Work Rejected",
                     message: `আপনার জমাকৃত কাজটি রিজেক্ট করা হয়েছে।`,
                     createdAt: serverTimestamp()
@@ -2168,7 +2138,7 @@
                 }
                 
                 await addDoc(collection(db, "deposits"), {
-                    userId: userData.tgChatId, userName: userData.name, method: method, amount: amount,
+                    userId: String(userData.tgChatId), userName: userData.name, method: method, amount: amount,
                     senderNumber: senderNumber, transactionId: transactionId, status: "pending", requestedAt: serverTimestamp()
                 });
                 showAlert("আপনার ডিপোজিট অনুরোধ সফলভাবে জমা হয়েছে।");
@@ -2190,7 +2160,7 @@
             loader.style.display = 'flex';
             try {
                 await runTransaction(db, async (transaction) => {
-                    const userRef = doc(db, "users", userData.tgChatId);
+                    const userRef = doc(db, "users", String(userData.tgChatId));
                     const userDoc = await transaction.get(userRef);
                     if (!userDoc.exists()) throw "User not found";
                     const currentBal = userDoc.data().balance;
@@ -2199,7 +2169,7 @@
 
                     transaction.update(userRef, { balance: currentBal - amount });
                     transaction.set(doc(collection(db, "withdrawals")), {
-                        userId: userData.tgChatId,
+                        userId: String(userData.tgChatId),
                         userName: userData.name,
                         method: method,
                         number: number,
@@ -2227,19 +2197,21 @@
             const historyList = document.getElementById('payment-history-list');
             historyList.innerHTML = getLoadingHTML();
             try {
-                const q = query(collection(db, "deposits"), where("userId", "==", userData.tgChatId), orderBy("requestedAt", "desc"));
+                const q = query(collection(db, "deposits"), where("userId", "==", String(userData.tgChatId)));
                 const snapshot = await getDocs(q);
                 if (snapshot.empty) return historyList.innerHTML = '<p class="text-gray-600 text-center">কোনো রেকর্ড পাওয়া যায়নি।</p>';
 
-                historyList.innerHTML = snapshot.docs.map(doc => {
-                    const item = doc.data();
+                const docs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                docs.sort((a, b) => (b.requestedAt?.toMillis() || 0) - (a.requestedAt?.toMillis() || 0));
+
+                historyList.innerHTML = docs.map(item => {
                     const statusMap = {
                         approved: { color: 'text-green-600', icon: 'check-circle-2' },
                         rejected: { color: 'text-red-600', icon: 'x-circle' },
                         pending: { color: 'text-yellow-600', icon: 'hourglass' }
                     };
                     const { color, icon } = statusMap[item.status] || statusMap.pending;
-                    const date = item.requestedAt ? item.requestedAt.toDate().toLocaleDateString('en-GB') : 'N/A';
+                    const date = item.requestedAt?.toDate ? item.requestedAt.toDate().toLocaleDateString('en-GB') : 'N/A';
                     return `<div class="card-bg p-3 rounded-lg flex items-center justify-between"><div class="flex items-center gap-3"><i data-lucide="${icon}" class="w-6 h-6 ${color}"></i><div><p class="font-semibold text-gray-800">${item.type || 'Deposit'} - ${item.method}</p><p class="text-xs text-gray-500">${date}</p></div></div><div class="text-right"><p class="font-bold text-lg text-gray-800">৳${item.amount}</p><p class="font-semibold ${color} capitalize text-xs">${item.status}</p></div></div>`;
                 }).join('');
                 lucide.createIcons();
@@ -2250,19 +2222,21 @@
             const historyList = document.getElementById('withdraw-history-list');
             historyList.innerHTML = getLoadingHTML();
             try {
-                const q = query(collection(db, "withdrawals"), where("userId", "==", userData.tgChatId), orderBy("requestedAt", "desc"));
+                const q = query(collection(db, "withdrawals"), where("userId", "==", String(userData.tgChatId)));
                 const snapshot = await getDocs(q);
                 if (snapshot.empty) return historyList.innerHTML = '<p class="text-gray-600 text-center">কোনো রেকর্ড পাওয়া যায়নি।</p>';
 
-                historyList.innerHTML = snapshot.docs.map(doc => {
-                    const item = doc.data();
+                const docs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                docs.sort((a, b) => (b.requestedAt?.toMillis() || 0) - (a.requestedAt?.toMillis() || 0));
+
+                historyList.innerHTML = docs.map(item => {
                     const statusMap = {
                         approved: { color: 'text-green-600', icon: 'check-circle-2' },
                         rejected: { color: 'text-red-600', icon: 'x-circle' },
                         pending: { color: 'text-yellow-600', icon: 'hourglass' }
                     };
                     const { color, icon } = statusMap[item.status] || statusMap.pending;
-                    const date = item.requestedAt ? item.requestedAt.toDate().toLocaleDateString('en-GB') : 'N/A';
+                    const date = item.requestedAt?.toDate ? item.requestedAt.toDate().toLocaleDateString('en-GB') : 'N/A';
                     return `<div class="card-bg p-3 rounded-lg flex items-center justify-between"><div class="flex items-center gap-3"><i data-lucide="${icon}" class="w-6 h-6 ${color}"></i><div><p class="font-semibold text-gray-800">Withdraw - ${item.method}</p><p class="text-xs text-gray-500">${date}</p></div></div><div class="text-right"><p class="font-bold text-lg text-gray-800">৳${item.amount}</p><p class="font-semibold ${color} capitalize text-xs">${item.status}</p></div></div>`;
                 }).join('');
                 lucide.createIcons();
@@ -2280,7 +2254,7 @@
             }
         }
         
-        /* ----- REAL FIREBASE MAIL STORE FETCHING ----- */
+        /* ----- MAIL STORE FETCHING ----- */
         async function loadMailStore() {
             const mailListContainer = document.getElementById('mail-list-container');
             mailListContainer.innerHTML = getLoadingHTML();
@@ -2288,12 +2262,12 @@
             try {
                 await fetchAppConfig();
                 
-                const userSnap = await getDoc(doc(db, "users", userData.tgChatId));
+                const userSnap = await getDoc(doc(db, "users", String(userData.tgChatId)));
                 if (userSnap.exists()) userData = userSnap.data();
 
                 let effectiveBalance = userData.balance;
                 if (userData.linkedBy) {
-                    const teamLeaderSnap = await getDoc(doc(db, "users", userData.linkedBy));
+                    const teamLeaderSnap = await getDoc(doc(db, "users", String(userData.linkedBy)));
                     if (teamLeaderSnap.exists()) effectiveBalance += teamLeaderSnap.data().balance;
                 }
 
@@ -2350,23 +2324,21 @@
             historyListEl.innerHTML = getLoadingHTML();
             
             try {
-                const twentyFourHoursAgo = Timestamp.fromDate(new Date(Date.now() - 24 * 60 * 60 * 1000));
                 let q = query(
                     collection(db, "mail_purchases"), 
-                    where("userId", "==", userData.tgChatId), 
-                    where("purchasedAt", ">=", twentyFourHoursAgo), 
-                    orderBy("purchasedAt", "desc")
+                    where("userId", "==", String(userData.tgChatId))
                 );
 
                 const querySnapshot = await getDocs(q);
 
                 let purchases = querySnapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+                purchases.sort((a, b) => (b.purchasedAt?.toMillis() || 0) - (a.purchasedAt?.toMillis() || 0));
                 
                 if(purchases.length === 0) {
                     historyListEl.innerHTML = '<p class="text-center text-gray-500 text-sm py-4">আপনার কোনো কেনা পণ্য নেই।</p>';
                 } else {
                     historyListEl.innerHTML = purchases.map(purchase => {
-                        const date = purchase.purchasedAt ? purchase.purchasedAt.toDate().toLocaleString() : 'N/A';
+                        const date = purchase.purchasedAt?.toDate ? purchase.purchasedAt.toDate().toLocaleString() : 'N/A';
                         let fullData = [purchase.mail, purchase.password, purchase.refreshToken, purchase.clientId].filter(Boolean).join('|');
 
                         return `<div class="card-bg p-4 rounded-xl space-y-3">
@@ -2413,7 +2385,7 @@
             
             try {
                 await runTransaction(db, async (transaction) => {
-                    const buyerRef = doc(db, "users", userData.tgChatId);
+                    const buyerRef = doc(db, "users", String(userData.tgChatId));
                     const mailSnap = await transaction.get(mailDocRef);
                     if (!mailSnap.exists() || mailSnap.data().isSold) {
                         throw new Error("এই পণ্যটি ইতিমধ্যে বিক্রি হয়ে গেছে।");
@@ -2427,12 +2399,12 @@
                     }
 
                     transaction.update(buyerRef, { balance: currentBuyerData.balance - cost });
-                    transaction.update(mailDocRef, { isSold: true, soldTo: userData.tgChatId, soldAt: serverTimestamp() });
+                    transaction.update(mailDocRef, { isSold: true, soldTo: String(userData.tgChatId), soldAt: serverTimestamp() });
                     
                     const purchaseLogRef = doc(collection(db, "mail_purchases"));
                     
                     transaction.set(purchaseLogRef, {
-                        userId: userData.tgChatId,
+                        userId: String(userData.tgChatId),
                         mailType: mailType,
                         cost: cost,
                         purchasedAt: serverTimestamp(),
@@ -2452,7 +2424,7 @@
                 
                 if (pageType === 'mail') loadMailStore();
                 
-                const finalUserSnap = await getDoc(doc(db, "users", userData.tgChatId));
+                const finalUserSnap = await getDoc(doc(db, "users", String(userData.tgChatId)));
                 if (finalUserSnap.exists()) userData = finalUserSnap.data();
                 updateUI();
 
@@ -2557,25 +2529,25 @@
             const historyList = document.getElementById('transfer-history-list');
             historyList.innerHTML = getLoadingHTML();
             try {
-                const sentQuery = query(collection(db, "transfers"), where("fromId", "==", userData.tgChatId));
-                const receivedQuery = query(collection(db, "transfers"), where("toId", "==", userData.tgChatId));
+                const sentQuery = query(collection(db, "transfers"), where("fromId", "==", String(userData.tgChatId)));
+                const receivedQuery = query(collection(db, "transfers"), where("toId", "==", String(userData.tgChatId)));
                 const [sentDocs, receivedDocs] = await Promise.all([getDocs(sentQuery), getDocs(receivedQuery)]);
                 
                 const transactions = [...sentDocs.docs, ...receivedDocs.docs]
                     .map(doc => doc.data())
-                    .sort((a, b) => b.timestamp.toMillis() - a.timestamp.toMillis());
+                    .sort((a, b) => (b.timestamp?.toMillis() || 0) - (a.timestamp?.toMillis() || 0));
 
                 if (transactions.length === 0) return historyList.innerHTML = '<p class="text-gray-600 text-center text-sm py-4">No transfer history.</p>';
                 historyList.innerHTML = transactions.map(item => {
-                    const isSent = item.fromId === userData.tgChatId;
-                    const date = item.timestamp ? item.timestamp.toDate().toLocaleString('en-GB') : 'N/A';
+                    const isSent = item.fromId === String(userData.tgChatId);
+                    const date = item.timestamp?.toDate ? item.timestamp.toDate().toLocaleString('en-GB') : 'N/A';
                     return `<div class="card-bg p-3 rounded-lg flex items-center justify-between"><div><p class="font-semibold text-gray-800 text-xs">${isSent ? `Sent to ${item.toName}` : `Received from ${item.fromName}`}</p><p class="text-[10px] text-gray-500">${date}</p></div><p class="font-bold text-sm ${isSent ? 'text-red-600' : 'text-green-600'}">${isSent ? '-' : '+'}৳${(isSent ? item.totalDeducted : item.amount).toFixed(2)}</p></div>`;
                 }).join('');
             } catch (e) { historyList.innerHTML = '<p class="text-red-600 text-center text-sm">History could not be loaded.</p>'; }
         }
 
         function handleReceive() {
-            copyToClipboard(userData.tgChatId, null, `আপনার আইডি:\n\n${userData.tgChatId}`);
+            copyToClipboard(String(userData.tgChatId), null, `আপনার আইডি:\n\n${userData.tgChatId}`);
         }
 
         function setupDynamicAmountHandlers(pageType) {
@@ -2593,7 +2565,7 @@
             const recipientId = document.getElementById('send-recipient-id').value.trim();
             const amount = parseFloat(document.getElementById('send-amount').value);
             if (!recipientId || isNaN(amount) || amount < 20) return showAlert("অনুগ্রহ করে প্রাপকের আইডি এবং সর্বনিম্ন ৳20 পরিমাণ লিখুন।");
-            if (recipientId === userData.tgChatId) return showAlert("আপনি নিজেকে ব্যালেন্স পাঠাতে পারবেন না।");
+            if (recipientId === String(userData.tgChatId)) return showAlert("আপনি নিজেকে ব্যালেন্স পাঠাতে পারবেন না।");
             
             const fee = amount * 0.05;
             const totalCost = amount + fee;
@@ -2602,7 +2574,7 @@
             loader.style.display = 'flex';
             try {
                 await runTransaction(db, async (transaction) => {
-                    const senderRef = doc(db, "users", userData.tgChatId);
+                    const senderRef = doc(db, "users", String(userData.tgChatId));
                     const recipientRef = doc(db, "users", recipientId);
                     const [senderDoc, recipientDoc] = await Promise.all([transaction.get(senderRef), transaction.get(recipientRef)]);
 
@@ -2612,7 +2584,7 @@
                     transaction.update(senderRef, { balance: senderDoc.data().balance - totalCost });
                     transaction.update(recipientRef, { balance: recipientDoc.data().balance + amount });
                     transaction.set(doc(collection(db, "transfers")), { 
-                        fromId: userData.tgChatId, fromName: userData.name, toId: recipientId, 
+                        fromId: String(userData.tgChatId), fromName: userData.name, toId: recipientId, 
                         toName: recipientDoc.data().name, amount, fee, totalDeducted: totalCost, 
                         timestamp: serverTimestamp() 
                     });
@@ -2627,7 +2599,7 @@
 
         async function handleSearchFriend() {
             const friendId = document.getElementById('link-friend-id').value.trim();
-            if (!friendId || friendId === userData.tgChatId) return showAlert("আইডি দিন।");
+            if (!friendId || friendId === String(userData.tgChatId)) return showAlert("আইডি দিন।");
             
             const searchResultEl = document.getElementById('friend-search-result');
             searchResultEl.innerHTML = getLoadingHTML();
@@ -2642,8 +2614,8 @@
 
         window.confirmLinkFriend = async function(friendId) {
             try {
-                await updateDoc(doc(db, "users", userData.tgChatId), { linkedUsers: arrayUnion(friendId) });
-                await updateDoc(doc(db, "users", friendId), { linkedBy: userData.tgChatId });
+                await updateDoc(doc(db, "users", String(userData.tgChatId)), { linkedUsers: arrayUnion(friendId) });
+                await updateDoc(doc(db, "users", friendId), { linkedBy: String(userData.tgChatId) });
                 showAlert(`Successfully linked!`);
                 document.getElementById('link-friend-id').value = '';
                 document.getElementById('friend-search-result').innerHTML = '';
@@ -2657,14 +2629,14 @@
             const listEl = document.getElementById('linked-friends-list');
             listEl.innerHTML = getLoadingHTML();
             
-            const userSnap = await getDoc(doc(db, "users", userData.tgChatId));
+            const userSnap = await getDoc(doc(db, "users", String(userData.tgChatId)));
             if (!userSnap.exists()) return listEl.innerHTML = '<p class="text-center text-red-500 text-xs">Error loading data.</p>';
             userData = userSnap.data();
             
             const linkedIds = userData.linkedUsers || [];
             if (linkedIds.length === 0) return listEl.innerHTML = '<p class="text-center text-gray-500 text-xs py-4">No team members yet.</p>';
 
-            const friendDocs = await Promise.all(linkedIds.map(id => getDoc(doc(db, "users", id))));
+            const friendDocs = await Promise.all(linkedIds.map(id => getDoc(doc(db, "users", String(id)))));
             listEl.innerHTML = friendDocs.map(friendDoc => {
                 if (!friendDoc.exists()) return '';
                 const friend = friendDoc.data();
@@ -2676,7 +2648,7 @@
         window.unlinkFriend = async function(friendId) {
             if (!confirm("Are you sure?")) return;
             try {
-                await updateDoc(doc(db, "users", userData.tgChatId), { linkedUsers: arrayRemove(friendId) });
+                await updateDoc(doc(db, "users", String(userData.tgChatId)), { linkedUsers: arrayRemove(friendId) });
                 await updateDoc(doc(db, "users", friendId), { linkedBy: null });
                 showAlert("Friend unlinked.");
                 loadLinkedFriends();
