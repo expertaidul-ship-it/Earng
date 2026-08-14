@@ -2,264 +2,333 @@
 <html lang="bn" class="dark">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>MediaTube - Telegram App</title>
 
+    <!-- External Libraries -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <!-- Firebase Compat SDKs (For Single File Compatibility) -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] },
+                    colors: {
+                        brand: {
+                            500: '#ff0033',
+                            600: '#cc0029',
+                            dark: '#0a0a0c',
+                            card: '#121216',
+                            border: '#1f1f26'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
 
     <style>
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: #0f0f0f;
-            color: #f1f1f1;
-            -webkit-user-select: none;
+            background-color: #0a0a0c;
+            color: #f3f4f6;
+            -webkit-tap-highlight-color: transparent;
             user-select: none;
         }
-        .video-aspect {
-            position: relative;
-            padding-top: 56.25%; /* 16:9 Aspect Ratio */
-        }
-        .video-aspect iframe, .video-aspect video {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            object-fit: cover;
-        }
-        .nav-active {
-            color: #ef4444 !important;
+        .video-aspect { position: relative; padding-top: 56.25%; }
+        .video-aspect iframe, .video-aspect video, .video-aspect img {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;
         }
         .sub-page { display: none; }
-        .sub-page.active { display: block; animation: fadeIn 0.25s ease-in-out; }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(4px); }
+        .sub-page.active { display: block; animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(8px); }
             to { opacity: 1; transform: translateY(0); }
         }
-
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .glass-header {
+            background: rgba(10, 10, 12, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        .skeleton {
+            background: linear-gradient(90deg, #18181b 25%, #27272a 50%, #18181b 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+        }
+        @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
     </style>
 </head>
-<body class="max-w-md mx-auto min-h-screen flex flex-col bg-[#0f0f0f] pb-20">
+<body class="max-w-md mx-auto min-h-screen flex flex-col bg-brand-dark pb-24 border-x border-brand-border/40 shadow-2xl">
 
-    <header id="main-header" class="sticky top-0 z-40 bg-[#0f0f0f]/95 backdrop-blur-md px-4 py-3 border-b border-zinc-800 flex items-center justify-between">
-        <div class="flex items-center gap-2 cursor-pointer" onclick="navigateTo('home-page')">
-            <div class="bg-red-600 text-white p-1.5 rounded-xl">
-                <i data-lucide="play" class="w-5 h-5 fill-white"></i>
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="fixed top-4 left-1/2 -translate-x-1/2 z-50 flex flex-col gap-2 w-11/12 max-w-xs pointer-events-none"></div>
+
+    <!-- Header -->
+    <header class="sticky top-0 z-40 glass-header px-4 py-3 border-b border-brand-border flex items-center justify-between">
+        <div class="flex items-center gap-2.5 cursor-pointer" onclick="navigateTo('home-page')">
+            <div class="bg-gradient-to-tr from-brand-600 to-brand-500 text-white p-2 rounded-xl shadow-lg shadow-brand-500/20">
+                <i data-lucide="play" class="w-4 h-4 fill-white"></i>
             </div>
-            <span class="font-extrabold text-lg tracking-tight text-white">Media<span class="text-red-600">Tube</span></span>
+            <span class="font-extrabold text-lg tracking-tight text-white">Media<span class="text-brand-500">Tube</span></span>
         </div>
 
-        <div class="flex items-center gap-3">
-            <button onclick="navigateTo('search-page')" class="p-2 text-zinc-300 hover:text-white rounded-full hover:bg-zinc-800">
+        <div class="flex items-center gap-2">
+            <button onclick="navigateTo('search-page')" class="p-2 text-zinc-400 hover:text-white rounded-full hover:bg-brand-card transition-all">
                 <i data-lucide="search" class="w-5 h-5"></i>
             </button>
-            <div onclick="navigateTo('profile-page')" class="w-8 h-8 rounded-full bg-zinc-700 overflow-hidden cursor-pointer border border-zinc-700 flex items-center justify-center">
+            <div onclick="navigateTo('profile-page')" class="w-8 h-8 rounded-full bg-brand-card overflow-hidden cursor-pointer border border-brand-border flex items-center justify-center ring-2 ring-transparent hover:ring-brand-500/50 transition-all">
                 <img id="header-avatar" src="" alt="" class="w-full h-full object-cover hidden">
-                <span id="header-avatar-initial" class="text-xs font-bold text-white">U</span>
+                <span id="header-avatar-initial" class="text-xs font-bold text-brand-500">U</span>
             </div>
         </div>
     </header>
 
+    <!-- Main Content Body -->
     <main class="flex-grow space-y-4">
 
-        <div id="home-page" class="sub-page active p-3 space-y-4">
-            <div class="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar text-xs font-medium">
-                <button onclick="filterCategory('All')" class="px-3.5 py-1.5 rounded-lg bg-white text-black font-semibold whitespace-nowrap cat-btn">All</button>
-                <button onclick="filterCategory('Tutorial')" class="px-3.5 py-1.5 rounded-lg bg-zinc-800 text-zinc-300 hover:bg-zinc-700 whitespace-nowrap cat-btn">Tutorials</button>
-                <button onclick="filterCategory('Tech')" class="px-3.5 py-1.5 rounded-lg bg-zinc-800 text-zinc-300 hover:bg-zinc-700 whitespace-nowrap cat-btn">Tech</button>
-                <button onclick="filterCategory('Music')" class="px-3.5 py-1.5 rounded-lg bg-zinc-800 text-zinc-300 hover:bg-zinc-700 whitespace-nowrap cat-btn">Music</button>
+        <!-- HOME PAGE -->
+        <div id="home-page" class="sub-page active p-3.5 space-y-4">
+            <!-- Categories Pills -->
+            <div class="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar text-xs font-semibold">
+                <button onclick="filterCategory('All')" class="cat-btn px-4 py-2 rounded-xl bg-white text-black shadow-sm font-bold whitespace-nowrap transition-all">All</button>
+                <button onclick="filterCategory('Tutorial')" class="cat-btn px-4 py-2 rounded-xl bg-brand-card text-zinc-400 hover:text-white border border-brand-border whitespace-nowrap transition-all">Tutorials</button>
+                <button onclick="filterCategory('Tech')" class="cat-btn px-4 py-2 rounded-xl bg-brand-card text-zinc-400 hover:text-white border border-brand-border whitespace-nowrap transition-all">Tech</button>
+                <button onclick="filterCategory('Music')" class="cat-btn px-4 py-2 rounded-xl bg-brand-card text-zinc-400 hover:text-white border border-brand-border whitespace-nowrap transition-all">Music</button>
             </div>
 
-            <div id="video-feed-container" class="space-y-5">
-                <p class="text-xs text-zinc-500 text-center py-10">ফায়ারবেস থেকে ভিডিও লোড হচ্ছে...</p>
+            <!-- Feed Container -->
+            <div id="video-feed-container" class="space-y-4">
+                <!-- Skeleton Loader -->
+                <div class="bg-brand-card rounded-2xl overflow-hidden border border-brand-border space-y-3 p-3">
+                    <div class="video-aspect rounded-xl skeleton"></div>
+                    <div class="h-4 skeleton rounded-lg w-3/4"></div>
+                    <div class="h-3 skeleton rounded-lg w-1/2"></div>
+                </div>
             </div>
         </div>
 
+        <!-- WATCH PAGE -->
         <div id="watch-page" class="sub-page space-y-4">
-            <div class="sticky top-0 z-50 bg-black">
+            <div class="sticky top-0 z-50 bg-black shadow-xl">
                 <div class="video-aspect">
-                    <iframe id="video-player-iframe" class="w-full h-full" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    <iframe id="video-player-iframe" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                 </div>
             </div>
 
-            <div class="p-3 space-y-4">
+            <div class="p-3.5 space-y-4">
                 <div>
-                    <h1 id="watch-video-title" class="text-base font-bold text-white line-clamp-2">Title...</h1>
-                    <p id="watch-video-meta" class="text-xs text-zinc-400 mt-1">0 views • Just now</p>
+                    <h1 id="watch-video-title" class="text-base font-bold text-white leading-snug">Loading...</h1>
+                    <p id="watch-video-meta" class="text-xs text-zinc-400 mt-1">0 views • Recently added</p>
                 </div>
 
-                <div class="flex items-center justify-around bg-zinc-900 border border-zinc-800 rounded-xl py-2.5">
-                    <button id="like-btn" onclick="toggleLikeCurrentVideo()" class="flex flex-col items-center gap-1 text-zinc-300 hover:text-white">
-                        <i data-lucide="thumbs-up" class="w-5 h-5"></i>
-                        <span id="watch-like-count" class="text-[11px] font-semibold">0</span>
+                <!-- Action Bar -->
+                <div class="grid grid-cols-3 gap-2 bg-brand-card border border-brand-border p-2 rounded-2xl text-center">
+                    <button id="like-btn" onclick="toggleLikeCurrentVideo()" class="flex items-center justify-center gap-2 py-2 text-zinc-300 hover:text-white rounded-xl active:bg-zinc-800/50 transition-all">
+                        <i data-lucide="thumbs-up" class="w-4 h-4"></i>
+                        <span id="watch-like-count" class="text-xs font-semibold">0</span>
                     </button>
-                    <button onclick="downloadCurrentVideo()" class="flex flex-col items-center gap-1 text-zinc-300 hover:text-white">
-                        <i data-lucide="download" class="w-5 h-5"></i>
-                        <span class="text-[11px] font-semibold">Save</span>
+                    <button onclick="downloadCurrentVideo()" class="flex items-center justify-center gap-2 py-2 text-zinc-300 hover:text-white rounded-xl active:bg-zinc-800/50 transition-all">
+                        <i data-lucide="bookmark" class="w-4 h-4"></i>
+                        <span class="text-xs font-semibold">Save</span>
                     </button>
-                    <button onclick="shareCurrentVideo()" class="flex flex-col items-center gap-1 text-zinc-300 hover:text-white">
-                        <i data-lucide="share-2" class="w-5 h-5"></i>
-                        <span class="text-[11px] font-semibold">Share</span>
+                    <button onclick="shareCurrentVideo()" class="flex items-center justify-center gap-2 py-2 text-zinc-300 hover:text-white rounded-xl active:bg-zinc-800/50 transition-all">
+                        <i data-lucide="share-2" class="w-4 h-4"></i>
+                        <span class="text-xs font-semibold">Share</span>
                     </button>
                 </div>
 
-                <div class="bg-zinc-900/80 p-3 rounded-xl border border-zinc-800 text-xs text-zinc-300 space-y-2">
-                    <div class="flex items-center gap-2">
-                        <div class="w-7 h-7 rounded-full bg-red-600 flex items-center justify-center font-bold text-white text-[10px]">M</div>
+                <!-- Channel / Description -->
+                <div class="bg-brand-card p-3.5 rounded-2xl border border-brand-border text-xs text-zinc-300 space-y-2">
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-8 h-8 rounded-full bg-brand-500/20 text-brand-500 border border-brand-500/30 flex items-center justify-center font-extrabold text-xs">M</div>
                         <div>
-                            <p id="watch-channel-name" class="font-bold text-white text-xs">MediaTube Official</p>
-                            <p class="text-[10px] text-zinc-400">Verified Creator</p>
+                            <p id="watch-channel-name" class="font-bold text-white">MediaTube Official</p>
+                            <p class="text-[10px] text-zinc-400">Verified Channel</p>
                         </div>
                     </div>
-                    <p id="watch-video-desc" class="text-zinc-400 pt-1 text-xs">No description available.</p>
+                    <p id="watch-video-desc" class="text-zinc-400 pt-1 text-xs leading-relaxed">No description provided.</p>
                 </div>
 
+                <!-- Comments Section -->
                 <div class="space-y-3 pt-2">
                     <h3 class="text-sm font-bold text-white flex items-center gap-2">
                         <span>Comments</span>
-                        <span id="comments-count" class="text-xs text-zinc-400 font-normal">(0)</span>
+                        <span id="comments-count" class="text-xs text-brand-500 font-bold bg-brand-500/10 px-2 py-0.5 rounded-full">0</span>
                     </h3>
 
                     <div class="flex items-center gap-2">
-                        <input type="text" id="comment-input" placeholder="Add a public comment..." class="flex-grow bg-zinc-900 border border-zinc-700 rounded-xl py-2 px-3 text-xs text-white focus:outline-none focus:border-red-500">
-                        <button onclick="submitComment()" class="bg-red-600 hover:bg-red-700 text-white p-2 rounded-xl flex items-center justify-center">
+                        <input type="text" id="comment-input" placeholder="Add a public comment..." class="flex-grow bg-brand-card border border-brand-border rounded-xl py-2.5 px-3.5 text-xs text-white focus:outline-none focus:border-brand-500 transition-all">
+                        <button onclick="submitComment()" class="bg-brand-500 hover:bg-brand-600 text-white p-2.5 rounded-xl flex items-center justify-center shadow-lg shadow-brand-500/20 active:scale-95 transition-all">
                             <i data-lucide="send" class="w-4 h-4"></i>
                         </button>
                     </div>
 
-                    <div id="comments-container" class="space-y-2.5 max-h-60 overflow-y-auto pr-1">
-                        </div>
+                    <div id="comments-container" class="space-y-2 max-h-56 overflow-y-auto no-scrollbar pr-1"></div>
                 </div>
 
-                <hr class="border-zinc-800 my-4">
+                <hr class="border-brand-border/60 my-4">
 
+                <!-- Suggested Videos -->
                 <div class="space-y-3">
                     <h3 class="text-sm font-bold text-white">Suggested Videos</h3>
-                    <div id="suggested-videos-container" class="space-y-4">
-                        </div>
+                    <div id="suggested-videos-container" class="space-y-2.5"></div>
                 </div>
             </div>
         </div>
 
-        <div id="search-page" class="sub-page p-3 space-y-4">
+        <!-- SEARCH PAGE -->
+        <div id="search-page" class="sub-page p-3.5 space-y-4">
             <div class="relative">
-                <input type="text" id="search-input" onkeyup="handleSearch()" placeholder="Search videos, tutorials..." class="w-full bg-zinc-900 border border-zinc-700 rounded-xl py-3 pl-10 pr-4 text-sm text-white focus:outline-none focus:border-red-500">
+                <input type="text" id="search-input" onkeyup="handleSearch()" placeholder="Search videos, tutorials..." class="w-full bg-brand-card border border-brand-border rounded-xl py-3 pl-10 pr-4 text-sm text-white focus:outline-none focus:border-brand-500 transition-all">
                 <i data-lucide="search" class="w-4 h-4 text-zinc-400 absolute left-3.5 top-3.5"></i>
             </div>
 
-            <div id="search-results-container" class="space-y-4">
-                <p class="text-xs text-zinc-500 text-center py-8">ভিডিও খুঁজতে উপরে টাইপ করুন...</p>
+            <div id="search-results-container" class="space-y-3">
+                <p class="text-xs text-zinc-500 text-center py-12">Search by typing keywords above...</p>
             </div>
         </div>
 
-        <div id="download-page" class="sub-page p-3 space-y-4">
-            <div class="flex items-center justify-between border-b border-zinc-800 pb-3">
+        <!-- SAVED/DOWNLOADS PAGE -->
+        <div id="download-page" class="sub-page p-3.5 space-y-4">
+            <div class="flex items-center justify-between border-b border-brand-border pb-3">
                 <h2 class="text-base font-bold text-white flex items-center gap-2">
-                    <i data-lucide="download" class="w-5 h-5 text-red-500"></i>
+                    <i data-lucide="bookmark" class="w-5 h-5 text-brand-500"></i>
                     <span>Saved Videos</span>
                 </h2>
-                <span id="download-count-badge" class="text-xs bg-zinc-800 text-zinc-300 px-2 py-0.5 rounded-full font-bold">0</span>
+                <span id="download-count-badge" class="text-xs bg-brand-card border border-brand-border text-brand-500 px-2.5 py-1 rounded-full font-bold">0</span>
             </div>
 
-            <div id="download-list-container" class="space-y-3">
-                </div>
+            <div id="download-list-container" class="space-y-3"></div>
         </div>
 
-        <div id="profile-page" class="sub-page p-3 space-y-4">
-            <div class="bg-zinc-900 border border-zinc-800 rounded-2xl p-5 text-center space-y-3 relative overflow-hidden">
-                <div class="w-20 h-20 mx-auto rounded-full bg-zinc-800 border-2 border-red-600 overflow-hidden flex items-center justify-center shadow-lg">
-                    <img id="profile-pic" src="" alt="Profile" class="w-full h-full object-cover hidden">
-                    <span id="profile-initial" class="text-2xl font-bold text-zinc-300">U</span>
+        <!-- PROFILE PAGE -->
+        <div id="profile-page" class="sub-page p-3.5 space-y-4">
+            <div class="bg-brand-card border border-brand-border rounded-2xl p-5 text-center space-y-3 relative overflow-hidden shadow-lg">
+                <div class="w-20 h-20 mx-auto rounded-full bg-zinc-800 border-2 border-brand-500 p-0.5 overflow-hidden flex items-center justify-center shadow-xl shadow-brand-500/10">
+                    <img id="profile-pic" src="" alt="Profile" class="w-full h-full object-cover rounded-full hidden">
+                    <span id="profile-initial" class="text-2xl font-black text-brand-500">U</span>
                 </div>
 
                 <div>
-                    <h3 id="profile-name" class="text-lg font-bold text-white">User</h3>
-                    <p id="profile-username" class="text-xs text-zinc-400">@username</p>
+                    <h3 id="profile-name" class="text-base font-bold text-white">Telegram User</h3>
+                    <p id="profile-username" class="text-xs text-zinc-400 mt-0.5">@username</p>
                 </div>
 
-                <div class="pt-3 border-t border-zinc-800/80 grid grid-cols-1 gap-2 text-left text-xs">
-                    <div class="bg-zinc-800/60 p-2.5 rounded-xl flex items-center gap-3">
-                        <i data-lucide="id-card" class="w-4 h-4 text-red-500"></i>
+                <div class="pt-3 border-t border-brand-border grid grid-cols-1 gap-2 text-left text-xs">
+                    <div class="bg-zinc-900/50 p-3 rounded-xl border border-brand-border flex items-center gap-3">
+                        <i data-lucide="id-card" class="w-4 h-4 text-brand-500"></i>
                         <div>
-                            <p class="text-[10px] text-zinc-500 uppercase font-bold">Telegram ID</p>
-                            <p id="profile-id" class="font-mono text-zinc-200">N/A</p>
+                            <p class="text-[9px] text-zinc-500 uppercase font-extrabold tracking-wider">Telegram User ID</p>
+                            <p id="profile-id" class="font-mono text-zinc-200 text-xs mt-0.5">N/A</p>
                         </div>
                     </div>
                 </div>
             </div>
 
             <div class="grid grid-cols-2 gap-3 text-center">
-                <div class="bg-zinc-900 border border-zinc-800 p-3 rounded-xl">
-                    <p class="text-[10px] text-zinc-500 uppercase font-bold">Saved Videos</p>
-                    <p id="stat-download-count" class="text-lg font-black text-red-500">0</p>
+                <div class="bg-brand-card border border-brand-border p-3.5 rounded-2xl">
+                    <p class="text-[9px] text-zinc-500 uppercase font-extrabold tracking-wider">Saved Items</p>
+                    <p id="stat-download-count" class="text-xl font-black text-brand-500 mt-1">0</p>
                 </div>
-                <div class="bg-zinc-900 border border-zinc-800 p-3 rounded-xl">
-                    <p class="text-[10px] text-zinc-500 uppercase font-bold">App Version</p>
-                    <p class="text-lg font-black text-zinc-300">v2.5</p>
+                <div class="bg-brand-card border border-brand-border p-3.5 rounded-2xl">
+                    <p class="text-[9px] text-zinc-500 uppercase font-extrabold tracking-wider">App Version</p>
+                    <p class="text-xl font-black text-zinc-300 mt-1">v3.0 Pro</p>
                 </div>
             </div>
         </div>
 
     </main>
 
-    <nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-[#0f0f0f]/95 backdrop-blur-md border-t border-zinc-800 flex justify-around items-center py-2 z-40">
-        <button onclick="navigateTo('home-page')" class="nav-item active flex flex-col items-center gap-1 text-zinc-400 text-[10px] font-medium" data-page="home-page">
+    <!-- Bottom Navigation Bar -->
+    <nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto glass-header border-t border-brand-border flex justify-around items-center py-2.5 z-40">
+        <button onclick="navigateTo('home-page')" class="nav-item flex flex-col items-center gap-1 text-brand-500 text-[10px] font-bold" data-page="home-page">
             <i data-lucide="home" class="w-5 h-5"></i>
             <span>Home</span>
         </button>
-        <button onclick="navigateTo('search-page')" class="nav-item flex flex-col items-center gap-1 text-zinc-400 text-[10px] font-medium" data-page="search-page">
+        <button onclick="navigateTo('search-page')" class="nav-item flex flex-col items-center gap-1 text-zinc-500 text-[10px] font-medium hover:text-zinc-300 transition-all" data-page="search-page">
             <i data-lucide="search" class="w-5 h-5"></i>
             <span>Search</span>
         </button>
-        <button onclick="navigateTo('download-page')" class="nav-item flex flex-col items-center gap-1 text-zinc-400 text-[10px] font-medium" data-page="download-page">
-            <i data-lucide="download" class="w-5 h-5"></i>
-            <span>Downloads</span>
+        <button onclick="navigateTo('download-page')" class="nav-item flex flex-col items-center gap-1 text-zinc-500 text-[10px] font-medium hover:text-zinc-300 transition-all" data-page="download-page">
+            <i data-lucide="bookmark" class="w-5 h-5"></i>
+            <span>Saved</span>
         </button>
-        <button onclick="navigateTo('profile-page')" class="nav-item flex flex-col items-center gap-1 text-zinc-400 text-[10px] font-medium" data-page="profile-page">
+        <button onclick="navigateTo('profile-page')" class="nav-item flex flex-col items-center gap-1 text-zinc-500 text-[10px] font-medium hover:text-zinc-300 transition-all" data-page="profile-page">
             <i data-lucide="user" class="w-5 h-5"></i>
             <span>Profile</span>
         </button>
     </nav>
 
+    <!-- APP SCRIPT LOGIC -->
     <script>
         // ============================================================
-        // 1. FIREBASE CONFIGURATION (আপনার আসল ক্রেডেনশিয়াল দিন)
+        // 1. FIREBASE CONFIGURATION (YOUR REAL KEYS INTEGRATED)
         // ============================================================
         const firebaseConfig = {
-            apiKey: "YOUR_API_KEY",
-            authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-            projectId: "YOUR_PROJECT_ID",
-            storageBucket: "YOUR_PROJECT_ID.appspot.com",
-            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-            appId: "YOUR_APP_ID"
+            apiKey: "AIzaSyDCRUcx2CtNx7iWEvvINnwVtycv7MS80jk",
+            authDomain: "video-r0om-bot.firebaseapp.com",
+            projectId: "video-r0om-bot",
+            storageBucket: "video-r0om-bot.firebasestorage.app",
+            messagingSenderId: "848251152121",
+            appId: "1:848251152121:web:9981c76985b4f385eda428"
         };
 
-        // Initialize Firebase (যদি অলরেডি কনফিগার করা থাকে)
         let db = null;
         try {
             if (!firebase.apps.length) {
                 firebase.initializeApp(firebaseConfig);
             }
             db = firebase.firestore();
-        } catch(e) {
-            console.log("Firebase Init error or fallback to local handling:", e);
+        } catch (e) {
+            console.warn("Firebase initialized with local fallback handling:", e);
         }
 
         // ============================================================
-        // GLOBAL DATA STATE
+        // SAMPLE DEMO DATA (Fallback if Firebase Firestore is empty)
         // ============================================================
-        let videosDatabase = []; // Firebase থেকে ডাটা এখানে আসবে
-        let currentActiveVideo = null;
-        let downloadedVideos = JSON.parse(localStorage.getItem('my_downloads') || '[]');
-        let currentUser = { name: "User", username: "username", photo: "" };
+        const demoVideos = [
+            {
+                id: "demo-1",
+                title: "Build a Telegram Mini App with HTML & Firebase",
+                category: "Tech",
+                views: "1.2K",
+                duration: "10:25",
+                thumbnail: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=600&auto=format&fit=crop&q=80",
+                embedUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+                desc: "Learn step-by-step how to integrate Firebase Firestore inside Telegram WebApps.",
+                likes: 42,
+                comments: [{ user: "Alex", text: "Awesome project layout!" }]
+            },
+            {
+                id: "demo-2",
+                title: "Tailwind CSS Responsive Design Masterclass",
+                category: "Tutorial",
+                views: "850",
+                duration: "08:15",
+                thumbnail: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=600&auto=format&fit=crop&q=80",
+                embedUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+                desc: "Master mobile-first dark mode layouts with modern Tailwind utility classes.",
+                likes: 19,
+                comments: []
+            }
+        ];
 
+        // GLOBAL APP STATE
+        let videosDatabase = [];
+        let currentActiveVideo = null;
+        let downloadedVideos = JSON.parse(localStorage.getItem('mediatube_saved') || '[]');
+        let currentUser = { name: "Telegram User", username: "username", photo: "" };
+
+        // INITIALIZATION ON LOAD
         window.onload = () => {
             lucide.createIcons();
             initTelegramProfile();
@@ -267,49 +336,82 @@
             updateDownloadUI();
         };
 
-        // TELEGRAM PROFILE INITIALIZATION
+        // TELEGRAM PROFILE SETUP
         function initTelegramProfile() {
             try {
-                window.Telegram.WebApp.ready();
-                window.Telegram.WebApp.expand();
+                if (window.Telegram?.WebApp) {
+                    window.Telegram.WebApp.ready();
+                    window.Telegram.WebApp.expand();
 
-                const user = window.Telegram.WebApp.initDataUnsafe?.user;
-                if (user) {
-                    const fullName = `${user.first_name || ''} ${user.last_name || ''}`.trim() || "Telegram User";
-                    currentUser.name = fullName;
-                    currentUser.username = user.username ? `@${user.username}` : "No Username";
-                    currentUser.photo = user.photo_url || "";
+                    const user = window.Telegram.WebApp.initDataUnsafe?.user;
+                    if (user) {
+                        const fullName = `${user.first_name || ''} ${user.last_name || ''}`.trim() || "Telegram User";
+                        currentUser.name = fullName;
+                        currentUser.username = user.username ? `@${user.username}` : "No Username";
 
-                    document.getElementById('profile-name').textContent = currentUser.name;
-                    document.getElementById('profile-username').textContent = currentUser.username;
-                    document.getElementById('profile-id').textContent = user.id || "N/A";
+                        document.getElementById('profile-name').textContent = currentUser.name;
+                        document.getElementById('profile-username').textContent = currentUser.username;
+                        document.getElementById('profile-id').textContent = user.id || "N/A";
 
-                    if (user.photo_url) {
-                        document.getElementById('profile-pic').src = user.photo_url;
-                        document.getElementById('profile-pic').classList.remove('hidden');
-                        document.getElementById('profile-initial').classList.add('hidden');
+                        if (user.photo_url) {
+                            currentUser.photo = user.photo_url;
+                            document.getElementById('profile-pic').src = user.photo_url;
+                            document.getElementById('profile-pic').classList.remove('hidden');
+                            document.getElementById('profile-initial').classList.add('hidden');
 
-                        document.getElementById('header-avatar').src = user.photo_url;
-                        document.getElementById('header-avatar').classList.remove('hidden');
-                        document.getElementById('header-avatar-initial').classList.add('hidden');
-                    } else {
-                        const initial = (user.first_name?.[0] || 'U').toUpperCase();
-                        document.getElementById('profile-initial').textContent = initial;
-                        document.getElementById('header-avatar-initial').textContent = initial;
+                            document.getElementById('header-avatar').src = user.photo_url;
+                            document.getElementById('header-avatar').classList.remove('hidden');
+                            document.getElementById('header-avatar-initial').classList.add('hidden');
+                        } else {
+                            const initial = (user.first_name?.[0] || 'U').toUpperCase();
+                            document.getElementById('profile-initial').textContent = initial;
+                            document.getElementById('header-avatar-initial').textContent = initial;
+                        }
                     }
                 }
             } catch (e) {
-                console.log("Telegram SDK Error:", e);
+                console.log("Telegram SDK execution notice:", e);
             }
         }
 
-        // ============================================================
-        // FETCH DATA FROM FIREBASE (Firestore Database Structure)
-        // ============================================================
+        // TOAST NOTIFICATION SYSTEM
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `bg-zinc-900 border border-brand-border text-white text-xs px-4 py-2.5 rounded-xl shadow-2xl flex items-center gap-2 transform transition-all duration-300 translate-y-[-10px] opacity-0`;
+            toast.innerHTML = `<i data-lucide="${type === 'success' ? 'check-circle' : 'info'}" class="w-4 h-4 text-brand-500"></i><span>${message}</span>`;
+            
+            container.appendChild(toast);
+            lucide.createIcons();
+
+            setTimeout(() => {
+                toast.classList.remove('translate-y-[-10px]', 'opacity-0');
+            }, 10);
+
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-[-10px]');
+                setTimeout(() => toast.remove(), 300);
+            }, 2500);
+        }
+
+        // HELPER: Extract Embed URL for YouTube
+        function parseEmbedUrl(urlOrId) {
+            if (!urlOrId) return 'https://www.youtube.com/embed/';
+            if (urlOrId.includes('youtube.com/embed/')) return urlOrId;
+            
+            let videoId = urlOrId;
+            const match = urlOrId.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/);
+            if (match && match[1]) {
+                videoId = match[1];
+            }
+            return `https://www.youtube.com/embed/${videoId}`;
+        }
+
+        // FETCH VIDEOS FROM FIREBASE
         function fetchVideosFromFirebase() {
             if (!db) {
-                // ফায়ারবেস কানেক্ট না থাকলে নোটিফিকেশন বা লোকাল ফাঁকা ডাটা
-                renderVideoFeed([]);
+                videosDatabase = demoVideos;
+                renderVideoFeed(videosDatabase);
                 return;
             }
 
@@ -321,11 +423,17 @@
                         ...doc.data()
                     });
                 });
+
+                // Fallback to Demo Videos if Database is Empty
+                if (videosDatabase.length === 0) {
+                    videosDatabase = demoVideos;
+                }
+
                 renderVideoFeed(videosDatabase);
             }).catch((error) => {
-                console.error("Error getting videos from Firebase: ", error);
-                document.getElementById('video-feed-container').innerHTML = 
-                    '<p class="text-xs text-zinc-500 text-center py-10">ভিডিও লোড করতে ব্যর্থ হয়েছে। ফায়ারবেস কনফিগারেশন চেক করুন।</p>';
+                console.error("Firestore Fetch Notice:", error);
+                videosDatabase = demoVideos;
+                renderVideoFeed(videosDatabase);
             });
         }
 
@@ -335,10 +443,12 @@
             document.getElementById(pageId).classList.add('active');
 
             document.querySelectorAll('.nav-item').forEach(btn => {
-                btn.classList.toggle('nav-active', btn.dataset.page === pageId);
+                const isActive = btn.dataset.page === pageId;
+                btn.classList.toggle('text-brand-500', isActive);
+                btn.classList.toggle('font-bold', isActive);
+                btn.classList.toggle('text-zinc-500', !isActive);
             });
 
-            // প্লেয়ার পেজ ছেড়ে অন্য পেজে গেলে ভিডিও স্টপ করা
             if (pageId !== 'watch-page') {
                 document.getElementById('video-player-iframe').src = "";
             }
@@ -352,27 +462,27 @@
         function renderVideoFeed(videos) {
             const container = document.getElementById('video-feed-container');
             if (videos.length === 0) {
-                container.innerHTML = '<p class="text-zinc-500 text-center py-10 text-xs">কোনো ভিডিও পাওয়া যায়নি। ফায়ারবেসে ভিডিও যোগ করুন।</p>';
+                container.innerHTML = `<p class="text-xs text-zinc-500 text-center py-10">No videos found.</p>`;
                 return;
             }
 
             container.innerHTML = videos.map(v => `
-                <div class="bg-zinc-900/90 rounded-2xl overflow-hidden border border-zinc-800/80 shadow-md">
-                    <div class="video-aspect cursor-pointer" onclick="openWatchPage('${v.id}')">
-                        <img src="${v.thumbnail}" alt="${v.title}" class="absolute top-0 left-0 w-full h-full object-cover">
-                        <span class="absolute bottom-2 right-2 bg-black/80 text-white text-[10px] font-bold px-1.5 py-0.5 rounded">${v.duration || '00:00'}</span>
+                <div class="bg-brand-card rounded-2xl overflow-hidden border border-brand-border shadow-md group">
+                    <div class="video-aspect cursor-pointer overflow-hidden" onclick="openWatchPage('${v.id}')">
+                        <img src="${v.thumbnail || 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=600'}" alt="${v.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                        <span class="absolute bottom-2.5 right-2.5 bg-black/80 backdrop-blur-md text-white text-[10px] font-bold px-2 py-0.5 rounded-lg border border-white/10">${v.duration || '00:00'}</span>
                     </div>
 
-                    <div class="p-3 flex items-start gap-3">
-                        <div class="w-8 h-8 rounded-full bg-red-600/20 text-red-500 flex items-center justify-center font-bold text-xs flex-shrink-0">
-                            <i data-lucide="play" class="w-4 h-4 fill-red-500"></i>
+                    <div class="p-3.5 flex items-start gap-3">
+                        <div class="w-8 h-8 rounded-full bg-brand-500/10 text-brand-500 flex items-center justify-center font-bold text-xs flex-shrink-0 border border-brand-500/20">
+                            <i data-lucide="play" class="w-4 h-4 fill-brand-500"></i>
                         </div>
                         <div class="flex-grow">
-                            <h3 onclick="openWatchPage('${v.id}')" class="font-bold text-sm text-white line-clamp-2 cursor-pointer hover:text-red-400">${v.title}</h3>
-                            <p class="text-xs text-zinc-400 mt-1">${v.category || 'General'} • ${v.views || '0'} views</p>
+                            <h3 onclick="openWatchPage('${v.id}')" class="font-bold text-xs text-white line-clamp-2 cursor-pointer hover:text-brand-500 transition-colors leading-snug">${v.title}</h3>
+                            <p class="text-[10px] text-zinc-400 mt-1">${v.category || 'General'} • ${v.views || '0'} views</p>
                         </div>
-                        <button onclick="downloadVideoById('${v.id}')" class="p-1.5 text-zinc-400 hover:text-red-500 rounded-lg">
-                            <i data-lucide="download" class="w-4 h-4"></i>
+                        <button onclick="downloadVideoById('${v.id}')" class="p-2 text-zinc-400 hover:text-brand-500 rounded-xl hover:bg-zinc-800 transition-all">
+                            <i data-lucide="bookmark" class="w-4 h-4"></i>
                         </button>
                     </div>
                 </div>
@@ -380,51 +490,46 @@
             lucide.createIcons();
         }
 
-        // ============================================================
-        // WATCH PAGE LOGIC (REAL YOUTUBE FEEL)
-        // ============================================================
+        // WATCH PAGE
         function openWatchPage(videoId) {
             const video = videosDatabase.find(v => v.id === videoId);
             if (!video) return;
 
             currentActiveVideo = video;
 
-            // YouTube Embed URL Set
-            const embedUrl = video.embedUrl || `https://www.youtube.com/embed/${video.youtubeId || videoId}`;
-            document.getElementById('video-player-iframe').src = embedUrl + "?autoplay=1";
-            
+            const finalEmbed = parseEmbedUrl(video.embedUrl || video.youtubeId || video.id);
+            document.getElementById('video-player-iframe').src = finalEmbed + "?autoplay=1";
+
             document.getElementById('watch-video-title').textContent = video.title;
             document.getElementById('watch-video-meta').textContent = `${video.views || '0'} views • ${video.category || 'General'}`;
             document.getElementById('watch-video-desc').textContent = video.desc || "No description provided.";
             document.getElementById('watch-like-count').textContent = video.likes || 0;
 
-            // Render Comments & Suggested
             renderComments(video.comments || []);
             renderSuggestedVideos(videoId);
 
-            // Reset Like Button UI
             const likeBtn = document.getElementById('like-btn');
-            likeBtn.classList.remove('text-red-500');
+            likeBtn.classList.remove('text-brand-500');
             likeBtn.classList.add('text-zinc-300');
 
             navigateTo('watch-page');
         }
 
-        // RENDER SUGGESTED VIDEOS BELOW PLAYER
+        // SUGGESTED VIDEOS
         function renderSuggestedVideos(currentId) {
             const container = document.getElementById('suggested-videos-container');
             const suggested = videosDatabase.filter(v => v.id !== currentId);
 
             if (suggested.length === 0) {
-                container.innerHTML = '<p class="text-xs text-zinc-500 text-center py-4">কোনো সাজেস্টেড ভিডিও নেই।</p>';
+                container.innerHTML = `<p class="text-xs text-zinc-500 text-center py-4">No suggested videos available.</p>`;
                 return;
             }
 
             container.innerHTML = suggested.map(v => `
-                <div class="flex items-center gap-3 bg-zinc-900/80 p-2 rounded-xl border border-zinc-800/80 cursor-pointer hover:bg-zinc-800/50" onclick="openWatchPage('${v.id}')">
-                    <div class="w-28 h-16 rounded-lg overflow-hidden bg-zinc-800 flex-shrink-0 relative">
+                <div class="flex items-center gap-3 bg-brand-card p-2.5 rounded-xl border border-brand-border cursor-pointer hover:border-zinc-700 transition-all" onclick="openWatchPage('${v.id}')">
+                    <div class="w-24 h-14 rounded-lg overflow-hidden bg-zinc-800 flex-shrink-0 relative">
                         <img src="${v.thumbnail}" class="w-full h-full object-cover" alt="">
-                        <span class="absolute bottom-1 right-1 bg-black/80 text-[9px] font-bold px-1 rounded text-white">${v.duration || ''}</span>
+                        <span class="absolute bottom-1 right-1 bg-black/80 text-[8px] font-bold px-1 rounded text-white">${v.duration || ''}</span>
                     </div>
                     <div class="flex-grow overflow-hidden">
                         <h4 class="text-xs font-bold text-white line-clamp-2">${v.title}</h4>
@@ -435,53 +540,48 @@
             lucide.createIcons();
         }
 
-        // ============================================================
-        // LIKE & COMMENT SYSTEM
-        // ============================================================
+        // LIKE & COMMENT HANDLERS
         function toggleLikeCurrentVideo() {
             if (!currentActiveVideo) return;
 
             const likeBtn = document.getElementById('like-btn');
             const likeCountEl = document.getElementById('watch-like-count');
-
             let currentLikes = parseInt(likeCountEl.textContent) || 0;
 
-            if (likeBtn.classList.contains('text-red-500')) {
-                // Unlike
+            if (likeBtn.classList.contains('text-brand-500')) {
                 currentLikes--;
-                likeBtn.classList.remove('text-red-500');
+                likeBtn.classList.remove('text-brand-500');
                 likeBtn.classList.add('text-zinc-300');
             } else {
-                // Like
                 currentLikes++;
-                likeBtn.classList.add('text-red-500');
+                likeBtn.classList.add('text-brand-500');
                 likeBtn.classList.remove('text-zinc-300');
+                showToast("Liked video!", "success");
             }
 
             likeCountEl.textContent = currentLikes;
             currentActiveVideo.likes = currentLikes;
 
-            // Update in Firebase Firestore
-            if (db && currentActiveVideo.id) {
+            if (db && currentActiveVideo.id && !currentActiveVideo.id.startsWith('demo-')) {
                 db.collection("videos").doc(currentActiveVideo.id).update({
                     likes: currentLikes
-                }).catch(err => console.log("Firebase Update Error:", err));
+                }).catch(err => console.log("Firestore update skipped:", err));
             }
         }
 
         function renderComments(comments) {
             const container = document.getElementById('comments-container');
-            document.getElementById('comments-count').textContent = `(${comments.length})`;
+            document.getElementById('comments-count').textContent = comments.length;
 
             if (comments.length === 0) {
-                container.innerHTML = '<p class="text-[11px] text-zinc-500 py-2">কোনো কমেন্ট নেই। প্রথম কমেন্ট করুন!</p>';
+                container.innerHTML = `<p class="text-[11px] text-zinc-500 py-3 text-center">No comments yet. Be the first to comment!</p>`;
                 return;
             }
 
             container.innerHTML = comments.map(c => `
-                <div class="bg-zinc-900/60 p-2.5 rounded-xl border border-zinc-800/60 space-y-1">
+                <div class="bg-brand-card p-2.5 rounded-xl border border-brand-border space-y-1">
                     <div class="flex items-center gap-2">
-                        <div class="w-5 h-5 rounded-full bg-zinc-700 text-white flex items-center justify-center text-[9px] font-bold">
+                        <div class="w-5 h-5 rounded-full bg-brand-500/20 text-brand-500 flex items-center justify-center text-[9px] font-bold">
                             ${c.user ? c.user[0].toUpperCase() : 'U'}
                         </div>
                         <span class="text-[11px] font-bold text-zinc-300">${c.user || 'User'}</span>
@@ -508,22 +608,22 @@
 
             renderComments(currentActiveVideo.comments);
             input.value = "";
+            showToast("Comment added!", "success");
 
-            // Firebase-এ কমেন্ট সংরক্ষণ
-            if (db && currentActiveVideo.id) {
+            if (db && currentActiveVideo.id && !currentActiveVideo.id.startsWith('demo-')) {
                 db.collection("videos").doc(currentActiveVideo.id).update({
                     comments: firebase.firestore.FieldValue.arrayUnion(newComment)
-                }).catch(err => console.log("Firebase Comment Error:", err));
+                }).catch(err => console.log("Firestore comment update skipped:", err));
             }
         }
 
-        // SEARCH FUNCTIONALITY
+        // SEARCH & FILTER LOGIC
         function handleSearch() {
             const query = document.getElementById('search-input').value.toLowerCase().trim();
             const container = document.getElementById('search-results-container');
 
             if (!query) {
-                container.innerHTML = '<p class="text-xs text-zinc-500 text-center py-8">ভিডিও খুঁজতে উপরে টাইপ করুন...</p>';
+                container.innerHTML = `<p class="text-xs text-zinc-500 text-center py-12">Search by typing keywords above...</p>`;
                 return;
             }
 
@@ -533,15 +633,15 @@
             );
 
             if (results.length === 0) {
-                container.innerHTML = '<p class="text-xs text-zinc-500 text-center py-8">কোনো ফলাফল পাওয়া যায়নি।</p>';
+                container.innerHTML = `<p class="text-xs text-zinc-500 text-center py-12">No video results found.</p>`;
                 return;
             }
 
             container.innerHTML = results.map(v => `
-                <div class="flex items-center gap-3 bg-zinc-900 p-2 rounded-xl border border-zinc-800" onclick="openWatchPage('${v.id}')">
+                <div class="flex items-center gap-3 bg-brand-card p-2.5 rounded-xl border border-brand-border cursor-pointer hover:border-zinc-700 transition-all" onclick="openWatchPage('${v.id}')">
                     <img src="${v.thumbnail}" class="w-24 h-14 object-cover rounded-lg flex-shrink-0" alt="">
                     <div class="flex-grow">
-                        <h4 class="text-xs font-bold text-white line-clamp-2 cursor-pointer">${v.title}</h4>
+                        <h4 class="text-xs font-bold text-white line-clamp-2">${v.title}</h4>
                         <p class="text-[10px] text-zinc-400 mt-1">${v.views || '0'} views</p>
                     </div>
                 </div>
@@ -549,8 +649,14 @@
             lucide.createIcons();
         }
 
-        // CATEGORY FILTER
         function filterCategory(cat) {
+            document.querySelectorAll('.cat-btn').forEach(btn => {
+                const isActive = btn.textContent.trim() === cat;
+                btn.className = `cat-btn px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all ${
+                    isActive ? 'bg-white text-black font-bold shadow-sm' : 'bg-brand-card text-zinc-400 hover:text-white border border-brand-border'
+                }`;
+            });
+
             if (cat === 'All') {
                 renderVideoFeed(videosDatabase);
             } else {
@@ -559,19 +665,19 @@
             }
         }
 
-        // DOWNLOAD SYSTEM
+        // SAVED / WATCH LATER SYSTEM
         function downloadVideoById(videoId) {
             const video = videosDatabase.find(v => v.id === videoId);
             if (!video) return;
 
             if (downloadedVideos.some(item => item.id === video.id)) {
-                alert("এই ভিডিওটি ইতিমধ্যে আপনার সেভ করা তালিকায় রয়েছে।");
+                showToast("Already saved to your list!");
                 return;
             }
 
             downloadedVideos.push(video);
-            localStorage.setItem('my_downloads', JSON.stringify(downloadedVideos));
-            alert("ভিডিওটি আপনার ওয়াচ-লেটার তালিকায় সেভ করা হয়েছে!");
+            localStorage.setItem('mediatube_saved', JSON.stringify(downloadedVideos));
+            showToast("Saved to your watch list!", "success");
             updateDownloadUI();
         }
 
@@ -588,20 +694,20 @@
             statCount.textContent = downloadedVideos.length;
 
             if (downloadedVideos.length === 0) {
-                container.innerHTML = '<p class="text-xs text-zinc-500 text-center py-8">কোনো সেভ করা ভিডিও নেই।</p>';
+                container.innerHTML = `<p class="text-xs text-zinc-500 text-center py-12">No saved videos yet.</p>`;
                 return;
             }
 
             container.innerHTML = downloadedVideos.map(v => `
-                <div class="flex items-center justify-between bg-zinc-900 p-2.5 rounded-xl border border-zinc-800">
+                <div class="flex items-center justify-between bg-brand-card p-2.5 rounded-xl border border-brand-border">
                     <div class="flex items-center gap-3 cursor-pointer" onclick="openWatchPage('${v.id}')">
                         <img src="${v.thumbnail}" class="w-16 h-10 object-cover rounded-lg" alt="">
                         <div>
                             <h4 class="text-xs font-bold text-white line-clamp-1">${v.title}</h4>
-                            <p class="text-[10px] text-zinc-400">${v.duration || ''}</p>
+                            <p class="text-[10px] text-zinc-400 mt-0.5">${v.duration || ''}</p>
                         </div>
                     </div>
-                    <button onclick="removeDownload('${v.id}')" class="p-1.5 text-zinc-500 hover:text-red-500">
+                    <button onclick="removeDownload('${v.id}')" class="p-2 text-zinc-500 hover:text-brand-500 rounded-lg transition-colors">
                         <i data-lucide="trash-2" class="w-4 h-4"></i>
                     </button>
                 </div>
@@ -611,15 +717,16 @@
 
         function removeDownload(videoId) {
             downloadedVideos = downloadedVideos.filter(v => v.id !== videoId);
-            localStorage.setItem('my_downloads', JSON.stringify(downloadedVideos));
+            localStorage.setItem('mediatube_saved', JSON.stringify(downloadedVideos));
+            showToast("Item removed");
             updateDownloadUI();
         }
 
         function shareCurrentVideo() {
             if (currentActiveVideo) {
-                const videoUrl = currentActiveVideo.embedUrl || `https://youtu.be/${currentActiveVideo.id}`;
+                const videoUrl = parseEmbedUrl(currentActiveVideo.embedUrl || currentActiveVideo.id);
                 navigator.clipboard.writeText(videoUrl);
-                alert("ভিডিও লিংক কপি করা হয়েছে!");
+                showToast("Link copied to clipboard!", "success");
             }
         }
     </script>
