@@ -11,7 +11,7 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-    <!-- Firebase Compat SDKs (For Single File Compatibility) -->
+    <!-- Firebase Compat SDKs -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 
@@ -67,10 +67,21 @@
         @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
     </style>
 </head>
-<body class="max-w-md mx-auto min-h-screen flex flex-col bg-brand-dark pb-24 border-x border-brand-border/40 shadow-2xl">
+<body class="max-w-md mx-auto min-h-screen flex flex-col bg-brand-dark pb-24 border-x border-brand-border/40 shadow-2xl relative">
 
     <!-- Toast Notification Container -->
     <div id="toast-container" class="fixed top-4 left-1/2 -translate-x-1/2 z-50 flex flex-col gap-2 w-11/12 max-w-xs pointer-events-none"></div>
+
+    <!-- FLOATING POPUP PLAYER (Pic-in-Pic Widget) -->
+    <div id="floating-player" class="fixed bottom-16 right-3 w-56 bg-brand-card border border-brand-border rounded-xl shadow-2xl z-50 hidden overflow-hidden flex flex-col transition-all duration-300">
+        <div class="flex items-center justify-between bg-zinc-900 px-2.5 py-1.5 border-b border-brand-border">
+            <span id="floating-player-title" class="text-[10px] font-bold text-white truncate max-w-[150px]">Playing Video</span>
+            <button onclick="closeFloatingPlayer()" class="p-1 text-zinc-400 hover:text-white rounded-md transition-colors">
+                <i data-lucide="x" class="w-3.5 h-3.5"></i>
+            </button>
+        </div>
+        <div id="floating-iframe-container" class="video-aspect w-full bg-black"></div>
+    </div>
 
     <!-- Header -->
     <header class="sticky top-0 z-40 glass-header px-4 py-3 border-b border-brand-border flex items-center justify-between">
@@ -107,7 +118,6 @@
 
             <!-- Feed Container -->
             <div id="video-feed-container" class="space-y-4">
-                <!-- Skeleton Loader -->
                 <div class="bg-brand-card rounded-2xl overflow-hidden border border-brand-border space-y-3 p-3">
                     <div class="video-aspect rounded-xl skeleton"></div>
                     <div class="h-4 skeleton rounded-lg w-3/4"></div>
@@ -118,7 +128,7 @@
 
         <!-- WATCH PAGE -->
         <div id="watch-page" class="sub-page space-y-4">
-            <div class="sticky top-0 z-50 bg-black shadow-xl">
+            <div id="main-player-container" class="sticky top-0 z-50 bg-black shadow-xl">
                 <div class="video-aspect">
                     <iframe id="video-player-iframe" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                 </div>
@@ -130,36 +140,37 @@
                     <p id="watch-video-meta" class="text-xs text-zinc-400 mt-1">0 views • Recently added</p>
                 </div>
 
-                <!-- Action Bar -->
-                <div class="grid grid-cols-3 gap-2 bg-brand-card border border-brand-border p-2 rounded-2xl text-center">
-                    <button id="like-btn" onclick="toggleLikeCurrentVideo()" class="flex items-center justify-center gap-2 py-2 text-zinc-300 hover:text-white rounded-xl active:bg-zinc-800/50 transition-all">
+                <!-- Action Bar (Added Comment Button) -->
+                <div class="grid grid-cols-4 gap-1.5 bg-brand-card border border-brand-border p-2 rounded-2xl text-center">
+                    <button id="like-btn" onclick="toggleLikeCurrentVideo()" class="flex items-center justify-center gap-1.5 py-2 text-zinc-300 hover:text-white rounded-xl active:bg-zinc-800/50 transition-all">
                         <i data-lucide="thumbs-up" class="w-4 h-4"></i>
                         <span id="watch-like-count" class="text-xs font-semibold">0</span>
                     </button>
-                    <button onclick="downloadCurrentVideo()" class="flex items-center justify-center gap-2 py-2 text-zinc-300 hover:text-white rounded-xl active:bg-zinc-800/50 transition-all">
+                    <button onclick="scrollToCommentInput()" class="flex items-center justify-center gap-1.5 py-2 text-zinc-300 hover:text-white rounded-xl active:bg-zinc-800/50 transition-all">
+                        <i data-lucide="message-square" class="w-4 h-4"></i>
+                        <span class="text-xs font-semibold">Comment</span>
+                    </button>
+                    <button onclick="downloadCurrentVideo()" class="flex items-center justify-center gap-1.5 py-2 text-zinc-300 hover:text-white rounded-xl active:bg-zinc-800/50 transition-all">
                         <i data-lucide="bookmark" class="w-4 h-4"></i>
                         <span class="text-xs font-semibold">Save</span>
                     </button>
-                    <button onclick="shareCurrentVideo()" class="flex items-center justify-center gap-2 py-2 text-zinc-300 hover:text-white rounded-xl active:bg-zinc-800/50 transition-all">
+                    <button onclick="shareCurrentVideo()" class="flex items-center justify-center gap-1.5 py-2 text-zinc-300 hover:text-white rounded-xl active:bg-zinc-800/50 transition-all">
                         <i data-lucide="share-2" class="w-4 h-4"></i>
                         <span class="text-xs font-semibold">Share</span>
                     </button>
                 </div>
 
-                <!-- Channel / Description -->
-                <div class="bg-brand-card p-3.5 rounded-2xl border border-brand-border text-xs text-zinc-300 space-y-2">
-                    <div class="flex items-center gap-2.5">
-                        <div class="w-8 h-8 rounded-full bg-brand-500/20 text-brand-500 border border-brand-500/30 flex items-center justify-center font-extrabold text-xs">M</div>
-                        <div>
-                            <p id="watch-channel-name" class="font-bold text-white">MediaTube Official</p>
-                            <p class="text-[10px] text-zinc-400">Verified Channel</p>
-                        </div>
+                <!-- Channel Info (Description Removed) -->
+                <div class="bg-brand-card p-3 rounded-2xl border border-brand-border text-xs text-zinc-300 flex items-center gap-2.5">
+                    <div class="w-8 h-8 rounded-full bg-brand-500/20 text-brand-500 border border-brand-500/30 flex items-center justify-center font-extrabold text-xs">M</div>
+                    <div>
+                        <p id="watch-channel-name" class="font-bold text-white">MediaTube Official</p>
+                        <p class="text-[10px] text-zinc-400">Verified Channel</p>
                     </div>
-                    <p id="watch-video-desc" class="text-zinc-400 pt-1 text-xs leading-relaxed">No description provided.</p>
                 </div>
 
                 <!-- Comments Section -->
-                <div class="space-y-3 pt-2">
+                <div id="comments-section-container" class="space-y-3 pt-2">
                     <h3 class="text-sm font-bold text-white flex items-center gap-2">
                         <span>Comments</span>
                         <span id="comments-count" class="text-xs text-brand-500 font-bold bg-brand-500/10 px-2 py-0.5 rounded-full">0</span>
@@ -188,7 +199,7 @@
         <!-- SEARCH PAGE -->
         <div id="search-page" class="sub-page p-3.5 space-y-4">
             <div class="relative">
-                <input type="text" id="search-input" onkeyup="handleSearch()" placeholder="Search videos, tutorials..." class="w-full bg-brand-card border border-brand-border rounded-xl py-3 pl-10 pr-4 text-sm text-white focus:outline-none focus:border-brand-500 transition-all">
+                <input type="text" id="search-input" oninput="handleSearch()" placeholder="Search videos, tutorials..." class="w-full bg-brand-card border border-brand-border rounded-xl py-3 pl-10 pr-4 text-sm text-white focus:outline-none focus:border-brand-500 transition-all">
                 <i data-lucide="search" class="w-4 h-4 text-zinc-400 absolute left-3.5 top-3.5"></i>
             </div>
 
@@ -270,9 +281,7 @@
 
     <!-- APP SCRIPT LOGIC -->
     <script>
-        // ============================================================
-        // 1. FIREBASE CONFIGURATION (YOUR REAL KEYS INTEGRATED)
-        // ============================================================
+        // FIREBASE CONFIGURATION
         const firebaseConfig = {
             apiKey: "AIzaSyDCRUcx2CtNx7iWEvvINnwVtycv7MS80jk",
             authDomain: "video-r0om-bot.firebaseapp.com",
@@ -289,12 +298,10 @@
             }
             db = firebase.firestore();
         } catch (e) {
-            console.warn("Firebase initialized with local fallback handling:", e);
+            console.warn("Firebase initialized with fallback:", e);
         }
 
-        // ============================================================
-        // SAMPLE DEMO DATA (Fallback if Firebase Firestore is empty)
-        // ============================================================
+        // SAMPLE DEMO DATA (Supports YouTube & Jumpshare links)
         const demoVideos = [
             {
                 id: "demo-1",
@@ -304,19 +311,17 @@
                 duration: "10:25",
                 thumbnail: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=600&auto=format&fit=crop&q=80",
                 embedUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-                desc: "Learn step-by-step how to integrate Firebase Firestore inside Telegram WebApps.",
                 likes: 42,
                 comments: [{ user: "Alex", text: "Awesome project layout!" }]
             },
             {
                 id: "demo-2",
-                title: "Tailwind CSS Responsive Design Masterclass",
+                title: "Tailwind CSS Responsive Masterclass - Jumpshare Stream",
                 category: "Tutorial",
                 views: "850",
                 duration: "08:15",
                 thumbnail: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=600&auto=format&fit=crop&q=80",
-                embedUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-                desc: "Master mobile-first dark mode layouts with modern Tailwind utility classes.",
+                embedUrl: "https://jumpshare.com/v/ZH8IiuPqjiYsTaQxlfI0",
                 likes: 19,
                 comments: []
             }
@@ -327,6 +332,7 @@
         let currentActiveVideo = null;
         let downloadedVideos = JSON.parse(localStorage.getItem('mediatube_saved') || '[]');
         let currentUser = { name: "Telegram User", username: "username", photo: "" };
+        let isFloatingActive = false;
 
         // INITIALIZATION ON LOAD
         window.onload = () => {
@@ -334,7 +340,18 @@
             initTelegramProfile();
             fetchVideosFromFirebase();
             updateDownloadUI();
+            setupScrollBehavior();
         };
+
+        // SCROLL BEHAVIOR FOR COMMENTS FOCUS COLLAPSE
+        function setupScrollBehavior() {
+            window.addEventListener('scroll', () => {
+                const commentInput = document.getElementById('comment-input');
+                if (document.activeElement === commentInput) {
+                    commentInput.blur();
+                }
+            });
+        }
 
         // TELEGRAM PROFILE SETUP
         function initTelegramProfile() {
@@ -370,7 +387,7 @@
                     }
                 }
             } catch (e) {
-                console.log("Telegram SDK execution notice:", e);
+                console.log("Telegram SDK notice:", e);
             }
         }
 
@@ -384,21 +401,27 @@
             container.appendChild(toast);
             lucide.createIcons();
 
-            setTimeout(() => {
-                toast.classList.remove('translate-y-[-10px]', 'opacity-0');
-            }, 10);
-
+            setTimeout(() => toast.classList.remove('translate-y-[-10px]', 'opacity-0'), 10);
             setTimeout(() => {
                 toast.classList.add('opacity-0', 'translate-y-[-10px]');
                 setTimeout(() => toast.remove(), 300);
             }, 2500);
         }
 
-        // HELPER: Extract Embed URL for YouTube
+        // HELPER: Extract Embed URL for YouTube & Jumpshare
         function parseEmbedUrl(urlOrId) {
             if (!urlOrId) return 'https://www.youtube.com/embed/';
+
+            // Jumpshare Support
+            if (urlOrId.includes('jumpshare.com')) {
+                if (urlOrId.includes('/v/')) {
+                    return urlOrId.replace('/v/', '/embed/');
+                }
+                return urlOrId;
+            }
+
+            // YouTube Embed Support
             if (urlOrId.includes('youtube.com/embed/')) return urlOrId;
-            
             let videoId = urlOrId;
             const match = urlOrId.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/);
             if (match && match[1]) {
@@ -418,17 +441,10 @@
             db.collection("videos").get().then((querySnapshot) => {
                 videosDatabase = [];
                 querySnapshot.forEach((doc) => {
-                    videosDatabase.push({
-                        id: doc.id,
-                        ...doc.data()
-                    });
+                    videosDatabase.push({ id: doc.id, ...doc.data() });
                 });
 
-                // Fallback to Demo Videos if Database is Empty
-                if (videosDatabase.length === 0) {
-                    videosDatabase = demoVideos;
-                }
-
+                if (videosDatabase.length === 0) videosDatabase = demoVideos;
                 renderVideoFeed(videosDatabase);
             }).catch((error) => {
                 console.error("Firestore Fetch Notice:", error);
@@ -437,8 +453,30 @@
             });
         }
 
-        // NAVIGATION LOGIC
+        // NAVIGATION LOGIC WITH POPUP/FLOATING PLAYER
         function navigateTo(pageId) {
+            const watchIframe = document.getElementById('video-player-iframe');
+            const floatingPlayer = document.getElementById('floating-player');
+            const floatingContainer = document.getElementById('floating-iframe-container');
+            const mainPlayerContainer = document.getElementById('main-player-container');
+
+            if (pageId !== 'watch-page' && currentActiveVideo && watchIframe.src) {
+                // Activate Floating Player
+                if (!isFloatingActive) {
+                    floatingContainer.appendChild(watchIframe);
+                    floatingPlayer.classList.remove('hidden');
+                    document.getElementById('floating-player-title').textContent = currentActiveVideo.title || "Playing Video";
+                    isFloatingActive = true;
+                }
+            } else if (pageId === 'watch-page') {
+                // Return iframe back to main watch page
+                if (watchIframe.parentElement !== mainPlayerContainer.firstElementChild) {
+                    mainPlayerContainer.firstElementChild.appendChild(watchIframe);
+                }
+                floatingPlayer.classList.add('hidden');
+                isFloatingActive = false;
+            }
+
             document.querySelectorAll('.sub-page').forEach(el => el.classList.remove('active'));
             document.getElementById(pageId).classList.add('active');
 
@@ -449,13 +487,18 @@
                 btn.classList.toggle('text-zinc-500', !isActive);
             });
 
-            if (pageId !== 'watch-page') {
-                document.getElementById('video-player-iframe').src = "";
-            }
-
             if (pageId === 'download-page') updateDownloadUI();
             window.scrollTo({ top: 0, behavior: 'smooth' });
             lucide.createIcons();
+        }
+
+        function closeFloatingPlayer() {
+            const watchIframe = document.getElementById('video-player-iframe');
+            const floatingPlayer = document.getElementById('floating-player');
+            watchIframe.src = "";
+            floatingPlayer.classList.add('hidden');
+            isFloatingActive = false;
+            currentActiveVideo = null;
         }
 
         // RENDER HOME FEED
@@ -496,13 +539,13 @@
             if (!video) return;
 
             currentActiveVideo = video;
-
             const finalEmbed = parseEmbedUrl(video.embedUrl || video.youtubeId || video.id);
-            document.getElementById('video-player-iframe').src = finalEmbed + "?autoplay=1";
+            
+            const watchIframe = document.getElementById('video-player-iframe');
+            watchIframe.src = finalEmbed + (finalEmbed.includes('?') ? "&autoplay=1" : "?autoplay=1");
 
             document.getElementById('watch-video-title').textContent = video.title;
             document.getElementById('watch-video-meta').textContent = `${video.views || '0'} views • ${video.category || 'General'}`;
-            document.getElementById('watch-video-desc').textContent = video.desc || "No description provided.";
             document.getElementById('watch-like-count').textContent = video.likes || 0;
 
             renderComments(video.comments || []);
@@ -513,6 +556,12 @@
             likeBtn.classList.add('text-zinc-300');
 
             navigateTo('watch-page');
+        }
+
+        function scrollToCommentInput() {
+            const commentInput = document.getElementById('comment-input');
+            commentInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            setTimeout(() => commentInput.focus(), 300);
         }
 
         // SUGGESTED VIDEOS
@@ -540,7 +589,7 @@
             lucide.createIcons();
         }
 
-        // LIKE & COMMENT HANDLERS
+        // LIKE & COMMENT HANDLERS (TELEGRAM LOGO INTEGRATED)
         function toggleLikeCurrentVideo() {
             if (!currentActiveVideo) return;
 
@@ -563,9 +612,7 @@
             currentActiveVideo.likes = currentLikes;
 
             if (db && currentActiveVideo.id && !currentActiveVideo.id.startsWith('demo-')) {
-                db.collection("videos").doc(currentActiveVideo.id).update({
-                    likes: currentLikes
-                }).catch(err => console.log("Firestore update skipped:", err));
+                db.collection("videos").doc(currentActiveVideo.id).update({ likes: currentLikes }).catch(e => {});
             }
         }
 
@@ -578,13 +625,19 @@
                 return;
             }
 
+            const telegramLogoSvg = `
+                <svg class="w-4 h-4 text-sky-400 fill-current" viewBox="0 0 24 24">
+                    <path d="M12 0C5.37 0 0 5.37 0 12s5.37 12 12 12 12-5.37 12-12S18.63 0 12 0zm5.56 8.16l-2.11 9.94c-.16.74-.6.92-1.22.57l-3.26-2.4-1.57 1.51c-.17.17-.32.32-.66.32l.23-3.32 6.05-5.46c.26-.23-.06-.36-.41-.13l-7.48 4.71-3.22-1c-.7-.22-.71-.7.15-1.04l12.58-4.85c.58-.21 1.09.14.92.85z"/>
+                </svg>
+            `;
+
             container.innerHTML = comments.map(c => `
                 <div class="bg-brand-card p-2.5 rounded-xl border border-brand-border space-y-1">
                     <div class="flex items-center gap-2">
-                        <div class="w-5 h-5 rounded-full bg-brand-500/20 text-brand-500 flex items-center justify-center text-[9px] font-bold">
-                            ${c.user ? c.user[0].toUpperCase() : 'U'}
+                        <div class="w-5 h-5 rounded-full bg-sky-500/10 flex items-center justify-center border border-sky-500/20">
+                            ${telegramLogoSvg}
                         </div>
-                        <span class="text-[11px] font-bold text-zinc-300">${c.user || 'User'}</span>
+                        <span class="text-[11px] font-bold text-zinc-300">${c.user || 'Telegram User'}</span>
                     </div>
                     <p class="text-xs text-zinc-200 pl-7">${c.text}</p>
                 </div>
@@ -608,16 +661,33 @@
 
             renderComments(currentActiveVideo.comments);
             input.value = "";
+            input.blur();
             showToast("Comment added!", "success");
 
             if (db && currentActiveVideo.id && !currentActiveVideo.id.startsWith('demo-')) {
                 db.collection("videos").doc(currentActiveVideo.id).update({
                     comments: firebase.firestore.FieldValue.arrayUnion(newComment)
-                }).catch(err => console.log("Firestore comment update skipped:", err));
+                }).catch(e => {});
             }
         }
 
-        // SEARCH & FILTER LOGIC
+        // 10% FUZZY SEARCH ALGORITHM
+        function calculateMatchScore(query, text) {
+            if (!query || !text) return 0;
+            query = query.toLowerCase();
+            text = text.toLowerCase();
+
+            if (text.includes(query)) return 1.0;
+
+            let matchCount = 0;
+            let queryChars = query.split('');
+            queryChars.forEach(char => {
+                if (text.includes(char)) matchCount++;
+            });
+
+            return matchCount / Math.max(query.length, 1);
+        }
+
         function handleSearch() {
             const query = document.getElementById('search-input').value.toLowerCase().trim();
             const container = document.getElementById('search-results-container');
@@ -627,10 +697,12 @@
                 return;
             }
 
-            const results = videosDatabase.filter(v => 
-                v.title.toLowerCase().includes(query) || 
-                (v.category && v.category.toLowerCase().includes(query))
-            );
+            // Shows results with at least 10% match (0.10 score)
+            const results = videosDatabase.filter(v => {
+                const titleScore = calculateMatchScore(query, v.title);
+                const categoryScore = calculateMatchScore(query, v.category || '');
+                return titleScore >= 0.10 || categoryScore >= 0.10;
+            });
 
             if (results.length === 0) {
                 container.innerHTML = `<p class="text-xs text-zinc-500 text-center py-12">No video results found.</p>`;
@@ -665,7 +737,7 @@
             }
         }
 
-        // SAVED / WATCH LATER SYSTEM
+        // SAVED SYSTEM
         function downloadVideoById(videoId) {
             const video = videosDatabase.find(v => v.id === videoId);
             if (!video) return;
