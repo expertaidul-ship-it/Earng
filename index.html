@@ -72,15 +72,22 @@
     <!-- Toast Notification Container -->
     <div id="toast-container" class="fixed top-4 left-1/2 -translate-x-1/2 z-50 flex flex-col gap-2 w-11/12 max-w-xs pointer-events-none"></div>
 
-    <!-- FLOATING POPUP PLAYER (Pic-in-Pic Widget) -->
-    <div id="floating-player" class="fixed bottom-16 right-3 w-56 bg-brand-card border border-brand-border rounded-xl shadow-2xl z-50 hidden overflow-hidden flex flex-col transition-all duration-300">
-        <div class="flex items-center justify-between bg-zinc-900 px-2.5 py-1.5 border-b border-brand-border">
-            <span id="floating-player-title" class="text-[10px] font-bold text-white truncate max-w-[150px]">Playing Video</span>
-            <button onclick="closeFloatingPlayer()" class="p-1 text-zinc-400 hover:text-white rounded-md transition-colors">
-                <i data-lucide="x" class="w-3.5 h-3.5"></i>
-            </button>
+    <!-- FLOATING POPUP PLAYER (Draggable & Expandable) -->
+    <div id="floating-player" class="fixed bottom-16 right-3 w-56 bg-brand-card border border-brand-border rounded-xl shadow-2xl z-50 hidden overflow-hidden flex flex-col touch-none">
+        <div id="floating-player-header" class="flex items-center justify-between bg-zinc-900 px-2.5 py-1.5 border-b border-brand-border cursor-move select-none">
+            <div class="flex items-center gap-1.5 text-zinc-400">
+                <i data-lucide="grip-horizontal" class="w-4 h-4 text-zinc-500"></i>
+            </div>
+            <div class="flex items-center gap-1">
+                <button onclick="expandFloatingPlayer()" title="Full Screen" class="p-1 text-zinc-400 hover:text-white rounded-md transition-colors">
+                    <i data-lucide="maximize-2" class="w-3.5 h-3.5"></i>
+                </button>
+                <button onclick="closeFloatingPlayer()" title="Close" class="p-1 text-zinc-400 hover:text-red-500 rounded-md transition-colors">
+                    <i data-lucide="x" class="w-3.5 h-3.5"></i>
+                </button>
+            </div>
         </div>
-        <div id="floating-iframe-container" class="video-aspect w-full bg-black"></div>
+        <div id="floating-iframe-container" class="video-aspect w-full bg-black pointer-events-auto"></div>
     </div>
 
     <!-- Header -->
@@ -108,13 +115,8 @@
 
         <!-- HOME PAGE -->
         <div id="home-page" class="sub-page active p-3.5 space-y-4">
-            <!-- Categories Pills -->
-            <div class="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar text-xs font-semibold">
-                <button onclick="filterCategory('All')" class="cat-btn px-4 py-2 rounded-xl bg-white text-black shadow-sm font-bold whitespace-nowrap transition-all">All</button>
-                <button onclick="filterCategory('Tutorial')" class="cat-btn px-4 py-2 rounded-xl bg-brand-card text-zinc-400 hover:text-white border border-brand-border whitespace-nowrap transition-all">Tutorials</button>
-                <button onclick="filterCategory('Tech')" class="cat-btn px-4 py-2 rounded-xl bg-brand-card text-zinc-400 hover:text-white border border-brand-border whitespace-nowrap transition-all">Tech</button>
-                <button onclick="filterCategory('Music')" class="cat-btn px-4 py-2 rounded-xl bg-brand-card text-zinc-400 hover:text-white border border-brand-border whitespace-nowrap transition-all">Music</button>
-            </div>
+            <!-- Dynamic Categories Pills from Firebase -->
+            <div id="category-pills-container" class="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar text-xs font-semibold"></div>
 
             <!-- Feed Container -->
             <div id="video-feed-container" class="space-y-4">
@@ -140,18 +142,18 @@
                     <p id="watch-video-meta" class="text-xs text-zinc-400 mt-1">0 views • Recently added</p>
                 </div>
 
-                <!-- Action Bar (Added Comment Button) -->
+                <!-- Action Bar -->
                 <div class="grid grid-cols-4 gap-1.5 bg-brand-card border border-brand-border p-2 rounded-2xl text-center">
                     <button id="like-btn" onclick="toggleLikeCurrentVideo()" class="flex items-center justify-center gap-1.5 py-2 text-zinc-300 hover:text-white rounded-xl active:bg-zinc-800/50 transition-all">
-                        <i data-lucide="thumbs-up" class="w-4 h-4"></i>
+                        <i data-lucide="thumbs-up" id="like-icon" class="w-4 h-4"></i>
                         <span id="watch-like-count" class="text-xs font-semibold">0</span>
                     </button>
                     <button onclick="scrollToCommentInput()" class="flex items-center justify-center gap-1.5 py-2 text-zinc-300 hover:text-white rounded-xl active:bg-zinc-800/50 transition-all">
                         <i data-lucide="message-square" class="w-4 h-4"></i>
                         <span class="text-xs font-semibold">Comment</span>
                     </button>
-                    <button onclick="downloadCurrentVideo()" class="flex items-center justify-center gap-1.5 py-2 text-zinc-300 hover:text-white rounded-xl active:bg-zinc-800/50 transition-all">
-                        <i data-lucide="bookmark" class="w-4 h-4"></i>
+                    <button id="save-btn" onclick="toggleSaveCurrentVideo()" class="flex items-center justify-center gap-1.5 py-2 text-zinc-300 hover:text-white rounded-xl active:bg-zinc-800/50 transition-all">
+                        <i data-lucide="bookmark" id="save-icon" class="w-4 h-4"></i>
                         <span class="text-xs font-semibold">Save</span>
                     </button>
                     <button onclick="shareCurrentVideo()" class="flex items-center justify-center gap-1.5 py-2 text-zinc-300 hover:text-white rounded-xl active:bg-zinc-800/50 transition-all">
@@ -160,7 +162,7 @@
                     </button>
                 </div>
 
-                <!-- Channel Info (Description Removed) -->
+                <!-- Channel Info -->
                 <div class="bg-brand-card p-3 rounded-2xl border border-brand-border text-xs text-zinc-300 flex items-center gap-2.5">
                     <div class="w-8 h-8 rounded-full bg-brand-500/20 text-brand-500 border border-brand-500/30 flex items-center justify-center font-extrabold text-xs">M</div>
                     <div>
@@ -301,7 +303,7 @@
             console.warn("Firebase initialized with fallback:", e);
         }
 
-        // SAMPLE DEMO DATA (Supports YouTube & Jumpshare links)
+        // SAMPLE DEMO DATA
         const demoVideos = [
             {
                 id: "demo-1",
@@ -321,7 +323,7 @@
                 views: "850",
                 duration: "08:15",
                 thumbnail: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=600&auto=format&fit=crop&q=80",
-                embedUrl: "https://jumpshare.com/v/ZH8IiuPqjiYsTaQxlfI0",
+                embedUrl: "https://jumpshare.com/share/3Y1HkfE43yVjA4IYWsxA?b=ZH8IiuPqjiYsTaQxlfI0",
                 likes: 19,
                 comments: []
             }
@@ -331,8 +333,10 @@
         let videosDatabase = [];
         let currentActiveVideo = null;
         let downloadedVideos = JSON.parse(localStorage.getItem('mediatube_saved') || '[]');
+        let likedVideoIds = JSON.parse(localStorage.getItem('mediatube_likes') || '[]');
         let currentUser = { name: "Telegram User", username: "username", photo: "" };
         let isFloatingActive = false;
+        let activeCategoryFilter = 'All';
 
         // INITIALIZATION ON LOAD
         window.onload = () => {
@@ -341,7 +345,74 @@
             fetchVideosFromFirebase();
             updateDownloadUI();
             setupScrollBehavior();
+            initDraggableFloatingPlayer();
         };
+
+        // DRAGGABLE FLOATING PLAYER SETUP
+        function initDraggableFloatingPlayer() {
+            const player = document.getElementById('floating-player');
+            const header = document.getElementById('floating-player-header');
+            if (!player || !header) return;
+
+            let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+
+            header.onmousedown = dragMouseDown;
+            header.ontouchstart = dragTouchStart;
+
+            function dragMouseDown(e) {
+                e = e || window.event;
+                e.preventDefault();
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                document.onmouseup = closeDragElement;
+                document.onmousemove = elementDrag;
+            }
+
+            function elementDrag(e) {
+                e = e || window.event;
+                e.preventDefault();
+                pos1 = pos3 - e.clientX;
+                pos2 = pos4 - e.clientY;
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                player.style.top = (player.offsetTop - pos2) + "px";
+                player.style.left = (player.offsetLeft - pos1) + "px";
+                player.style.bottom = 'auto';
+                player.style.right = 'auto';
+            }
+
+            function closeDragElement() {
+                document.onmouseup = null;
+                document.onmousemove = null;
+            }
+
+            function dragTouchStart(e) {
+                if (e.touches.length === 1) {
+                    pos3 = e.touches[0].clientX;
+                    pos4 = e.touches[0].clientY;
+                    document.ontouchend = closeTouchDragElement;
+                    document.ontouchmove = elementTouchDrag;
+                }
+            }
+
+            function elementTouchDrag(e) {
+                if (e.touches.length === 1) {
+                    pos1 = pos3 - e.touches[0].clientX;
+                    pos2 = pos4 - e.touches[0].clientY;
+                    pos3 = e.touches[0].clientX;
+                    pos4 = e.touches[0].clientY;
+                    player.style.top = (player.offsetTop - pos2) + "px";
+                    player.style.left = (player.offsetLeft - pos1) + "px";
+                    player.style.bottom = 'auto';
+                    player.style.right = 'auto';
+                }
+            }
+
+            function closeTouchDragElement() {
+                document.ontouchend = null;
+                document.ontouchmove = null;
+            }
+        }
 
         // SCROLL BEHAVIOR FOR COMMENTS FOCUS COLLAPSE
         function setupScrollBehavior() {
@@ -408,14 +479,23 @@
             }, 2500);
         }
 
-        // HELPER: Extract Embed URL for YouTube & Jumpshare
+        // HELPER: Extract Embed URL for YouTube & Jumpshare (Fix for Jumpshare Share URLs)
         function parseEmbedUrl(urlOrId) {
             if (!urlOrId) return 'https://www.youtube.com/embed/';
 
             // Jumpshare Support
             if (urlOrId.includes('jumpshare.com')) {
+                // Check if embed parameter 'b' exists (e.g. ?b=ZH8IiuPqjiYsTaQxlfI0)
+                const bMatch = urlOrId.match(/[?&]b=([^&]+)/);
+                if (bMatch && bMatch[1]) {
+                    return `https://jumpshare.com/embed/${bMatch[1]}`;
+                }
+                // Check /v/ or /share/ links
                 if (urlOrId.includes('/v/')) {
                     return urlOrId.replace('/v/', '/embed/');
+                }
+                if (urlOrId.includes('/share/')) {
+                    return urlOrId.replace('/share/', '/embed/');
                 }
                 return urlOrId;
             }
@@ -434,6 +514,7 @@
         function fetchVideosFromFirebase() {
             if (!db) {
                 videosDatabase = demoVideos;
+                renderCategories();
                 renderVideoFeed(videosDatabase);
                 return;
             }
@@ -445,12 +526,41 @@
                 });
 
                 if (videosDatabase.length === 0) videosDatabase = demoVideos;
+                renderCategories();
                 renderVideoFeed(videosDatabase);
             }).catch((error) => {
                 console.error("Firestore Fetch Notice:", error);
                 videosDatabase = demoVideos;
+                renderCategories();
                 renderVideoFeed(videosDatabase);
             });
+        }
+
+        // DYNAMIC CATEGORY PILLS FROM FIREBASE
+        function renderCategories() {
+            const container = document.getElementById('category-pills-container');
+            if (!container) return;
+
+            // Collect unique categories
+            const categoriesSet = new Set();
+            videosDatabase.forEach(v => {
+                if (v.category && v.category.trim() !== '') {
+                    categoriesSet.add(v.category.trim());
+                }
+            });
+
+            const categories = ['All', ...Array.from(categoriesSet)];
+
+            container.innerHTML = categories.map(cat => {
+                const isActive = cat === activeCategoryFilter;
+                return `
+                    <button onclick="filterCategory('${cat}')" class="cat-btn px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all ${
+                        isActive ? 'bg-white text-black font-bold shadow-sm' : 'bg-brand-card text-zinc-400 hover:text-white border border-brand-border'
+                    }">
+                        ${cat}
+                    </button>
+                `;
+            }).join('');
         }
 
         // NAVIGATION LOGIC WITH POPUP/FLOATING PLAYER
@@ -465,7 +575,6 @@
                 if (!isFloatingActive) {
                     floatingContainer.appendChild(watchIframe);
                     floatingPlayer.classList.remove('hidden');
-                    document.getElementById('floating-player-title').textContent = currentActiveVideo.title || "Playing Video";
                     isFloatingActive = true;
                 }
             } else if (pageId === 'watch-page') {
@@ -492,6 +601,12 @@
             lucide.createIcons();
         }
 
+        function expandFloatingPlayer() {
+            if (currentActiveVideo) {
+                navigateTo('watch-page');
+            }
+        }
+
         function closeFloatingPlayer() {
             const watchIframe = document.getElementById('video-player-iframe');
             const floatingPlayer = document.getElementById('floating-player');
@@ -509,27 +624,30 @@
                 return;
             }
 
-            container.innerHTML = videos.map(v => `
-                <div class="bg-brand-card rounded-2xl overflow-hidden border border-brand-border shadow-md group">
-                    <div class="video-aspect cursor-pointer overflow-hidden" onclick="openWatchPage('${v.id}')">
-                        <img src="${v.thumbnail || 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=600'}" alt="${v.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-                        <span class="absolute bottom-2.5 right-2.5 bg-black/80 backdrop-blur-md text-white text-[10px] font-bold px-2 py-0.5 rounded-lg border border-white/10">${v.duration || '00:00'}</span>
-                    </div>
+            container.innerHTML = videos.map(v => {
+                const isSaved = downloadedVideos.some(item => item.id === v.id);
+                return `
+                    <div class="bg-brand-card rounded-2xl overflow-hidden border border-brand-border shadow-md group">
+                        <div class="video-aspect cursor-pointer overflow-hidden" onclick="openWatchPage('${v.id}')">
+                            <img src="${v.thumbnail || 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=600'}" alt="${v.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                            <span class="absolute bottom-2.5 right-2.5 bg-black/80 backdrop-blur-md text-white text-[10px] font-bold px-2 py-0.5 rounded-lg border border-white/10">${v.duration || '00:00'}</span>
+                        </div>
 
-                    <div class="p-3.5 flex items-start gap-3">
-                        <div class="w-8 h-8 rounded-full bg-brand-500/10 text-brand-500 flex items-center justify-center font-bold text-xs flex-shrink-0 border border-brand-500/20">
-                            <i data-lucide="play" class="w-4 h-4 fill-brand-500"></i>
+                        <div class="p-3.5 flex items-start gap-3">
+                            <div class="w-8 h-8 rounded-full bg-brand-500/10 text-brand-500 flex items-center justify-center font-bold text-xs flex-shrink-0 border border-brand-500/20">
+                                <i data-lucide="play" class="w-4 h-4 fill-brand-500"></i>
+                            </div>
+                            <div class="flex-grow">
+                                <h3 onclick="openWatchPage('${v.id}')" class="font-bold text-xs text-white line-clamp-2 cursor-pointer hover:text-brand-500 transition-colors leading-snug">${v.title}</h3>
+                                <p class="text-[10px] text-zinc-400 mt-1">${v.category || 'General'} • ${v.views || '0'} views</p>
+                            </div>
+                            <button onclick="toggleSaveVideoById('${v.id}')" class="p-2 rounded-xl transition-all ${isSaved ? 'text-red-500 bg-red-500/10' : 'text-zinc-400 hover:text-white hover:bg-zinc-800'}">
+                                <i data-lucide="bookmark" class="w-4 h-4 ${isSaved ? 'fill-red-500' : ''}"></i>
+                            </button>
                         </div>
-                        <div class="flex-grow">
-                            <h3 onclick="openWatchPage('${v.id}')" class="font-bold text-xs text-white line-clamp-2 cursor-pointer hover:text-brand-500 transition-colors leading-snug">${v.title}</h3>
-                            <p class="text-[10px] text-zinc-400 mt-1">${v.category || 'General'} • ${v.views || '0'} views</p>
-                        </div>
-                        <button onclick="downloadVideoById('${v.id}')" class="p-2 text-zinc-400 hover:text-brand-500 rounded-xl hover:bg-zinc-800 transition-all">
-                            <i data-lucide="bookmark" class="w-4 h-4"></i>
-                        </button>
                     </div>
-                </div>
-            `).join('');
+                `;
+            }).join('');
             lucide.createIcons();
         }
 
@@ -551,11 +669,40 @@
             renderComments(video.comments || []);
             renderSuggestedVideos(videoId);
 
-            const likeBtn = document.getElementById('like-btn');
-            likeBtn.classList.remove('text-brand-500');
-            likeBtn.classList.add('text-zinc-300');
+            // Update Like & Save buttons UI
+            updateWatchPageActionsUI(videoId);
 
             navigateTo('watch-page');
+        }
+
+        function updateWatchPageActionsUI(videoId) {
+            const isLiked = likedVideoIds.includes(videoId);
+            const isSaved = downloadedVideos.some(v => v.id === videoId);
+
+            const likeBtn = document.getElementById('like-btn');
+            const likeIcon = document.getElementById('like-icon');
+            const saveBtn = document.getElementById('save-btn');
+            const saveIcon = document.getElementById('save-icon');
+
+            if (isLiked) {
+                likeBtn.classList.add('text-red-500');
+                likeBtn.classList.remove('text-zinc-300');
+                if (likeIcon) likeIcon.classList.add('fill-red-500');
+            } else {
+                likeBtn.classList.remove('text-red-500');
+                likeBtn.classList.add('text-zinc-300');
+                if (likeIcon) likeIcon.classList.remove('fill-red-500');
+            }
+
+            if (isSaved) {
+                saveBtn.classList.add('text-red-500');
+                saveBtn.classList.remove('text-zinc-300');
+                if (saveIcon) saveIcon.classList.add('fill-red-500');
+            } else {
+                saveBtn.classList.remove('text-red-500');
+                saveBtn.classList.add('text-zinc-300');
+                if (saveIcon) saveIcon.classList.remove('fill-red-500');
+            }
         }
 
         function scrollToCommentInput() {
@@ -589,25 +736,37 @@
             lucide.createIcons();
         }
 
-        // LIKE & COMMENT HANDLERS (TELEGRAM LOGO INTEGRATED)
+        // LIKE HANDLER (RED COLOR TOGGLE + ONCE PER USER)
         function toggleLikeCurrentVideo() {
             if (!currentActiveVideo) return;
 
+            const videoId = currentActiveVideo.id;
+            const isLiked = likedVideoIds.includes(videoId);
+
             const likeBtn = document.getElementById('like-btn');
+            const likeIcon = document.getElementById('like-icon');
             const likeCountEl = document.getElementById('watch-like-count');
             let currentLikes = parseInt(likeCountEl.textContent) || 0;
 
-            if (likeBtn.classList.contains('text-brand-500')) {
-                currentLikes--;
-                likeBtn.classList.remove('text-brand-500');
+            if (isLiked) {
+                // Toggle off / Remove Like
+                likedVideoIds = likedVideoIds.filter(id => id !== videoId);
+                currentLikes = Math.max(0, currentLikes - 1);
+                likeBtn.classList.remove('text-red-500');
                 likeBtn.classList.add('text-zinc-300');
+                if (likeIcon) likeIcon.classList.remove('fill-red-500');
+                showToast("Like removed");
             } else {
+                // Toggle on / Add Like
+                likedVideoIds.push(videoId);
                 currentLikes++;
-                likeBtn.classList.add('text-brand-500');
+                likeBtn.classList.add('text-red-500');
                 likeBtn.classList.remove('text-zinc-300');
+                if (likeIcon) likeIcon.classList.add('fill-red-500');
                 showToast("Liked video!", "success");
             }
 
+            localStorage.setItem('mediatube_likes', JSON.stringify(likedVideoIds));
             likeCountEl.textContent = currentLikes;
             currentActiveVideo.likes = currentLikes;
 
@@ -671,7 +830,7 @@
             }
         }
 
-        // 10% FUZZY SEARCH ALGORITHM
+        // FUZZY SEARCH ALGORITHM
         function calculateMatchScore(query, text) {
             if (!query || !text) return 0;
             query = query.toLowerCase();
@@ -697,7 +856,6 @@
                 return;
             }
 
-            // Shows results with at least 10% match (0.10 score)
             const results = videosDatabase.filter(v => {
                 const titleScore = calculateMatchScore(query, v.title);
                 const categoryScore = calculateMatchScore(query, v.category || '');
@@ -722,12 +880,8 @@
         }
 
         function filterCategory(cat) {
-            document.querySelectorAll('.cat-btn').forEach(btn => {
-                const isActive = btn.textContent.trim() === cat;
-                btn.className = `cat-btn px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all ${
-                    isActive ? 'bg-white text-black font-bold shadow-sm' : 'bg-brand-card text-zinc-400 hover:text-white border border-brand-border'
-                }`;
-            });
+            activeCategoryFilter = cat;
+            renderCategories();
 
             if (cat === 'All') {
                 renderVideoFeed(videosDatabase);
@@ -737,24 +891,37 @@
             }
         }
 
-        // SAVED SYSTEM
-        function downloadVideoById(videoId) {
+        // SAVED SYSTEM (RED COLOR TOGGLE + ONCE PER USER)
+        function toggleSaveVideoById(videoId) {
             const video = videosDatabase.find(v => v.id === videoId);
             if (!video) return;
 
-            if (downloadedVideos.some(item => item.id === video.id)) {
-                showToast("Already saved to your list!");
-                return;
+            const existingIndex = downloadedVideos.findIndex(item => item.id === video.id);
+
+            if (existingIndex > -1) {
+                // Remove from saved
+                downloadedVideos.splice(existingIndex, 1);
+                showToast("Removed from saved list");
+            } else {
+                // Add to saved
+                downloadedVideos.push(video);
+                showToast("Saved to list!", "success");
             }
 
-            downloadedVideos.push(video);
             localStorage.setItem('mediatube_saved', JSON.stringify(downloadedVideos));
-            showToast("Saved to your watch list!", "success");
+            
+            if (currentActiveVideo && currentActiveVideo.id === videoId) {
+                updateWatchPageActionsUI(videoId);
+            }
+
+            renderVideoFeed(videosDatabase);
             updateDownloadUI();
         }
 
-        function downloadCurrentVideo() {
-            if (currentActiveVideo) downloadVideoById(currentActiveVideo.id);
+        function toggleSaveCurrentVideo() {
+            if (currentActiveVideo) {
+                toggleSaveVideoById(currentActiveVideo.id);
+            }
         }
 
         function updateDownloadUI() {
@@ -779,19 +946,12 @@
                             <p class="text-[10px] text-zinc-400 mt-0.5">${v.duration || ''}</p>
                         </div>
                     </div>
-                    <button onclick="removeDownload('${v.id}')" class="p-2 text-zinc-500 hover:text-brand-500 rounded-lg transition-colors">
+                    <button onclick="toggleSaveVideoById('${v.id}')" class="p-2 text-red-500 hover:text-brand-500 rounded-lg transition-colors">
                         <i data-lucide="trash-2" class="w-4 h-4"></i>
                     </button>
                 </div>
             `).join('');
             lucide.createIcons();
-        }
-
-        function removeDownload(videoId) {
-            downloadedVideos = downloadedVideos.filter(v => v.id !== videoId);
-            localStorage.setItem('mediatube_saved', JSON.stringify(downloadedVideos));
-            showToast("Item removed");
-            updateDownloadUI();
         }
 
         function shareCurrentVideo() {
